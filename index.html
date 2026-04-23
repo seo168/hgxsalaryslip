@@ -123,7 +123,7 @@
     </section>
 
     <script>
-        // GANTI INI DENGAN URL DARI GOOGLE APPS SCRIPT ANDA
+        // MASUKKAN URL BARU DARI GOOGLE APPS SCRIPT SETELAH DEPLOY ULANG
         const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyFgCwKakEng8AW8uptDMhFOd25dO6JRLJt1Bzsqx5_vP4A-ilHwqG6NC_aZ53dLie70Q/exec";
 
         function switchTab(type) {
@@ -147,18 +147,22 @@
             btn.disabled = true; btn.innerText = "Memproses...";
 
             try {
-                const resp = await fetch(BACKEND_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "login", id: id, pass: pass })
-                });
+                // Gunakan metode fetch GET agar anti-blokir CORS
+                const resp = await fetch(`${BACKEND_URL}?action=login&id=${id}&pass=${pass}`);
                 const data = await resp.json();
+                
                 if(data.result === "success") {
                     localStorage.setItem('isLoggedIn', 'true');
                     localStorage.setItem('currentUser', data.name);
                     showDashboard();
-                } else { alert("ID atau Password Salah!"); }
-            } catch (e) { alert("Error koneksi ke database!"); }
-            btn.disabled = false; btn.innerText = "Masuk";
+                } else { 
+                    alert("ID atau Password Salah!"); 
+                }
+            } catch (e) { 
+                alert("Gagal terhubung ke database. Pastikan URL Script sudah benar dan di-deploy!"); 
+            } finally {
+                btn.disabled = false; btn.innerText = "Masuk";
+            }
         }
 
         async function handleRegister() {
@@ -171,14 +175,15 @@
             btn.disabled = true; btn.innerText = "Mendaftarkan...";
 
             try {
-                await fetch(BACKEND_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "register", id: id, name: name, pass: pass })
-                });
-                alert("Pendaftaran Berhasil! Data sudah masuk ke Google Sheets Admin.");
+                // Gunakan metode fetch GET untuk mendaftar
+                await fetch(`${BACKEND_URL}?action=register&id=${id}&name=${encodeURIComponent(name)}&pass=${pass}`);
+                alert("Pendaftaran Berhasil! Data sudah masuk ke Google Sheets Admin. Silakan Masuk.");
                 switchTab('login');
-            } catch (e) { alert("Gagal mendaftar!"); }
-            btn.disabled = false; btn.innerText = "Daftar Staff";
+            } catch (e) { 
+                alert("Pendaftaran gagal dikirim."); 
+            } finally {
+                btn.disabled = false; btn.innerText = "Daftar Staff";
+            }
         }
 
         function handleForgot() {
@@ -188,7 +193,7 @@
         function showDashboard() {
             document.getElementById('auth-page').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('user-display').innerText = localStorage.getItem('currentUser');
+            document.getElementById('user-display').innerText = "Halo, " + localStorage.getItem('currentUser');
         }
 
         function handleLogout() { localStorage.clear(); location.reload(); }
