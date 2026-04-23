@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HGX Salary Slip - Secure Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e293b;
+            --accent: #2563eb;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+
+        /* Login Section */
+        #login-page {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .login-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-card h1 { font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
+        .login-card p { font-size: 0.875rem; color: #64748b; margin-bottom: 2rem; }
+
+        .form-group { text-align: left; margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; }
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            outline: none;
+            transition: 0.2s;
+        }
+        .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+
+        /* Dashboard Section */
+        #dashboard { display: none; }
+        header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+
+        .card {
+            background: var(--white);
+            border-radius: 1rem;
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            padding: 2rem;
+            text-align: center;
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .upload-area:hover { border-color: var(--accent); background: #f1f5f9; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th { text-align: left; padding: 1rem; font-size: 0.75rem; color: #64748b; border-bottom: 2px solid var(--border); }
+        td { padding: 1rem; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .view-btn { color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <section id="login-page">
+        <div class="login-card">
+            <h1>HGX <span style="color:var(--accent)">Sallary</span></h1>
+            <p>Employee Payroll Portal</p>
+            <div class="form-group">
+                <label>User ID</label>
+                <input type="text" id="userid" placeholder="Enter ID">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="••••••••">
+            </div>
+            <button class="btn" onclick="handleLogin()">Login to Portal</button>
+        </div>
+    </section>
+
+    <section id="dashboard">
+        <header>
+            <div style="font-weight: 800; font-size: 1.2rem;">HGX <span style="color:var(--accent)">Sallary</span></div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span id="user-display" style="font-size: 0.875rem; font-weight: 600;">Admin</span>
+                <button onclick="handleLogout()" style="background: none; border: none; color: #ef4444; cursor: pointer; font-weight: 600;">Logout</button>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="card">
+                <h3 style="margin-bottom: 1rem;">Upload New Slip</h3>
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--accent); margin-bottom: 1rem;"></i>
+                    <p>Click to upload or drag and drop slip gaji (PDF/Image)</p>
+                    <input type="file" id="fileInput" hidden onchange="handleUpload(event)">
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 1rem;">Payment History</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PERIOD</th>
+                            <th>FILE NAME</th>
+                            <th>DATE UPLOADED</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Data sederhana untuk login (Bisa diganti nantinya)
+        const USERS = {
+            "HGX001": "password123",
+            "ADMIN": "admin123"
+        };
+
+        function handleLogin() {
+            const uid = document.getElementById('userid').value;
+            const pass = document.getElementById('password').value;
+
+            if (USERS[uid] && USERS[uid] === pass) {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', uid);
+                showDashboard();
+            } else {
+                alert('ID atau Password Salah!');
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('user-display').innerText = localStorage.getItem('currentUser');
+            loadHistory();
+        }
+
+        function handleLogout() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        function handleUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const newSlip = {
+                id: Date.now(),
+                period: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }),
+                fileName: file.name,
+                date: new Date().toLocaleDateString('id-ID'),
+                url: '#' // Di sistem nyata, ini adalah link ke server/database
+            };
+
+            // Simpan ke histori (LocalStorage)
+            let history = JSON.parse(localStorage.getItem('slip_history') || '[]');
+            history.unshift(newSlip);
+            localStorage.setItem('slip_history', JSON.stringify(history));
+
+            alert('Slip Gaji Berhasil Diupload!');
+            loadHistory();
+        }
+
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('slip_history') || '[]');
+            const body = document.getElementById('history-body');
+            
+            if (history.length === 0) {
+                body.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 2rem;">No history found</td></tr>';
+                return;
+            }
+
+            body.innerHTML = history.map(item => `
+                <tr>
+                    <td><b>${item.period}</b></td>
+                    <td>${item.fileName}</td>
+                    <td>${item.date}</td>
+                    <td><span class="status-badge">Paid</span></td>
+                    <td><a href="${item.url}" class="view-btn"><i class="fas fa-download"></i> View</a></td>
+                </tr>
+            `).join('');
+        }
+
+        // Check login status on boot
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            showDashboard();
+        }
+    </script>
+</body>
+</html>
