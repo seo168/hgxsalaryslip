@@ -126,12 +126,42 @@
         function switchTab(type) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            if(type === 'login') {
+
+            if (type === 'login') {
                 document.getElementById('tab-login').classList.add('active');
                 document.getElementById('login-form').classList.add('active');
             } else {
                 document.getElementById('tab-reg').classList.add('active');
                 document.getElementById('register-form').classList.add('active');
+            }
+        }
+
+        function buildUrl(params) {
+            const url = new URL(BACKEND_URL);
+            Object.entries(params).forEach(([key, value]) => {
+                url.searchParams.set(key, value);
+            });
+            url.searchParams.set("_t", Date.now().toString());
+            return url.toString();
+        }
+
+        async function fetchJson(params) {
+            const resp = await fetch(buildUrl(params), {
+                method: "GET",
+                cache: "no-store"
+            });
+
+            const rawText = await resp.text();
+
+            if (!resp.ok) {
+                throw new Error(`HTTP ${resp.status}: ${rawText}`);
+            }
+
+            try {
+                return JSON.parse(rawText);
+            } catch (err) {
+                console.error("Response bukan JSON:", rawText);
+                throw new Error("Response backend bukan JSON valid.");
             }
         }
 
@@ -149,9 +179,11 @@
             btn.innerText = "Memproses...";
 
             try {
-                const url = `${BACKEND_URL}?action=login&id=${encodeURIComponent(id)}&pass=${encodeURIComponent(pass)}`;
-                const resp = await fetch(url);
-                const data = await resp.json();
+                const data = await fetchJson({
+                    action: "login",
+                    id: id,
+                    pass: pass
+                });
 
                 if (data.result === "success") {
                     localStorage.setItem("isLoggedIn", "true");
@@ -161,6 +193,7 @@
                     alert(data.message || "ID atau Password salah!");
                 }
             } catch (e) {
+                console.error("LOGIN ERROR:", e);
                 alert("Gagal terhubung ke database. Pastikan Apps Script sudah di-deploy sebagai Web App.");
             } finally {
                 btn.disabled = false;
@@ -188,9 +221,12 @@
             btn.innerText = "Mendaftarkan...";
 
             try {
-                const url = `${BACKEND_URL}?action=register&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&pass=${encodeURIComponent(pass)}`;
-                const resp = await fetch(url);
-                const data = await resp.json();
+                const data = await fetchJson({
+                    action: "register",
+                    id: id,
+                    name: name,
+                    pass: pass
+                });
 
                 if (data.result === "success") {
                     alert("Pendaftaran berhasil! Silakan masuk.");
@@ -202,6 +238,7 @@
                     alert(data.message || "Pendaftaran gagal.");
                 }
             } catch (e) {
+                console.error("REGISTER ERROR:", e);
                 alert("Pendaftaran gagal dikirim. Pastikan Apps Script aktif.");
             } finally {
                 btn.disabled = false;
@@ -223,6 +260,26 @@
             localStorage.clear();
             location.reload();
         }
+
+        document.getElementById("login-id").addEventListener("keydown", function(e) {
+            if (e.key === "Enter") handleLogin();
+        });
+
+        document.getElementById("login-pass").addEventListener("keydown", function(e) {
+            if (e.key === "Enter") handleLogin();
+        });
+
+        document.getElementById("reg-name").addEventListener("keydown", function(e) {
+            if (e.key === "Enter") handleRegister();
+        });
+
+        document.getElementById("reg-id").addEventListener("keydown", function(e) {
+            if (e.key === "Enter") handleRegister();
+        });
+
+        document.getElementById("reg-pass").addEventListener("keydown", function(e) {
+            if (e.key === "Enter") handleRegister();
+        });
 
         if (localStorage.getItem('isLoggedIn') === 'true') {
             showDashboard();
