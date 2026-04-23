@@ -10,7 +10,7 @@
         :root {
             --primary: #1e293b;
             --accent: #2563eb;
-            --bg: #f8fafc;
+            --bg: #f1f5f9;
             --white: #ffffff;
             --text: #334155;
             --border: #e2e8f0;
@@ -19,115 +19,136 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
 
-        /* Login Section */
-        #login-page {
-            height: 100vh;
+        /* Login & Auth Section */
+        #auth-page {
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 20px;
         }
 
-        .login-card {
+        .auth-card {
             background: var(--white);
             padding: 2.5rem;
             border-radius: 1.5rem;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             width: 100%;
-            max-width: 400px;
-            text-align: center;
+            max-width: 450px;
         }
 
-        .login-card h1 { font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
-        .login-card p { font-size: 0.875rem; color: #64748b; margin-bottom: 2rem; }
+        .auth-header { text-align: center; margin-bottom: 2rem; }
+        .auth-header h1 { font-weight: 800; color: var(--primary); font-size: 1.8rem; }
+        
+        /* Tab System */
+        .tab-menu { display: flex; gap: 10px; margin-bottom: 2rem; background: #f8fafc; padding: 5px; border-radius: 12px; }
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: none;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            color: #64748b;
+            transition: 0.3s;
+        }
+        .tab-btn.active { background: var(--white); color: var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-        .form-group { text-align: left; margin-bottom: 1.5rem; }
-        .form-group label { display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; }
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+
+        .form-group { text-align: left; margin-bottom: 1.2rem; }
+        .form-group label { display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; color: #64748b; text-transform: uppercase; }
         .form-group input {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.8rem 1rem;
             border: 1px solid var(--border);
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
             outline: none;
-            transition: 0.2s;
+            font-family: inherit;
         }
-        .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        .form-group input:focus { border-color: var(--accent); ring: 2px var(--accent); }
 
         .btn {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.8rem;
             border: none;
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
             background: var(--accent);
             color: white;
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
+            margin-top: 10px;
         }
         .btn:hover { background: #1d4ed8; transform: translateY(-1px); }
 
-        /* Dashboard Section */
-        #dashboard { display: none; }
-        header {
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-
-        .card {
-            background: var(--white);
-            border-radius: 1rem;
-            border: 1px solid var(--border);
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .upload-area {
-            border: 2px dashed var(--border);
-            padding: 2rem;
+        .forgot-link {
+            display: block;
             text-align: center;
-            border-radius: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: #64748b;
+            text-decoration: none;
             cursor: pointer;
-            transition: 0.3s;
         }
-        .upload-area:hover { border-color: var(--accent); background: #f1f5f9; }
+        .forgot-link:hover { color: var(--accent); }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        /* Dashboard Styles tetap sama seperti sebelumnya... */
+        #dashboard { display: none; }
+        header { background: var(--white); border-bottom: 1px solid var(--border); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: var(--white); border-radius: 1rem; border: 1px solid var(--border); padding: 2rem; margin-bottom: 1.5rem; }
+        table { width: 100%; border-collapse: collapse; }
         th { text-align: left; padding: 1rem; font-size: 0.75rem; color: #64748b; border-bottom: 2px solid var(--border); }
         td { padding: 1rem; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
-
-        .status-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 99px;
-            font-size: 0.75rem;
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .view-btn { color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
+        .status-badge { padding: 4px 12px; border-radius: 99px; font-size: 0.7rem; background: #dcfce7; color: #166534; font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <section id="login-page">
-        <div class="login-card">
-            <h1>HGX <span style="color:var(--accent)">Sallary</span></h1>
-            <p>Employee Payroll Portal</p>
-            <div class="form-group">
-                <label>User ID</label>
-                <input type="text" id="userid" placeholder="Enter ID">
+    <section id="auth-page">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>HGX <span style="color:var(--accent)">SALARY</span></h1>
+                <p style="font-size: 0.9rem; color: #64748b; margin-top: 5px;">Portal Slip Gaji Karyawan</p>
             </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="password" placeholder="••••••••">
+
+            <div class="tab-menu">
+                <button class="tab-btn active" onclick="switchTab('login')">Masuk</button>
+                <button class="tab-btn" onclick="switchTab('register')">Daftar</button>
             </div>
-            <button class="btn" onclick="handleLogin()">Login to Portal</button>
+
+            <div id="login-form" class="auth-form active">
+                <div class="form-group">
+                    <label>ID Karyawan</label>
+                    <input type="text" id="login-id" placeholder="Contoh: HGX123">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-pass" placeholder="••••••••">
+                </div>
+                <button class="btn" onclick="handleLogin()">Masuk Ke Portal</button>
+                <a class="forgot-link" onclick="handleForgot()">Lupa Password?</a>
+            </div>
+
+            <div id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="reg-name" placeholder="Nama sesuai ID Card">
+                </div>
+                <div class="form-group">
+                    <label>ID Karyawan</label>
+                    <input type="text" id="reg-id" placeholder="ID Unik Karyawan">
+                </div>
+                <div class="form-group">
+                    <label>Buat Password</label>
+                    <input type="password" id="reg-pass" placeholder="Minimal 6 karakter">
+                </div>
+                <button class="btn" style="background: #0f172a;" onclick="handleRegister()">Daftar Sekarang</button>
+            </div>
         </div>
     </section>
 
@@ -135,117 +156,105 @@
         <header>
             <div style="font-weight: 800; font-size: 1.2rem;">HGX <span style="color:var(--accent)">Sallary</span></div>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span id="user-display" style="font-size: 0.875rem; font-weight: 600;">Admin</span>
-                <button onclick="handleLogout()" style="background: none; border: none; color: #ef4444; cursor: pointer; font-weight: 600;">Logout</button>
+                <span id="user-display" style="font-size: 0.875rem; font-weight: 600;"></span>
+                <button onclick="handleLogout()" style="background: none; border: none; color: #ef4444; cursor: pointer; font-weight: 600;">Keluar</button>
             </div>
         </header>
 
         <div class="container">
             <div class="card">
-                <h3 style="margin-bottom: 1rem;">Upload New Slip</h3>
-                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--accent); margin-bottom: 1rem;"></i>
-                    <p>Click to upload or drag and drop slip gaji (PDF/Image)</p>
-                    <input type="file" id="fileInput" hidden onchange="handleUpload(event)">
-                </div>
-            </div>
-
-            <div class="card">
-                <h3 style="margin-bottom: 1rem;">Payment History</h3>
+                <h3>Riwayat Slip Gaji</h3>
+                <p style="color: #64748b; font-size: 0.8rem; margin-bottom: 1.5rem;">Data gaji yang telah diproses oleh HRD</p>
                 <table>
                     <thead>
                         <tr>
-                            <th>PERIOD</th>
-                            <th>FILE NAME</th>
-                            <th>DATE UPLOADED</th>
+                            <th>PERIODE</th>
+                            <th>TANGGAL</th>
                             <th>STATUS</th>
-                            <th>ACTION</th>
+                            <th>AKSI</th>
                         </tr>
                     </thead>
                     <tbody id="history-body">
-                        </tbody>
+                        <tr>
+                            <td><b>April 2026</b></td>
+                            <td>19/04/2026</td>
+                            <td><span class="status-badge">Sudah Dibayar</span></td>
+                            <td><a href="#" class="view-btn" style="color:var(--accent); text-decoration:none; font-weight:600;">Unduh PDF</a></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
     </section>
 
     <script>
-        // Data sederhana untuk login (Bisa diganti nantinya)
-        const USERS = {
-            "HGX001": "password123",
-            "ADMIN": "admin123"
-        };
+        // URL Backend dari Google Apps Script yang Anda buat
+        const BACKEND_URL = "MASUKKAN_URL_GOOGLE_APPS_SCRIPT_DISINI";
 
-        function handleLogin() {
-            const uid = document.getElementById('userid').value;
-            const pass = document.getElementById('password').value;
+        function switchTab(type) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            if(type === 'login') {
+                document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+                document.getElementById('login-form').classList.add('active');
+            } else {
+                document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+                document.getElementById('register-form').classList.add('active');
+            }
+        }
 
-            if (USERS[uid] && USERS[uid] === pass) {
+        async function handleLogin() {
+            const id = document.getElementById('login-id').value;
+            const pass = document.getElementById('login-pass').value;
+
+            if(!id || !pass) return alert("Isi semua bidang!");
+
+            // Jika belum ada backend, kita pakai LocalStorage sebagai demo
+            const users = JSON.parse(localStorage.getItem('hgx_users') || '{}');
+            
+            if(users[id] && users[id].pass === pass) {
                 localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('currentUser', uid);
+                localStorage.setItem('currentUser', users[id].name);
                 showDashboard();
             } else {
-                alert('ID atau Password Salah!');
+                alert("ID atau Password salah!");
             }
+        }
+
+        function handleRegister() {
+            const name = document.getElementById('reg-name').value;
+            const id = document.getElementById('reg-id').value;
+            const pass = document.getElementById('reg-pass').value;
+
+            if(!name || !id || !pass) return alert("Lengkapi data daftar!");
+
+            let users = JSON.parse(localStorage.getItem('hgx_users') || '{}');
+            users[id] = { name: name, pass: pass };
+            localStorage.setItem('hgx_users', JSON.stringify(users));
+
+            alert("Pendaftaran Berhasil! Silakan Login.");
+            switchTab('login');
+        }
+
+        function handleForgot() {
+            // Konsep profesional: Lupa password diarahkan ke Admin/HRD
+            const pesan = encodeURIComponent("Halo Admin HGX, saya lupa password untuk akses slip gaji. ID Staff saya: ");
+            window.open(`https://wa.me/628123456789?text=${pesan}`, '_blank');
         }
 
         function showDashboard() {
-            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('auth-page').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('user-display').innerText = localStorage.getItem('currentUser');
-            loadHistory();
+            document.getElementById('user-display').innerText = "Halo, " + localStorage.getItem('currentUser');
         }
 
         function handleLogout() {
-            localStorage.clear();
+            localStorage.removeItem('isLoggedIn');
             location.reload();
         }
 
-        function handleUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const newSlip = {
-                id: Date.now(),
-                period: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }),
-                fileName: file.name,
-                date: new Date().toLocaleDateString('id-ID'),
-                url: '#' // Di sistem nyata, ini adalah link ke server/database
-            };
-
-            // Simpan ke histori (LocalStorage)
-            let history = JSON.parse(localStorage.getItem('slip_history') || '[]');
-            history.unshift(newSlip);
-            localStorage.setItem('slip_history', JSON.stringify(history));
-
-            alert('Slip Gaji Berhasil Diupload!');
-            loadHistory();
-        }
-
-        function loadHistory() {
-            const history = JSON.parse(localStorage.getItem('slip_history') || '[]');
-            const body = document.getElementById('history-body');
-            
-            if (history.length === 0) {
-                body.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 2rem;">No history found</td></tr>';
-                return;
-            }
-
-            body.innerHTML = history.map(item => `
-                <tr>
-                    <td><b>${item.period}</b></td>
-                    <td>${item.fileName}</td>
-                    <td>${item.date}</td>
-                    <td><span class="status-badge">Paid</span></td>
-                    <td><a href="${item.url}" class="view-btn"><i class="fas fa-download"></i> View</a></td>
-                </tr>
-            `).join('');
-        }
-
-        // Check login status on boot
-        if (localStorage.getItem('isLoggedIn') === 'true') {
-            showDashboard();
-        }
+        if(localStorage.getItem('isLoggedIn') === 'true') showDashboard();
     </script>
 </body>
 </html>
