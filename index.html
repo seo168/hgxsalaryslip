@@ -7,101 +7,43 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #1e293b;
-            --accent: #2563eb;
-            --bg: #f1f5f9;
-            --white: #ffffff;
-            --text: #334155;
-            --border: #e2e8f0;
-        }
-
+        :root { --primary: #1e293b; --accent: #2563eb; --bg: #f1f5f9; --white: #ffffff; --text: #334155; --border: #e2e8f0; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        /* Login & Auth Section */
-        #auth-page {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            padding: 20px;
-        }
-
-        .auth-card {
-            background: var(--white);
-            padding: 2.5rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 450px;
-        }
-
+        /* Auth Page */
+        #auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 20px; }
+        .auth-card { background: var(--white); padding: 2.5rem; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); width: 100%; max-width: 450px; }
         .auth-header { text-align: center; margin-bottom: 2rem; }
-        .auth-header h1 { font-weight: 800; color: var(--primary); font-size: 1.8rem; }
-        
-        /* Tab System */
+        .auth-header h1 { font-weight: 800; color: var(--primary); font-size: 1.8rem; letter-spacing: -1px; }
+
         .tab-menu { display: flex; gap: 10px; margin-bottom: 2rem; background: #f8fafc; padding: 5px; border-radius: 12px; }
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: none;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 8px;
-            color: #64748b;
-            transition: 0.3s;
-        }
+        .tab-btn { flex: 1; padding: 10px; border: none; background: none; font-weight: 600; cursor: pointer; border-radius: 8px; color: #64748b; transition: 0.3s; }
         .tab-btn.active { background: var(--white); color: var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
         .auth-form { display: none; }
-        .auth-form.active { display: block; }
+        .auth-form.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .form-group { text-align: left; margin-bottom: 1.2rem; }
         .form-group label { display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; color: #64748b; text-transform: uppercase; }
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 0.75rem;
-            outline: none;
-            font-family: inherit;
-        }
-        .form-group input:focus { border-color: var(--accent); ring: 2px var(--accent); }
+        .form-group input { width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); border-radius: 0.75rem; outline: none; transition: 0.3s; }
+        .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
 
-        .btn {
-            width: 100%;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 0.75rem;
-            background: var(--accent);
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
+        .btn { width: 100%; padding: 0.8rem; border: none; border-radius: 0.75rem; background: var(--accent); color: white; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+        .btn:disabled { background: #94a3b8; cursor: not-allowed; }
 
-        .forgot-link {
-            display: block;
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.85rem;
-            color: #64748b;
-            text-decoration: none;
-            cursor: pointer;
-        }
+        .forgot-link { display: block; text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: #64748b; text-decoration: none; cursor: pointer; }
         .forgot-link:hover { color: var(--accent); }
 
-        /* Dashboard Styles tetap sama seperti sebelumnya... */
+        /* Dashboard */
         #dashboard { display: none; }
-        header { background: var(--white); border-bottom: 1px solid var(--border); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        header { background: var(--white); border-bottom: 1px solid var(--border); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; }
         .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-        .card { background: var(--white); border-radius: 1rem; border: 1px solid var(--border); padding: 2rem; margin-bottom: 1.5rem; }
-        table { width: 100%; border-collapse: collapse; }
+        .card { background: var(--white); border-radius: 1rem; border: 1px solid var(--border); padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
         th { text-align: left; padding: 1rem; font-size: 0.75rem; color: #64748b; border-bottom: 2px solid var(--border); }
         td { padding: 1rem; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
         .status-badge { padding: 4px 12px; border-radius: 99px; font-size: 0.7rem; background: #dcfce7; color: #166534; font-weight: 700; }
@@ -113,73 +55,66 @@
         <div class="auth-card">
             <div class="auth-header">
                 <h1>HGX <span style="color:var(--accent)">SALARY</span></h1>
-                <p style="font-size: 0.9rem; color: #64748b; margin-top: 5px;">Portal Slip Gaji Karyawan</p>
+                <p style="color:#64748b; font-size:0.85rem;">Portal Slip Gaji 200+ Staff</p>
             </div>
 
             <div class="tab-menu">
-                <button class="tab-btn active" onclick="switchTab('login')">Masuk</button>
-                <button class="tab-btn" onclick="switchTab('register')">Daftar</button>
+                <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Masuk</button>
+                <button class="tab-btn" id="tab-reg" onclick="switchTab('register')">Daftar</button>
             </div>
 
             <div id="login-form" class="auth-form active">
                 <div class="form-group">
                     <label>ID Karyawan</label>
-                    <input type="text" id="login-id" placeholder="Contoh: HGX123">
+                    <input type="text" id="login-id" placeholder="Masukkan ID">
                 </div>
                 <div class="form-group">
                     <label>Password</label>
                     <input type="password" id="login-pass" placeholder="••••••••">
                 </div>
-                <button class="btn" onclick="handleLogin()">Masuk Ke Portal</button>
-                <a class="forgot-link" onclick="handleForgot()">Lupa Password?</a>
+                <button class="btn" id="btn-login" onclick="handleLogin()">Masuk</button>
+                <a class="forgot-link" onclick="handleForgot()">Lupa Password? Hubungi Admin</a>
             </div>
 
             <div id="register-form" class="auth-form">
                 <div class="form-group">
                     <label>Nama Lengkap</label>
-                    <input type="text" id="reg-name" placeholder="Nama sesuai ID Card">
+                    <input type="text" id="reg-name" placeholder="Nama Lengkap">
                 </div>
                 <div class="form-group">
                     <label>ID Karyawan</label>
-                    <input type="text" id="reg-id" placeholder="ID Unik Karyawan">
+                    <input type="text" id="reg-id" placeholder="ID Karyawan">
                 </div>
                 <div class="form-group">
-                    <label>Buat Password</label>
-                    <input type="password" id="reg-pass" placeholder="Minimal 6 karakter">
+                    <label>Password Baru</label>
+                    <input type="password" id="reg-pass" placeholder="Min. 6 Karakter">
                 </div>
-                <button class="btn" style="background: #0f172a;" onclick="handleRegister()">Daftar Sekarang</button>
+                <button class="btn" id="btn-reg" style="background:#0f172a;" onclick="handleRegister()">Daftar Staff</button>
             </div>
         </div>
     </section>
 
     <section id="dashboard">
         <header>
-            <div style="font-weight: 800; font-size: 1.2rem;">HGX <span style="color:var(--accent)">Sallary</span></div>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <span id="user-display" style="font-size: 0.875rem; font-weight: 600;"></span>
-                <button onclick="handleLogout()" style="background: none; border: none; color: #ef4444; cursor: pointer; font-weight: 600;">Keluar</button>
+            <div style="font-weight:800;">HGX <span style="color:var(--accent)">SALARY</span></div>
+            <div style="display:flex; align-items:center; gap:15px;">
+                <span id="user-display" style="font-size:0.8rem; font-weight:600;"></span>
+                <button onclick="handleLogout()" style="color:#ef4444; border:none; background:none; font-weight:700; cursor:pointer;">Keluar</button>
             </div>
         </header>
-
         <div class="container">
             <div class="card">
                 <h3>Riwayat Slip Gaji</h3>
-                <p style="color: #64748b; font-size: 0.8rem; margin-bottom: 1.5rem;">Data gaji yang telah diproses oleh HRD</p>
                 <table>
                     <thead>
-                        <tr>
-                            <th>PERIODE</th>
-                            <th>TANGGAL</th>
-                            <th>STATUS</th>
-                            <th>AKSI</th>
-                        </tr>
+                        <tr><th>PERIODE</th><th>TANGGAL</th><th>STATUS</th><th>AKSI</th></tr>
                     </thead>
                     <tbody id="history-body">
                         <tr>
                             <td><b>April 2026</b></td>
-                            <td>19/04/2026</td>
-                            <td><span class="status-badge">Sudah Dibayar</span></td>
-                            <td><a href="#" class="view-btn" style="color:var(--accent); text-decoration:none; font-weight:600;">Unduh PDF</a></td>
+                            <td>20/04/2026</td>
+                            <td><span class="status-badge">PAID</span></td>
+                            <td><button style="border:none; background:none; color:var(--accent); font-weight:700; cursor:pointer;">Download PDF</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -188,18 +123,17 @@
     </section>
 
     <script>
-        // URL Backend dari Google Apps Script yang Anda buat
-        const BACKEND_URL = "MASUKKAN_URL_GOOGLE_APPS_SCRIPT_DISINI";
+        // GANTI INI DENGAN URL DARI GOOGLE APPS SCRIPT ANDA
+        const BACKEND_URL = "https://script.google.com/macros/s/AKfycbx2ESFofQmtXQtsROa87AMmZrfk2SucsMgN1DnUAfPx1A6GVQP2NWTlPG-2WO9f0CflNQ/exec";
 
         function switchTab(type) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            
             if(type === 'login') {
-                document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+                document.getElementById('tab-login').classList.add('active');
                 document.getElementById('login-form').classList.add('active');
             } else {
-                document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+                document.getElementById('tab-reg').classList.add('active');
                 document.getElementById('register-form').classList.add('active');
             }
         }
@@ -207,52 +141,57 @@
         async function handleLogin() {
             const id = document.getElementById('login-id').value;
             const pass = document.getElementById('login-pass').value;
+            const btn = document.getElementById('btn-login');
 
-            if(!id || !pass) return alert("Isi semua bidang!");
+            if(!id || !pass) return alert("Lengkapi data!");
+            btn.disabled = true; btn.innerText = "Memproses...";
 
-            // Jika belum ada backend, kita pakai LocalStorage sebagai demo
-            const users = JSON.parse(localStorage.getItem('hgx_users') || '{}');
-            
-            if(users[id] && users[id].pass === pass) {
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('currentUser', users[id].name);
-                showDashboard();
-            } else {
-                alert("ID atau Password salah!");
-            }
+            try {
+                const resp = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "login", id: id, pass: pass })
+                });
+                const data = await resp.json();
+                if(data.result === "success") {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('currentUser', data.name);
+                    showDashboard();
+                } else { alert("ID atau Password Salah!"); }
+            } catch (e) { alert("Error koneksi ke database!"); }
+            btn.disabled = false; btn.innerText = "Masuk";
         }
 
-        function handleRegister() {
+        async function handleRegister() {
             const name = document.getElementById('reg-name').value;
             const id = document.getElementById('reg-id').value;
             const pass = document.getElementById('reg-pass').value;
+            const btn = document.getElementById('btn-reg');
 
-            if(!name || !id || !pass) return alert("Lengkapi data daftar!");
+            if(!name || !id || !pass) return alert("Lengkapi data!");
+            btn.disabled = true; btn.innerText = "Mendaftarkan...";
 
-            let users = JSON.parse(localStorage.getItem('hgx_users') || '{}');
-            users[id] = { name: name, pass: pass };
-            localStorage.setItem('hgx_users', JSON.stringify(users));
-
-            alert("Pendaftaran Berhasil! Silakan Login.");
-            switchTab('login');
+            try {
+                await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "register", id: id, name: name, pass: pass })
+                });
+                alert("Pendaftaran Berhasil! Data sudah masuk ke Google Sheets Admin.");
+                switchTab('login');
+            } catch (e) { alert("Gagal mendaftar!"); }
+            btn.disabled = false; btn.innerText = "Daftar Staff";
         }
 
         function handleForgot() {
-            // Konsep profesional: Lupa password diarahkan ke Admin/HRD
-            const pesan = encodeURIComponent("Halo Admin HGX, saya lupa password untuk akses slip gaji. ID Staff saya: ");
-            window.open(`https://wa.me/628123456789?text=${pesan}`, '_blank');
+            window.open("https://wa.me/628123456789?text=Halo%20Admin,%20saya%20lupa%20password%20HGX%20Salary", "_blank");
         }
 
         function showDashboard() {
             document.getElementById('auth-page').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('user-display').innerText = "Halo, " + localStorage.getItem('currentUser');
+            document.getElementById('user-display').innerText = localStorage.getItem('currentUser');
         }
 
-        function handleLogout() {
-            localStorage.removeItem('isLoggedIn');
-            location.reload();
-        }
+        function handleLogout() { localStorage.clear(); location.reload(); }
 
         if(localStorage.getItem('isLoggedIn') === 'true') showDashboard();
     </script>
