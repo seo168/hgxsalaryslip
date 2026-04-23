@@ -40,7 +40,7 @@
         header { background: var(--white); border-bottom: 1px solid var(--border); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; }
         .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
         .card { background: var(--white); border-radius: 1rem; border: 1px solid var(--border); padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        
+
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
         th { text-align: left; padding: 1rem; font-size: 0.75rem; color: #64748b; border-bottom: 2px solid var(--border); }
         td { padding: 1rem; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
@@ -49,242 +49,258 @@
 </head>
 <body>
 
-    <section id="auth-page">
-        <div class="auth-card">
-            <div class="auth-header">
-                <h1>HGX <span style="color:var(--accent)">SALARY</span></h1>
-                <p style="color:#64748b; font-size:0.85rem;">Portal Slip Gaji Staff</p>
-            </div>
-
-            <div class="tab-menu">
-                <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Masuk</button>
-                <button class="tab-btn" id="tab-reg" onclick="switchTab('register')">Daftar</button>
-            </div>
-
-            <div id="login-form" class="auth-form active">
-                <div class="form-group">
-                    <label>ID Karyawan</label>
-                    <input type="text" id="login-id" placeholder="Masukkan ID">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="login-pass" placeholder="••••••••">
-                </div>
-                <button class="btn" id="btn-login" onclick="handleLogin()">Masuk</button>
-                <a class="forgot-link" onclick="handleForgot()">Lupa Password? Hubungi Admin</a>
-            </div>
-
-            <div id="register-form" class="auth-form">
-                <div class="form-group">
-                    <label>Nama Lengkap</label>
-                    <input type="text" id="reg-name" placeholder="Nama Lengkap">
-                </div>
-                <div class="form-group">
-                    <label>ID Karyawan</label>
-                    <input type="text" id="reg-id" placeholder="ID Karyawan">
-                </div>
-                <div class="form-group">
-                    <label>Password Baru</label>
-                    <input type="password" id="reg-pass" placeholder="Min. 6 Karakter">
-                </div>
-                <button class="btn" id="btn-reg" style="background:#0f172a;" onclick="handleRegister()">Daftar Staff</button>
-            </div>
+<section id="auth-page">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>HGX <span style="color:var(--accent)">SALARY</span></h1>
+            <p style="color:#64748b; font-size:0.85rem;">Portal Slip Gaji Staff</p>
         </div>
-    </section>
 
-    <section id="dashboard">
-        <header>
-            <div style="font-weight:800;">HGX <span style="color:var(--accent)">SALARY</span></div>
-            <div style="display:flex; align-items:center; gap:15px;">
-                <span id="user-display" style="font-size:0.8rem; font-weight:600;"></span>
-                <button onclick="handleLogout()" style="color:#ef4444; border:none; background:none; font-weight:700; cursor:pointer;">Keluar</button>
-            </div>
-        </header>
-        <div class="container">
-            <div class="card">
-                <h3>Riwayat Slip Gaji</h3>
-                <table>
-                    <thead>
-                        <tr><th>PERIODE</th><th>TANGGAL</th><th>STATUS</th><th>AKSI</th></tr>
-                    </thead>
-                    <tbody id="history-body">
-                        <tr>
-                            <td><b>April 2026</b></td>
-                            <td>20/04/2026</td>
-                            <td><span class="status-badge">PAID</span></td>
-                            <td><button style="border:none; background:none; color:var(--accent); font-weight:700; cursor:pointer;">Download PDF</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="tab-menu">
+            <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Masuk</button>
+            <button class="tab-btn" id="tab-reg" onclick="switchTab('register')">Daftar</button>
         </div>
-    </section>
 
-    <script>
-        const BACKEND_URL = "https://script.google.com/macros/s/AKfycbwKlTDrGUteTwBP_7NkulcKncprtr5IDgm-XyHjYtjCa2xjOxRpVDTF0pSSl5Ho38W0DA/exec";
+        <div id="login-form" class="auth-form active">
+            <div class="form-group">
+                <label>ID Karyawan</label>
+                <input type="text" id="login-id" placeholder="Masukkan ID">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="login-pass" placeholder="••••••••">
+            </div>
+            <button class="btn" id="btn-login" onclick="handleLogin()">Masuk</button>
+            <a class="forgot-link" onclick="handleForgot()">Lupa Password? Hubungi Admin</a>
+        </div>
 
-        function switchTab(type) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+        <div id="register-form" class="auth-form">
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" id="reg-name" placeholder="Nama Lengkap">
+            </div>
+            <div class="form-group">
+                <label>ID Karyawan</label>
+                <input type="text" id="reg-id" placeholder="ID Karyawan">
+            </div>
+            <div class="form-group">
+                <label>Password Baru</label>
+                <input type="password" id="reg-pass" placeholder="Min. 6 Karakter">
+            </div>
+            <button class="btn" id="btn-reg" style="background:#0f172a;" onclick="handleRegister()">Daftar Staff</button>
+        </div>
+    </div>
+</section>
 
-            if (type === 'login') {
-                document.getElementById('tab-login').classList.add('active');
-                document.getElementById('login-form').classList.add('active');
-            } else {
-                document.getElementById('tab-reg').classList.add('active');
-                document.getElementById('register-form').classList.add('active');
-            }
+<section id="dashboard">
+    <header>
+        <div style="font-weight:800;">HGX <span style="color:var(--accent)">SALARY</span></div>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <span id="user-display" style="font-size:0.8rem; font-weight:600;"></span>
+            <button onclick="handleLogout()" style="color:#ef4444; border:none; background:none; font-weight:700; cursor:pointer;">Keluar</button>
+        </div>
+    </header>
+    <div class="container">
+        <div class="card">
+            <h3>Riwayat Slip Gaji</h3>
+            <table>
+                <thead>
+                    <tr><th>PERIODE</th><th>TANGGAL</th><th>STATUS</th><th>AKSI</th></tr>
+                </thead>
+                <tbody id="history-body">
+                    <tr>
+                        <td><b>April 2026</b></td>
+                        <td>20/04/2026</td>
+                        <td><span class="status-badge">PAID</span></td>
+                        <td><button style="border:none; background:none; color:var(--accent); font-weight:700; cursor:pointer;">Download PDF</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbynI15dxBBqXkqcXjdCPs3srf7wsmfSkeRQLYKFHxXhVcwRRKGq-lN6l3wM0bDegyX7Iw/exec";
+
+    function switchTab(type) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+
+        if (type === 'login') {
+            document.getElementById('tab-login').classList.add('active');
+            document.getElementById('login-form').classList.add('active');
+        } else {
+            document.getElementById('tab-reg').classList.add('active');
+            document.getElementById('register-form').classList.add('active');
         }
+    }
 
-        function buildUrl(params) {
+    function requestJsonp(params) {
+        return new Promise((resolve, reject) => {
+            const callbackName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+
             const url = new URL(BACKEND_URL);
             Object.entries(params).forEach(([key, value]) => {
                 url.searchParams.set(key, value);
             });
+            url.searchParams.set("callback", callbackName);
             url.searchParams.set("_t", Date.now().toString());
-            return url.toString();
+
+            const script = document.createElement("script");
+            let finished = false;
+
+            function cleanup() {
+                if (script.parentNode) script.parentNode.removeChild(script);
+                try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
+            }
+
+            window[callbackName] = function(data) {
+                if (finished) return;
+                finished = true;
+                cleanup();
+                resolve(data);
+            };
+
+            script.onerror = function() {
+                if (finished) return;
+                finished = true;
+                cleanup();
+                reject(new Error("Gagal memuat JSONP dari Apps Script"));
+            };
+
+            script.src = url.toString();
+            document.body.appendChild(script);
+
+            setTimeout(() => {
+                if (finished) return;
+                finished = true;
+                cleanup();
+                reject(new Error("Request timeout"));
+            }, 15000);
+        });
+    }
+
+    async function handleLogin() {
+        const id = document.getElementById('login-id').value.trim();
+        const pass = document.getElementById('login-pass').value.trim();
+        const btn = document.getElementById('btn-login');
+
+        if (!id || !pass) {
+            alert("Lengkapi data!");
+            return;
         }
 
-        async function fetchJson(params) {
-            const response = await fetch(buildUrl(params), {
-                method: "GET",
-                cache: "no-store"
+        btn.disabled = true;
+        btn.innerText = "Memproses...";
+
+        try {
+            const data = await requestJsonp({
+                action: "login",
+                id: id,
+                pass: pass
             });
 
-            const rawText = await response.text();
-
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${rawText}`);
+            if (data.result === "success") {
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("currentUser", data.name || id);
+                showDashboard();
+            } else {
+                alert(data.message || "ID atau Password salah!");
             }
+        } catch (error) {
+            console.error("LOGIN ERROR:", error);
+            alert("Gagal terhubung ke database. Pastikan Apps Script sudah benar dan aktif.");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "Masuk";
+        }
+    }
 
-            try {
-                return JSON.parse(rawText);
-            } catch (error) {
-                console.error("Response bukan JSON:", rawText);
-                throw new Error("Response backend bukan JSON valid.");
-            }
+    async function handleRegister() {
+        const name = document.getElementById('reg-name').value.trim();
+        const id = document.getElementById('reg-id').value.trim();
+        const pass = document.getElementById('reg-pass').value.trim();
+        const btn = document.getElementById('btn-reg');
+
+        if (!name || !id || !pass) {
+            alert("Lengkapi data!");
+            return;
         }
 
-        async function handleLogin() {
-            const id = document.getElementById('login-id').value.trim();
-            const pass = document.getElementById('login-pass').value.trim();
-            const btn = document.getElementById('btn-login');
+        if (pass.length < 6) {
+            alert("Password minimal 6 karakter!");
+            return;
+        }
 
-            if (!id || !pass) {
-                alert("Lengkapi data!");
-                return;
+        btn.disabled = true;
+        btn.innerText = "Mendaftarkan...";
+
+        try {
+            const data = await requestJsonp({
+                action: "register",
+                id: id,
+                name: name,
+                pass: pass
+            });
+
+            if (data.result === "success") {
+                alert(data.message || "Pendaftaran berhasil! Silakan masuk.");
+                document.getElementById('reg-name').value = "";
+                document.getElementById('reg-id').value = "";
+                document.getElementById('reg-pass').value = "";
+                switchTab('login');
+            } else {
+                alert(data.message || "Pendaftaran gagal.");
             }
-
-            btn.disabled = true;
-            btn.innerText = "Memproses...";
-
-            try {
-                const data = await fetchJson({
-                    action: "login",
-                    id: id,
-                    pass: pass
-                });
-
-                if (data.result === "success") {
-                    localStorage.setItem("isLoggedIn", "true");
-                    localStorage.setItem("currentUser", data.name || id);
-                    showDashboard();
-                } else {
-                    alert(data.message || "ID atau Password salah!");
-                }
-            } catch (error) {
-                console.error("LOGIN ERROR:", error);
-                alert("Gagal terhubung ke database. Pastikan Apps Script sudah di-deploy sebagai Web App.");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "Masuk";
-            }
+        } catch (error) {
+            console.error("REGISTER ERROR:", error);
+            alert("Pendaftaran gagal dikirim. Pastikan Apps Script aktif.");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "Daftar Staff";
         }
+    }
 
-        async function handleRegister() {
-            const name = document.getElementById('reg-name').value.trim();
-            const id = document.getElementById('reg-id').value.trim();
-            const pass = document.getElementById('reg-pass').value.trim();
-            const btn = document.getElementById('btn-reg');
+    function handleForgot() {
+        window.open("https://wa.me/628123456789?text=Halo%20Admin,%20saya%20lupa%20password%20HGX%20Salary", "_blank");
+    }
 
-            if (!name || !id || !pass) {
-                alert("Lengkapi data!");
-                return;
-            }
+    function showDashboard() {
+        document.getElementById('auth-page').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('user-display').innerText = "Halo, " + (localStorage.getItem('currentUser') || "");
+    }
 
-            if (pass.length < 6) {
-                alert("Password minimal 6 karakter!");
-                return;
-            }
+    function handleLogout() {
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("currentUser");
+        location.reload();
+    }
 
-            btn.disabled = true;
-            btn.innerText = "Mendaftarkan...";
+    document.getElementById("login-id").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") handleLogin();
+    });
 
-            try {
-                const data = await fetchJson({
-                    action: "register",
-                    id: id,
-                    name: name,
-                    pass: pass
-                });
+    document.getElementById("login-pass").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") handleLogin();
+    });
 
-                if (data.result === "success") {
-                    alert(data.message || "Pendaftaran berhasil! Silakan masuk.");
-                    document.getElementById('reg-name').value = "";
-                    document.getElementById('reg-id').value = "";
-                    document.getElementById('reg-pass').value = "";
-                    switchTab('login');
-                } else {
-                    alert(data.message || "Pendaftaran gagal.");
-                }
-            } catch (error) {
-                console.error("REGISTER ERROR:", error);
-                alert("Pendaftaran gagal dikirim. Pastikan Apps Script aktif dan URL backend benar.");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "Daftar Staff";
-            }
-        }
+    document.getElementById("reg-name").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") handleRegister();
+    });
 
-        function handleForgot() {
-            window.open("https://wa.me/628123456789?text=Halo%20Admin,%20saya%20lupa%20password%20HGX%20Salary", "_blank");
-        }
+    document.getElementById("reg-id").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") handleRegister();
+    });
 
-        function showDashboard() {
-            document.getElementById('auth-page').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('user-display').innerText = "Halo, " + (localStorage.getItem('currentUser') || "");
-        }
+    document.getElementById("reg-pass").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") handleRegister();
+    });
 
-        function handleLogout() {
-            localStorage.removeItem("isLoggedIn");
-            localStorage.removeItem("currentUser");
-            location.reload();
-        }
-
-        document.getElementById("login-id").addEventListener("keydown", function(event) {
-            if (event.key === "Enter") handleLogin();
-        });
-
-        document.getElementById("login-pass").addEventListener("keydown", function(event) {
-            if (event.key === "Enter") handleLogin();
-        });
-
-        document.getElementById("reg-name").addEventListener("keydown", function(event) {
-            if (event.key === "Enter") handleRegister();
-        });
-
-        document.getElementById("reg-id").addEventListener("keydown", function(event) {
-            if (event.key === "Enter") handleRegister();
-        });
-
-        document.getElementById("reg-pass").addEventListener("keydown", function(event) {
-            if (event.key === "Enter") handleRegister();
-        });
-
-        if (localStorage.getItem("isLoggedIn") === "true") {
-            showDashboard();
-        }
-    </script>
+    if (localStorage.getItem("isLoggedIn") === "true") {
+        showDashboard();
+    }
+</script>
 </body>
 </html>
