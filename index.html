@@ -11,7 +11,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        /* Auth Page */
         #auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 20px; }
         .auth-card { background: var(--white); padding: 2.5rem; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); width: 100%; max-width: 450px; }
         .auth-header { text-align: center; margin-bottom: 2rem; }
@@ -37,7 +36,6 @@
         .forgot-link { display: block; text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: #64748b; text-decoration: none; cursor: pointer; }
         .forgot-link:hover { color: var(--accent); }
 
-        /* Dashboard */
         #dashboard { display: none; }
         header { background: var(--white); border-bottom: 1px solid var(--border); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; }
         .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
@@ -55,7 +53,7 @@
         <div class="auth-card">
             <div class="auth-header">
                 <h1>HGX <span style="color:var(--accent)">SALARY</span></h1>
-                <p style="color:#64748b; font-size:0.85rem;">Portal Slip Gaji 200+ Staff</p>
+                <p style="color:#64748b; font-size:0.85rem;">Portal Slip Gaji Staff</p>
             </div>
 
             <div class="tab-menu">
@@ -123,8 +121,7 @@
     </section>
 
     <script>
-        // MASUKKAN URL BARU DARI GOOGLE APPS SCRIPT SETELAH DEPLOY ULANG
-        const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyFgCwKakEng8AW8uptDMhFOd25dO6JRLJt1Bzsqx5_vP4A-ilHwqG6NC_aZ53dLie70Q/exec";
+        const BACKEND_URL = "https://script.google.com/macros/s/AKfycbzASraRlU6sBecAQhbn-bIepulOzzF6qc2PcHsAxdiiQ8vAHkfPxprDkvODR5Hs2j2ANA/exec";
 
         function switchTab(type) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -139,50 +136,76 @@
         }
 
         async function handleLogin() {
-            const id = document.getElementById('login-id').value;
-            const pass = document.getElementById('login-pass').value;
+            const id = document.getElementById('login-id').value.trim();
+            const pass = document.getElementById('login-pass').value.trim();
             const btn = document.getElementById('btn-login');
 
-            if(!id || !pass) return alert("Lengkapi data!");
-            btn.disabled = true; btn.innerText = "Memproses...";
+            if (!id || !pass) {
+                alert("Lengkapi data!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Memproses...";
 
             try {
-                // Gunakan metode fetch GET agar anti-blokir CORS
-                const resp = await fetch(`${BACKEND_URL}?action=login&id=${id}&pass=${pass}`);
+                const url = `${BACKEND_URL}?action=login&id=${encodeURIComponent(id)}&pass=${encodeURIComponent(pass)}`;
+                const resp = await fetch(url);
                 const data = await resp.json();
-                
-                if(data.result === "success") {
-                    localStorage.setItem('isLoggedIn', 'true');
-                    localStorage.setItem('currentUser', data.name);
+
+                if (data.result === "success") {
+                    localStorage.setItem("isLoggedIn", "true");
+                    localStorage.setItem("currentUser", data.name || id);
                     showDashboard();
-                } else { 
-                    alert("ID atau Password Salah!"); 
+                } else {
+                    alert(data.message || "ID atau Password salah!");
                 }
-            } catch (e) { 
-                alert("Gagal terhubung ke database. Pastikan URL Script sudah benar dan di-deploy!"); 
+            } catch (e) {
+                alert("Gagal terhubung ke database. Pastikan Apps Script sudah di-deploy sebagai Web App.");
             } finally {
-                btn.disabled = false; btn.innerText = "Masuk";
+                btn.disabled = false;
+                btn.innerText = "Masuk";
             }
         }
 
         async function handleRegister() {
-            const name = document.getElementById('reg-name').value;
-            const id = document.getElementById('reg-id').value;
-            const pass = document.getElementById('reg-pass').value;
+            const name = document.getElementById('reg-name').value.trim();
+            const id = document.getElementById('reg-id').value.trim();
+            const pass = document.getElementById('reg-pass').value.trim();
             const btn = document.getElementById('btn-reg');
 
-            if(!name || !id || !pass) return alert("Lengkapi data!");
-            btn.disabled = true; btn.innerText = "Mendaftarkan...";
+            if (!name || !id || !pass) {
+                alert("Lengkapi data!");
+                return;
+            }
+
+            if (pass.length < 6) {
+                alert("Password minimal 6 karakter!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Mendaftarkan...";
 
             try {
-                // Gunakan metode fetch GET untuk mendaftar
-                await fetch(`${BACKEND_URL}?action=register&id=${id}&name=${encodeURIComponent(name)}&pass=${pass}`);
-                alert("Pendaftaran Berhasil! Data sudah masuk ke Google Sheets Admin. Silakan Masuk.");
-                switchTab('login');
-            } catch (e) { 
-                alert("Pendaftaran gagal dikirim."); 
+                const url = `${BACKEND_URL}?action=register&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&pass=${encodeURIComponent(pass)}`;
+                const resp = await fetch(url);
+                const data = await resp.json();
+
+                if (data.result === "success") {
+                    alert("Pendaftaran berhasil! Silakan masuk.");
+                    document.getElementById('reg-name').value = "";
+                    document.getElementById('reg-id').value = "";
+                    document.getElementById('reg-pass').value = "";
+                    switchTab('login');
+                } else {
+                    alert(data.message || "Pendaftaran gagal.");
+                }
+            } catch (e) {
+                alert("Pendaftaran gagal dikirim. Pastikan Apps Script aktif.");
             } finally {
-                btn.disabled = false; btn.innerText = "Daftar Staff";
+                btn.disabled = false;
+                btn.innerText = "Daftar Staff";
             }
         }
 
@@ -193,12 +216,17 @@
         function showDashboard() {
             document.getElementById('auth-page').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('user-display').innerText = "Halo, " + localStorage.getItem('currentUser');
+            document.getElementById('user-display').innerText = "Halo, " + (localStorage.getItem('currentUser') || "");
         }
 
-        function handleLogout() { localStorage.clear(); location.reload(); }
+        function handleLogout() {
+            localStorage.clear();
+            location.reload();
+        }
 
-        if(localStorage.getItem('isLoggedIn') === 'true') showDashboard();
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            showDashboard();
+        }
     </script>
 </body>
 </html>
