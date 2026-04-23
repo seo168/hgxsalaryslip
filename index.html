@@ -5,55 +5,881 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HGX Salary Slip - Secure Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1e293b; --accent: #2563eb; --bg: #f1f5f9; --white: #ffffff; --text: #334155; --border: #e2e8f0; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+        :root{
+            --primary:#0f172a;
+            --primary-2:#1e293b;
+            --accent:#2563eb;
+            --accent-2:#1d4ed8;
+            --bg:#f8fafc;
+            --card:#ffffff;
+            --text:#334155;
+            --muted:#64748b;
+            --border:#e2e8f0;
+            --success:#16a34a;
+            --success-bg:#dcfce7;
+            --danger:#ef4444;
+            --danger-bg:#fee2e2;
+            --warning:#f59e0b;
+            --shadow:0 20px 40px rgba(15,23,42,.08);
+            --shadow-lg:0 30px 60px rgba(15,23,42,.18);
+            --radius:22px;
+        }
 
-        #auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 20px; }
-        .auth-card { background: var(--white); padding: 2.5rem; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); width: 100%; max-width: 450px; }
-        .auth-header { text-align: center; margin-bottom: 2rem; }
-        .auth-header h1 { font-weight: 800; color: var(--primary); font-size: 1.8rem; letter-spacing: -1px; }
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{
+            font-family:'Inter',sans-serif;
+            background:var(--bg);
+            color:var(--text);
+            overflow-x:hidden;
+        }
 
-        .tab-menu { display: flex; gap: 10px; margin-bottom: 2rem; background: #f8fafc; padding: 5px; border-radius: 12px; }
-        .tab-btn { flex: 1; padding: 10px; border: none; background: none; font-weight: 600; cursor: pointer; border-radius: 8px; color: #64748b; transition: 0.3s; }
-        .tab-btn.active { background: var(--white); color: var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .hidden{display:none !important;}
 
-        .auth-form { display: none; }
-        .auth-form.active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* AUTH */
+        #auth-page{
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:
+                radial-gradient(circle at top right, rgba(37,99,235,.18), transparent 28%),
+                radial-gradient(circle at bottom left, rgba(59,130,246,.15), transparent 25%),
+                linear-gradient(135deg,#0f172a 0%, #111827 40%, #020617 100%);
+            padding:24px;
+            position:relative;
+        }
 
-        .form-group { text-align: left; margin-bottom: 1.2rem; }
-        .form-group label { display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; color: #64748b; text-transform: uppercase; }
-        .form-group input { width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); border-radius: 0.75rem; outline: none; transition: 0.3s; }
-        .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        .auth-card{
+            width:100%;
+            max-width:460px;
+            background:rgba(255,255,255,.98);
+            backdrop-filter:blur(16px);
+            border:1px solid rgba(255,255,255,.2);
+            border-radius:28px;
+            box-shadow:var(--shadow-lg);
+            padding:2.4rem;
+            position:relative;
+            overflow:hidden;
+        }
 
-        .btn { width: 100%; padding: 0.8rem; border: none; border-radius: 0.75rem; background: var(--accent); color: white; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .btn:hover { background: #1d4ed8; transform: translateY(-1px); }
-        .btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+        .auth-card::before{
+            content:"";
+            position:absolute;
+            top:-80px;
+            right:-80px;
+            width:180px;
+            height:180px;
+            background:radial-gradient(circle, rgba(37,99,235,.18), transparent 70%);
+            border-radius:50%;
+        }
 
-        .forgot-link { display: block; text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: #64748b; text-decoration: none; cursor: pointer; }
-        .forgot-link:hover { color: var(--accent); }
+        .auth-top-badge{
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            padding:8px 14px;
+            border-radius:999px;
+            font-size:.72rem;
+            font-weight:700;
+            color:var(--accent);
+            background:#eff6ff;
+            border:1px solid #dbeafe;
+            margin-bottom:18px;
+        }
 
-        #dashboard { display: none; }
-        header { background: var(--white); border-bottom: 1px solid var(--border); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; }
-        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-        .card { background: var(--white); border-radius: 1rem; border: 1px solid var(--border); padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .auth-header{
+            text-align:center;
+            margin-bottom:2rem;
+            position:relative;
+            z-index:1;
+        }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th { text-align: left; padding: 1rem; font-size: 0.75rem; color: #64748b; border-bottom: 2px solid var(--border); }
-        td { padding: 1rem; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
-        .status-badge { padding: 4px 12px; border-radius: 99px; font-size: 0.7rem; background: #dcfce7; color: #166534; font-weight: 700; }
+        .auth-header h1{
+            font-size:2rem;
+            font-weight:800;
+            letter-spacing:-1px;
+            color:var(--primary);
+        }
+
+        .auth-header p{
+            color:var(--muted);
+            font-size:.92rem;
+            margin-top:8px;
+        }
+
+        .tab-menu{
+            display:flex;
+            gap:10px;
+            margin-bottom:1.8rem;
+            background:#f8fafc;
+            padding:6px;
+            border-radius:16px;
+            border:1px solid var(--border);
+            position:relative;
+            z-index:1;
+        }
+
+        .tab-btn{
+            flex:1;
+            padding:12px;
+            border:none;
+            background:none;
+            font-weight:700;
+            cursor:pointer;
+            border-radius:12px;
+            color:var(--muted);
+            transition:.25s ease;
+            font-size:.92rem;
+        }
+
+        .tab-btn.active{
+            background:#fff;
+            color:var(--accent);
+            box-shadow:0 6px 18px rgba(15,23,42,.06);
+        }
+
+        .auth-form{display:none}
+        .auth-form.active{display:block;animation:fadeIn .35s ease}
+
+        @keyframes fadeIn{
+            from{opacity:0;transform:translateY(10px)}
+            to{opacity:1;transform:translateY(0)}
+        }
+
+        .form-group{
+            margin-bottom:1.15rem;
+            position:relative;
+        }
+
+        .form-group label{
+            display:block;
+            font-size:.72rem;
+            font-weight:800;
+            color:var(--muted);
+            margin-bottom:.55rem;
+            text-transform:uppercase;
+            letter-spacing:.4px;
+        }
+
+        .input-wrap{
+            position:relative;
+        }
+
+        .input-wrap i{
+            position:absolute;
+            left:14px;
+            top:50%;
+            transform:translateY(-50%);
+            color:#94a3b8;
+            font-size:.9rem;
+        }
+
+        .form-group input{
+            width:100%;
+            padding:.95rem 1rem .95rem 2.7rem;
+            border:1px solid var(--border);
+            border-radius:14px;
+            outline:none;
+            transition:.25s ease;
+            font-size:.95rem;
+            background:#fff;
+        }
+
+        .form-group input:focus{
+            border-color:var(--accent);
+            box-shadow:0 0 0 4px rgba(37,99,235,.10);
+        }
+
+        .btn{
+            width:100%;
+            padding:.95rem 1rem;
+            border:none;
+            border-radius:14px;
+            background:linear-gradient(135deg,var(--accent),var(--accent-2));
+            color:#fff;
+            font-weight:700;
+            cursor:pointer;
+            transition:.25s ease;
+            font-size:.95rem;
+        }
+
+        .btn:hover{
+            transform:translateY(-1px);
+            box-shadow:0 12px 22px rgba(37,99,235,.20);
+        }
+
+        .btn:disabled{
+            background:#94a3b8;
+            cursor:not-allowed;
+            transform:none;
+            box-shadow:none;
+        }
+
+        .btn-dark{
+            background:linear-gradient(135deg,#0f172a,#1e293b) !important;
+        }
+
+        .forgot-link{
+            display:block;
+            text-align:center;
+            margin-top:1.35rem;
+            font-size:.88rem;
+            color:var(--muted);
+            text-decoration:none;
+            cursor:pointer;
+            transition:.2s;
+        }
+
+        .forgot-link:hover{color:var(--accent)}
+
+        .auth-footer-note{
+            margin-top:18px;
+            display:flex;
+            justify-content:center;
+            gap:14px;
+            flex-wrap:wrap;
+            color:#94a3b8;
+            font-size:.76rem;
+        }
+
+        /* DASHBOARD */
+        #dashboard{display:none;min-height:100vh;background:var(--bg)}
+
+        header{
+            background:rgba(255,255,255,.92);
+            backdrop-filter:blur(14px);
+            border-bottom:1px solid var(--border);
+            padding:1rem 4%;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            position:sticky;
+            top:0;
+            z-index:100;
+        }
+
+        .brand{
+            display:flex;
+            align-items:center;
+            gap:14px;
+        }
+
+        .brand-logo{
+            width:44px;
+            height:44px;
+            border-radius:14px;
+            background:linear-gradient(135deg,var(--accent),#60a5fa);
+            color:white;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:1.05rem;
+            box-shadow:0 10px 24px rgba(37,99,235,.25);
+        }
+
+        .brand-title{
+            font-weight:800;
+            color:var(--primary);
+            font-size:1.05rem;
+            letter-spacing:-.4px;
+        }
+
+        .brand-sub{
+            font-size:.78rem;
+            color:var(--muted);
+            margin-top:3px;
+        }
+
+        .header-right{
+            display:flex;
+            align-items:center;
+            gap:14px;
+        }
+
+        .user-pill{
+            display:flex;
+            align-items:center;
+            gap:10px;
+            background:#fff;
+            border:1px solid var(--border);
+            padding:8px 14px;
+            border-radius:999px;
+            box-shadow:0 8px 20px rgba(15,23,42,.05);
+        }
+
+        .user-avatar{
+            width:34px;
+            height:34px;
+            border-radius:50%;
+            background:linear-gradient(135deg,#dbeafe,#bfdbfe);
+            color:var(--accent);
+            font-weight:800;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:.9rem;
+        }
+
+        .logout-btn{
+            color:var(--danger);
+            border:none;
+            background:none;
+            font-weight:800;
+            cursor:pointer;
+            font-size:.92rem;
+        }
+
+        .dashboard-shell{
+            max-width:1280px;
+            margin:0 auto;
+            padding:26px 18px 40px;
+        }
+
+        .hero{
+            background:linear-gradient(135deg,#0f172a 0%, #1e3a8a 100%);
+            border-radius:30px;
+            padding:28px;
+            color:#fff;
+            position:relative;
+            overflow:hidden;
+            box-shadow:var(--shadow);
+        }
+
+        .hero::before{
+            content:"";
+            position:absolute;
+            right:-60px;
+            top:-60px;
+            width:220px;
+            height:220px;
+            background:radial-gradient(circle, rgba(255,255,255,.18), transparent 70%);
+            border-radius:50%;
+        }
+
+        .hero-grid{
+            display:grid;
+            grid-template-columns:1.35fr .8fr;
+            gap:20px;
+            align-items:stretch;
+            position:relative;
+            z-index:1;
+        }
+
+        .hero-left h2{
+            font-size:2rem;
+            font-weight:800;
+            letter-spacing:-1px;
+            margin-bottom:10px;
+        }
+
+        .hero-left p{
+            color:rgba(255,255,255,.82);
+            max-width:680px;
+            line-height:1.7;
+            font-size:.95rem;
+        }
+
+        .hero-actions{
+            margin-top:20px;
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+        }
+
+        .hero-btn{
+            display:inline-flex;
+            align-items:center;
+            gap:9px;
+            padding:12px 16px;
+            border-radius:14px;
+            border:1px solid rgba(255,255,255,.18);
+            background:rgba(255,255,255,.10);
+            color:#fff;
+            font-weight:700;
+            cursor:pointer;
+            transition:.25s ease;
+        }
+
+        .hero-btn:hover{
+            background:rgba(255,255,255,.16);
+            transform:translateY(-1px);
+        }
+
+        .hero-side{
+            display:grid;
+            gap:12px;
+        }
+
+        .hero-mini{
+            background:rgba(255,255,255,.10);
+            border:1px solid rgba(255,255,255,.12);
+            border-radius:20px;
+            padding:18px;
+        }
+
+        .hero-mini-label{
+            font-size:.76rem;
+            color:rgba(255,255,255,.72);
+            text-transform:uppercase;
+            font-weight:700;
+            margin-bottom:8px;
+        }
+
+        .hero-mini-value{
+            font-size:1.3rem;
+            font-weight:800;
+        }
+
+        .top-grid{
+            display:grid;
+            grid-template-columns:1fr 1fr 1fr 1fr;
+            gap:16px;
+            margin-top:22px;
+        }
+
+        .stat-card{
+            background:var(--card);
+            border:1px solid var(--border);
+            border-radius:22px;
+            padding:18px;
+            box-shadow:0 8px 22px rgba(15,23,42,.04);
+        }
+
+        .stat-top{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:14px;
+        }
+
+        .stat-icon{
+            width:42px;
+            height:42px;
+            border-radius:14px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:1rem;
+        }
+
+        .stat-blue{background:#eff6ff;color:#2563eb}
+        .stat-green{background:#ecfdf5;color:#16a34a}
+        .stat-orange{background:#fff7ed;color:#ea580c}
+        .stat-purple{background:#f5f3ff;color:#7c3aed}
+
+        .stat-label{
+            color:var(--muted);
+            font-size:.76rem;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:.35px;
+        }
+
+        .stat-value{
+            margin-top:6px;
+            font-size:1.55rem;
+            font-weight:800;
+            color:var(--primary);
+        }
+
+        .stat-note{
+            margin-top:6px;
+            font-size:.8rem;
+            color:#94a3b8;
+        }
+
+        .main-grid{
+            display:grid;
+            grid-template-columns:1.15fr .85fr;
+            gap:18px;
+            margin-top:18px;
+        }
+
+        .panel{
+            background:var(--card);
+            border:1px solid var(--border);
+            border-radius:24px;
+            padding:20px;
+            box-shadow:0 10px 30px rgba(15,23,42,.04);
+        }
+
+        .panel-header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+            margin-bottom:18px;
+        }
+
+        .panel-title{
+            font-size:1.02rem;
+            font-weight:800;
+            color:var(--primary);
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+
+        .panel-title i{
+            color:var(--accent);
+        }
+
+        .panel-sub{
+            color:var(--muted);
+            font-size:.84rem;
+            margin-top:4px;
+        }
+
+        .ghost-btn{
+            padding:10px 14px;
+            border-radius:12px;
+            border:1px solid var(--border);
+            background:#fff;
+            color:var(--primary);
+            font-weight:700;
+            cursor:pointer;
+        }
+
+        .quick-actions{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:12px;
+        }
+
+        .action-card{
+            border:1px solid var(--border);
+            border-radius:18px;
+            padding:16px;
+            background:linear-gradient(180deg,#fff,#f8fafc);
+            cursor:pointer;
+            transition:.25s ease;
+        }
+
+        .action-card:hover{
+            transform:translateY(-2px);
+            box-shadow:0 12px 24px rgba(15,23,42,.06);
+        }
+
+        .action-icon{
+            width:42px;
+            height:42px;
+            border-radius:14px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            margin-bottom:12px;
+            font-size:1rem;
+            background:#eff6ff;
+            color:var(--accent);
+        }
+
+        .action-title{
+            font-weight:800;
+            color:var(--primary);
+            margin-bottom:5px;
+            font-size:.95rem;
+        }
+
+        .action-desc{
+            color:var(--muted);
+            font-size:.82rem;
+            line-height:1.5;
+        }
+
+        .profile-card{
+            display:flex;
+            align-items:center;
+            gap:14px;
+            padding:14px;
+            border:1px solid var(--border);
+            border-radius:18px;
+            background:#f8fafc;
+        }
+
+        .profile-avatar{
+            width:56px;
+            height:56px;
+            border-radius:18px;
+            background:linear-gradient(135deg,#2563eb,#60a5fa);
+            color:#fff;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:1.2rem;
+            font-weight:800;
+        }
+
+        .profile-name{
+            font-size:1rem;
+            font-weight:800;
+            color:var(--primary);
+        }
+
+        .profile-meta{
+            color:var(--muted);
+            font-size:.82rem;
+            margin-top:4px;
+        }
+
+        .profile-badges{
+            margin-top:12px;
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+        }
+
+        .badge{
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+            padding:7px 12px;
+            border-radius:999px;
+            font-size:.74rem;
+            font-weight:700;
+            border:1px solid var(--border);
+            background:#fff;
+        }
+
+        .badge-success{
+            background:var(--success-bg);
+            color:#166534;
+            border-color:#bbf7d0;
+        }
+
+        .badge-blue{
+            background:#eff6ff;
+            color:#1d4ed8;
+            border-color:#dbeafe;
+        }
+
+        .salary-highlight{
+            margin-top:16px;
+            background:linear-gradient(135deg,#f8fafc,#eff6ff);
+            border:1px solid #dbeafe;
+            border-radius:20px;
+            padding:16px;
+        }
+
+        .salary-amount{
+            font-size:1.7rem;
+            font-weight:800;
+            color:var(--primary);
+            margin-top:6px;
+        }
+
+        .salary-meta{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:14px;
+        }
+
+        .mini-info{
+            background:#fff;
+            border:1px solid var(--border);
+            border-radius:16px;
+            padding:12px;
+        }
+
+        .mini-info-label{
+            font-size:.7rem;
+            color:var(--muted);
+            text-transform:uppercase;
+            font-weight:700;
+            margin-bottom:5px;
+        }
+
+        .mini-info-value{
+            font-size:.9rem;
+            font-weight:800;
+            color:var(--primary);
+        }
+
+        .table-wrap{
+            overflow:auto;
+            border-radius:18px;
+            border:1px solid var(--border);
+            margin-top:14px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:0;
+            min-width:760px;
+            background:#fff;
+        }
+
+        th{
+            text-align:left;
+            padding:15px 16px;
+            font-size:.72rem;
+            color:var(--muted);
+            border-bottom:1px solid var(--border);
+            text-transform:uppercase;
+            letter-spacing:.35px;
+            background:#f8fafc;
+            white-space:nowrap;
+        }
+
+        td{
+            padding:16px;
+            border-bottom:1px solid #eef2f7;
+            font-size:.88rem;
+            vertical-align:middle;
+            white-space:nowrap;
+        }
+
+        tr:hover td{
+            background:#fcfdff;
+        }
+
+        .status-badge{
+            padding:6px 12px;
+            border-radius:999px;
+            font-size:.72rem;
+            background:#dcfce7;
+            color:#166534;
+            font-weight:800;
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+        }
+
+        .download-btn{
+            border:none;
+            background:#eff6ff;
+            color:var(--accent);
+            font-weight:800;
+            cursor:pointer;
+            padding:10px 14px;
+            border-radius:12px;
+            transition:.2s ease;
+        }
+
+        .download-btn:hover{
+            background:#dbeafe;
+        }
+
+        .history-empty{
+            text-align:center;
+            padding:28px;
+            color:var(--muted);
+            font-size:.9rem;
+        }
+
+        .recent-list{
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+        }
+
+        .recent-item{
+            display:flex;
+            align-items:flex-start;
+            gap:12px;
+            border:1px solid var(--border);
+            border-radius:18px;
+            padding:14px;
+            background:#fff;
+        }
+
+        .recent-icon{
+            width:38px;
+            height:38px;
+            flex:0 0 38px;
+            border-radius:12px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:#eff6ff;
+            color:var(--accent);
+            font-size:.92rem;
+        }
+
+        .recent-title{
+            font-size:.9rem;
+            font-weight:800;
+            color:var(--primary);
+        }
+
+        .recent-desc{
+            font-size:.82rem;
+            color:var(--muted);
+            margin-top:4px;
+            line-height:1.5;
+        }
+
+        .recent-time{
+            font-size:.74rem;
+            color:#94a3b8;
+            margin-top:6px;
+        }
+
+        .dashboard-footer{
+            margin-top:18px;
+            text-align:center;
+            color:#94a3b8;
+            font-size:.78rem;
+        }
+
+        @media (max-width: 1100px){
+            .hero-grid,
+            .main-grid{
+                grid-template-columns:1fr;
+            }
+            .top-grid{
+                grid-template-columns:1fr 1fr;
+            }
+        }
+
+        @media (max-width: 700px){
+            .top-grid,
+            .quick-actions,
+            .salary-meta{
+                grid-template-columns:1fr;
+            }
+
+            .auth-card{
+                padding:1.5rem;
+            }
+
+            .hero{
+                padding:20px;
+            }
+
+            .hero-left h2{
+                font-size:1.5rem;
+            }
+
+            header{
+                padding:1rem 16px;
+            }
+
+            .dashboard-shell{
+                padding:18px 14px 34px;
+            }
+
+            .user-pill span{
+                display:none;
+            }
+        }
     </style>
 </head>
 <body>
 
 <section id="auth-page">
     <div class="auth-card">
+        <div class="auth-top-badge">
+            <i class="fas fa-shield-alt"></i>
+            Secure Staff Access
+        </div>
+
         <div class="auth-header">
             <h1>HGX <span style="color:var(--accent)">SALARY</span></h1>
-            <p style="color:#64748b; font-size:0.85rem;">Portal Slip Gaji Staff</p>
+            <p>Portal Slip Gaji Staff dengan tampilan lebih modern, aman, dan profesional.</p>
         </div>
 
         <div class="tab-menu">
@@ -64,58 +890,343 @@
         <div id="login-form" class="auth-form active">
             <div class="form-group">
                 <label>ID Karyawan</label>
-                <input type="text" id="login-id" placeholder="Masukkan ID">
+                <div class="input-wrap">
+                    <i class="fas fa-id-badge"></i>
+                    <input type="text" id="login-id" placeholder="Masukkan ID">
+                </div>
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" id="login-pass" placeholder="••••••••">
+                <div class="input-wrap">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="login-pass" placeholder="••••••••">
+                </div>
             </div>
-            <button class="btn" id="btn-login" onclick="handleLogin()">Masuk</button>
+            <button class="btn" id="btn-login" onclick="handleLogin()">Masuk ke Dashboard</button>
             <a class="forgot-link" onclick="handleForgot()">Lupa Password? Hubungi Admin</a>
         </div>
 
         <div id="register-form" class="auth-form">
             <div class="form-group">
                 <label>Nama Lengkap</label>
-                <input type="text" id="reg-name" placeholder="Nama Lengkap">
+                <div class="input-wrap">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="reg-name" placeholder="Nama Lengkap">
+                </div>
             </div>
             <div class="form-group">
                 <label>ID Karyawan</label>
-                <input type="text" id="reg-id" placeholder="ID Karyawan">
+                <div class="input-wrap">
+                    <i class="fas fa-id-card"></i>
+                    <input type="text" id="reg-id" placeholder="ID Karyawan">
+                </div>
             </div>
             <div class="form-group">
                 <label>Password Baru</label>
-                <input type="password" id="reg-pass" placeholder="Min. 6 Karakter">
+                <div class="input-wrap">
+                    <i class="fas fa-key"></i>
+                    <input type="password" id="reg-pass" placeholder="Min. 6 Karakter">
+                </div>
             </div>
-            <button class="btn" id="btn-reg" style="background:#0f172a;" onclick="handleRegister()">Daftar Staff</button>
+            <button class="btn btn-dark" id="btn-reg" onclick="handleRegister()">Daftar Staff</button>
+        </div>
+
+        <div class="auth-footer-note">
+            <span><i class="fas fa-lock"></i> Protected Login</span>
+            <span><i class="fas fa-file-invoice-dollar"></i> Salary Slip Access</span>
+            <span><i class="fas fa-user-shield"></i> Staff Only</span>
         </div>
     </div>
 </section>
 
 <section id="dashboard">
     <header>
-        <div style="font-weight:800;">HGX <span style="color:var(--accent)">SALARY</span></div>
-        <div style="display:flex; align-items:center; gap:15px;">
-            <span id="user-display" style="font-size:0.8rem; font-weight:600;"></span>
-            <button onclick="handleLogout()" style="color:#ef4444; border:none; background:none; font-weight:700; cursor:pointer;">Keluar</button>
+        <div class="brand">
+            <div class="brand-logo">
+                <i class="fas fa-wallet"></i>
+            </div>
+            <div>
+                <div class="brand-title">HGX Salary Dashboard</div>
+                <div class="brand-sub">Secure employee payroll portal</div>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="user-pill">
+                <div class="user-avatar" id="user-avatar">H</div>
+                <span id="user-display" style="font-size:.85rem;font-weight:700;"></span>
+            </div>
+            <button class="logout-btn" onclick="handleLogout()">Keluar</button>
         </div>
     </header>
-    <div class="container">
-        <div class="card">
-            <h3>Riwayat Slip Gaji</h3>
-            <table>
-                <thead>
-                    <tr><th>PERIODE</th><th>TANGGAL</th><th>STATUS</th><th>AKSI</th></tr>
-                </thead>
-                <tbody id="history-body">
-                    <tr>
-                        <td><b>April 2026</b></td>
-                        <td>20/04/2026</td>
-                        <td><span class="status-badge">PAID</span></td>
-                        <td><button style="border:none; background:none; color:var(--accent); font-weight:700; cursor:pointer;">Download PDF</button></td>
-                    </tr>
-                </tbody>
-            </table>
+
+    <div class="dashboard-shell">
+        <section class="hero">
+            <div class="hero-grid">
+                <div class="hero-left">
+                    <h2>Selamat datang di portal salary slip HGX</h2>
+                    <p>
+                        Sistem ini dirancang untuk memberikan akses yang cepat, rapi, dan aman ke data slip gaji staff.
+                        Kamu bisa melihat riwayat slip, status pembayaran, ringkasan payroll, dan informasi personal dalam satu dashboard yang lebih premium.
+                    </p>
+
+                    <div class="hero-actions">
+                        <button class="hero-btn" onclick="scrollToHistory()">
+                            <i class="fas fa-file-alt"></i>
+                            Lihat Slip Gaji
+                        </button>
+                        <button class="hero-btn" onclick="handleForgot()">
+                            <i class="fas fa-headset"></i>
+                            Hubungi Admin
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hero-side">
+                    <div class="hero-mini">
+                        <div class="hero-mini-label">Status Akun</div>
+                        <div class="hero-mini-value">Aktif & Aman</div>
+                    </div>
+                    <div class="hero-mini">
+                        <div class="hero-mini-label">Akses Terakhir</div>
+                        <div class="hero-mini-value" id="last-login-time">Hari Ini</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="top-grid">
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div>
+                        <div class="stat-label">Total Slip</div>
+                        <div class="stat-value">12</div>
+                    </div>
+                    <div class="stat-icon stat-blue"><i class="fas fa-folder-open"></i></div>
+                </div>
+                <div class="stat-note">Riwayat slip gaji tersimpan</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div>
+                        <div class="stat-label">Status Pembayaran</div>
+                        <div class="stat-value">Paid</div>
+                    </div>
+                    <div class="stat-icon stat-green"><i class="fas fa-circle-check"></i></div>
+                </div>
+                <div class="stat-note">Slip terbaru sudah dibayarkan</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div>
+                        <div class="stat-label">Periode Aktif</div>
+                        <div class="stat-value">Apr 2026</div>
+                    </div>
+                    <div class="stat-icon stat-orange"><i class="fas fa-calendar-days"></i></div>
+                </div>
+                <div class="stat-note">Periode slip terakhir</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div>
+                        <div class="stat-label">Akses User</div>
+                        <div class="stat-value">Staff</div>
+                    </div>
+                    <div class="stat-icon stat-purple"><i class="fas fa-user-shield"></i></div>
+                </div>
+                <div class="stat-note">Portal pribadi karyawan</div>
+            </div>
+        </section>
+
+        <section class="main-grid">
+            <div>
+                <div class="panel" id="salary-history-section">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title">
+                                <i class="fas fa-receipt"></i>
+                                Riwayat Slip Gaji
+                            </div>
+                            <div class="panel-sub">Daftar slip gaji yang tersedia untuk akun kamu.</div>
+                        </div>
+                        <button class="ghost-btn">Export</button>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Periode</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                    <th>Metode</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-body">
+                                <tr>
+                                    <td><b>April 2026</b></td>
+                                    <td>20/04/2026</td>
+                                    <td><span class="status-badge"><i class="fas fa-check"></i> PAID</span></td>
+                                    <td>Transfer</td>
+                                    <td><button class="download-btn">Download PDF</button></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Maret 2026</b></td>
+                                    <td>20/03/2026</td>
+                                    <td><span class="status-badge"><i class="fas fa-check"></i> PAID</span></td>
+                                    <td>Transfer</td>
+                                    <td><button class="download-btn">Download PDF</button></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Februari 2026</b></td>
+                                    <td>20/02/2026</td>
+                                    <td><span class="status-badge"><i class="fas fa-check"></i> PAID</span></td>
+                                    <td>Transfer</td>
+                                    <td><button class="download-btn">Download PDF</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel" style="margin-top:18px;">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title">
+                                <i class="fas fa-bolt"></i>
+                                Quick Actions
+                            </div>
+                            <div class="panel-sub">Akses cepat ke fungsi penting portal salary.</div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <div class="action-card" onclick="scrollToHistory()">
+                            <div class="action-icon"><i class="fas fa-file-invoice"></i></div>
+                            <div class="action-title">Lihat Slip</div>
+                            <div class="action-desc">Buka daftar slip gaji dan cek status pembayaran terbaru.</div>
+                        </div>
+
+                        <div class="action-card" onclick="handleForgot()">
+                            <div class="action-icon"><i class="fas fa-life-ring"></i></div>
+                            <div class="action-title">Hubungi Admin</div>
+                            <div class="action-desc">Ajukan bantuan untuk reset password atau pertanyaan payroll.</div>
+                        </div>
+
+                        <div class="action-card" onclick="simulateDownload()">
+                            <div class="action-icon"><i class="fas fa-download"></i></div>
+                            <div class="action-title">Download Cepat</div>
+                            <div class="action-desc">Unduh slip terbaru dengan lebih cepat dari dashboard.</div>
+                        </div>
+
+                        <div class="action-card" onclick="showInfo()">
+                            <div class="action-icon"><i class="fas fa-circle-info"></i></div>
+                            <div class="action-title">Info Salary</div>
+                            <div class="action-desc">Lihat penjelasan singkat terkait status slip dan periode gaji.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title">
+                                <i class="fas fa-user-circle"></i>
+                                Profil Staff
+                            </div>
+                            <div class="panel-sub">Informasi singkat akun yang sedang login.</div>
+                        </div>
+                    </div>
+
+                    <div class="profile-card">
+                        <div class="profile-avatar" id="profile-avatar">H</div>
+                        <div>
+                            <div class="profile-name" id="profile-name">Nama Staff</div>
+                            <div class="profile-meta">Portal salary pribadi • Akses aman</div>
+                        </div>
+                    </div>
+
+                    <div class="profile-badges">
+                        <span class="badge badge-success"><i class="fas fa-circle-check"></i> Active Account</span>
+                        <span class="badge badge-blue"><i class="fas fa-shield-halved"></i> Protected Access</span>
+                    </div>
+
+                    <div class="salary-highlight">
+                        <div class="panel-sub" style="margin:0;color:var(--muted);">Slip Terbaru</div>
+                        <div class="salary-amount">$ 500.00</div>
+
+                        <div class="salary-meta">
+                            <div class="mini-info">
+                                <div class="mini-info-label">Periode</div>
+                                <div class="mini-info-value">April 2026</div>
+                            </div>
+                            <div class="mini-info">
+                                <div class="mini-info-label">Status</div>
+                                <div class="mini-info-value" style="color:var(--success);">PAID</div>
+                            </div>
+                            <div class="mini-info">
+                                <div class="mini-info-label">Tanggal Bayar</div>
+                                <div class="mini-info-value">20/04/2026</div>
+                            </div>
+                            <div class="mini-info">
+                                <div class="mini-info-label">Metode</div>
+                                <div class="mini-info-value">Transfer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel" style="margin-top:18px;">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title">
+                                <i class="fas fa-clock-rotate-left"></i>
+                                Aktivitas Terbaru
+                            </div>
+                            <div class="panel-sub">Catatan aktivitas akun di portal ini.</div>
+                        </div>
+                    </div>
+
+                    <div class="recent-list">
+                        <div class="recent-item">
+                            <div class="recent-icon"><i class="fas fa-right-to-bracket"></i></div>
+                            <div>
+                                <div class="recent-title">Login berhasil</div>
+                                <div class="recent-desc">Kamu berhasil masuk ke portal salary slip HGX.</div>
+                                <div class="recent-time" id="activity-login-time">Baru saja</div>
+                            </div>
+                        </div>
+
+                        <div class="recent-item">
+                            <div class="recent-icon"><i class="fas fa-file-arrow-down"></i></div>
+                            <div>
+                                <div class="recent-title">Slip tersedia</div>
+                                <div class="recent-desc">Slip gaji bulan terbaru sudah tersedia untuk diunduh.</div>
+                                <div class="recent-time">Hari ini</div>
+                            </div>
+                        </div>
+
+                        <div class="recent-item">
+                            <div class="recent-icon"><i class="fas fa-shield"></i></div>
+                            <div>
+                                <div class="recent-title">Akses aman aktif</div>
+                                <div class="recent-desc">Session login tersimpan di browser ini sampai logout manual.</div>
+                                <div class="recent-time">Sesi aktif</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="dashboard-footer">
+            HGX Salary Portal • Tampilan diperbarui tanpa mengubah logika backend
         </div>
     </div>
 </section>
@@ -204,6 +1315,7 @@
             if (data.result === "success") {
                 localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("currentUser", data.name || id);
+                localStorage.setItem("lastLoginAt", new Date().toLocaleString("id-ID"));
                 showDashboard();
             } else {
                 alert(data.message || "ID atau Password salah!");
@@ -213,7 +1325,7 @@
             alert("Gagal terhubung ke database. Pastikan Apps Script sudah benar dan aktif.");
         } finally {
             btn.disabled = false;
-            btn.innerText = "Masuk";
+            btn.innerText = "Masuk ke Dashboard";
         }
     }
 
@@ -266,16 +1378,44 @@
         window.open("https://wa.me/628123456789?text=Halo%20Admin,%20saya%20lupa%20password%20HGX%20Salary", "_blank");
     }
 
+    function getInitial(name) {
+        if (!name) return "H";
+        return String(name).trim().charAt(0).toUpperCase();
+    }
+
     function showDashboard() {
+        const currentUser = localStorage.getItem('currentUser') || "";
+        const lastLogin = localStorage.getItem('lastLoginAt') || "Hari Ini";
+
         document.getElementById('auth-page').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
-        document.getElementById('user-display').innerText = "Halo, " + (localStorage.getItem('currentUser') || "");
+
+        document.getElementById('user-display').innerText = currentUser;
+        document.getElementById('user-avatar').innerText = getInitial(currentUser);
+        document.getElementById('profile-avatar').innerText = getInitial(currentUser);
+        document.getElementById('profile-name').innerText = currentUser || "Nama Staff";
+        document.getElementById('last-login-time').innerText = lastLogin;
+        document.getElementById('activity-login-time').innerText = lastLogin;
     }
 
     function handleLogout() {
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("currentUser");
+        localStorage.removeItem("lastLoginAt");
         location.reload();
+    }
+
+    function scrollToHistory() {
+        const el = document.getElementById("salary-history-section");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function simulateDownload() {
+        alert("Fitur download cepat siap dihubungkan ke file slip gaji PDF.");
+    }
+
+    function showInfo() {
+        alert("Dashboard ini sudah di-upgrade tampilannya tanpa mengubah logika backend atau script data yang berjalan.");
     }
 
     document.getElementById("login-id").addEventListener("keydown", function(event) {
