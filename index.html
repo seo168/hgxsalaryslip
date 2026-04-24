@@ -432,10 +432,207 @@
       table{min-width:820px}
       th,td{padding:13px 14px}
     }
+
+    /* === HOLOGRAM UI UPGRADE === */
+    .holo-scanlines{
+      position:fixed;
+      inset:0;
+      z-index:-6;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(55,232,255,.055) 0px,
+          rgba(55,232,255,.055) 1px,
+          transparent 2px,
+          transparent 7px
+        );
+      mix-blend-mode:screen;
+      opacity:.42;
+      animation:holoScan 4.8s linear infinite;
+    }
+
+    .holo-beam{
+      position:fixed;
+      left:50%;
+      top:50%;
+      width:82vmin;
+      height:82vmin;
+      transform:translate(-50%,-50%) rotateX(62deg);
+      z-index:-6;
+      pointer-events:none;
+      border-radius:50%;
+      background:
+        radial-gradient(circle,rgba(55,232,255,.16),transparent 58%),
+        conic-gradient(from 0deg,transparent,rgba(55,232,255,.28),transparent,rgba(255,60,172,.18),transparent,rgba(139,92,246,.24),transparent);
+      filter:blur(.4px);
+      opacity:.7;
+      animation:holoDisk 10s linear infinite;
+    }
+
+    .holo-beam::before,
+    .holo-beam::after{
+      content:"";
+      position:absolute;
+      inset:12%;
+      border-radius:50%;
+      border:1px solid rgba(55,232,255,.22);
+      box-shadow:0 0 28px rgba(55,232,255,.18), inset 0 0 24px rgba(255,60,172,.10);
+    }
+
+    .holo-beam::after{
+      inset:28%;
+      border-color:rgba(255,60,172,.20);
+      animation:holoPulse 2.8s ease-in-out infinite alternate;
+    }
+
+    .holo-runes{
+      position:fixed;
+      inset:0;
+      z-index:-5;
+      pointer-events:none;
+      overflow:hidden;
+    }
+
+    .holo-runes span{
+      position:absolute;
+      color:rgba(147,197,253,.62);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:2px;
+      text-shadow:0 0 12px rgba(55,232,255,.75),0 0 26px rgba(255,60,172,.25);
+      opacity:.62;
+      animation:runeFloat 9s linear infinite;
+      user-select:none;
+    }
+
+    .holo-runes span:nth-child(1){left:8%;top:18%;animation-delay:0s}
+    .holo-runes span:nth-child(2){left:72%;top:14%;animation-delay:1.2s}
+    .holo-runes span:nth-child(3){left:18%;top:78%;animation-delay:2.4s}
+    .holo-runes span:nth-child(4){left:82%;top:70%;animation-delay:3.4s}
+    .holo-runes span:nth-child(5){left:48%;top:8%;animation-delay:4.2s}
+    .holo-runes span:nth-child(6){left:38%;top:86%;animation-delay:5.1s}
+
+    .auth-card,
+    .sidebar,
+    .topbar,
+    .welcome,
+    .stat-box,
+    .card{
+      position:relative;
+    }
+
+    .auth-card::before,
+    .sidebar::before,
+    .topbar::before,
+    .welcome::before,
+    .stat-box::before,
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius:inherit;
+      padding:1px;
+      background:linear-gradient(135deg,rgba(55,232,255,.42),rgba(255,60,172,.16),rgba(139,92,246,.32),rgba(55,232,255,.18));
+      -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+      pointer-events:none;
+      opacity:.72;
+    }
+
+    .card::after,
+    .welcome::after,
+    .stat-box::after{
+      content:"";
+      position:absolute;
+      left:-140%;
+      top:0;
+      width:80%;
+      height:100%;
+      background:linear-gradient(105deg,transparent,rgba(55,232,255,.12),rgba(255,255,255,.06),transparent);
+      transform:skewX(-18deg);
+      animation:holoSweep 7s ease-in-out infinite;
+      pointer-events:none;
+    }
+
+    .card-title,
+    .side-brand,
+    .auth-header h1,
+    .welcome h2{
+      text-shadow:0 0 18px rgba(55,232,255,.24),0 0 36px rgba(255,60,172,.12);
+    }
+
+    .side-link.active,
+    .download-btn,
+    .btn,
+    .tab-btn.active{
+      box-shadow:0 0 0 1px rgba(55,232,255,.12),0 0 24px rgba(47,124,255,.20),0 0 38px rgba(255,60,172,.08);
+    }
+
+    .holo-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:7px 11px;
+      border:1px solid rgba(55,232,255,.25);
+      border-radius:999px;
+      background:rgba(55,232,255,.08);
+      color:#bfdbfe;
+      font-size:.72rem;
+      font-weight:900;
+      letter-spacing:.4px;
+      text-transform:uppercase;
+      box-shadow:inset 0 0 18px rgba(55,232,255,.06),0 0 18px rgba(55,232,255,.14);
+    }
+
+    @keyframes holoScan{
+      0%{transform:translateY(-12px);opacity:.30}
+      50%{opacity:.50}
+      100%{transform:translateY(12px);opacity:.30}
+    }
+
+    @keyframes holoDisk{
+      to{transform:translate(-50%,-50%) rotateX(62deg) rotateZ(360deg)}
+    }
+
+    @keyframes holoPulse{
+      from{opacity:.42;transform:scale(.96)}
+      to{opacity:.86;transform:scale(1.04)}
+    }
+
+    @keyframes runeFloat{
+      0%{transform:translate3d(0,30px,0) rotate(0deg);opacity:0}
+      18%{opacity:.72}
+      100%{transform:translate3d(22px,-90px,0) rotate(8deg);opacity:0}
+    }
+
+    @keyframes holoSweep{
+      0%,48%{left:-140%;opacity:0}
+      60%{opacity:1}
+      100%{left:160%;opacity:0}
+    }
+
+    @media(max-width:600px){
+      .holo-beam{width:115vmin;height:115vmin;opacity:.46}
+      .holo-runes span{font-size:10px;opacity:.45}
+      .holo-scanlines{opacity:.32}
+    }
+
   </style>
 </head>
 
 <body>
+<div class="holo-scanlines"></div>
+<div class="holo-beam"></div>
+<div class="holo-runes">
+  <span>HGX-CORE</span>
+  <span>PAYROLL-SYNC</span>
+  <span>SALARY-ID</span>
+  <span>SECURE-ACCESS</span>
+  <span>QUANTUM-UI</span>
+  <span>STAFF-DATA</span>
+</div>
 <canvas id="three-bg"></canvas>
 <div class="hyper-bg"></div>
 <div class="aurora"></div>
