@@ -1,1569 +1,1617 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HGX Salary Slip - Secure Portal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root{
-            --primary:#0f172a;
-            --primary-2:#1e293b;
-            --accent:#2563eb;
-            --accent-2:#1d4ed8;
-            --bg:#f8fafc;
-            --card:#ffffff;
-            --text:#334155;
-            --muted:#64748b;
-            --border:#e2e8f0;
-            --success:#16a34a;
-            --success-bg:#dcfce7;
-            --danger:#ef4444;
-            --danger-bg:#fee2e2;
-            --warning:#f59e0b;
-            --shadow:0 20px 40px rgba(15,23,42,.08);
-            --shadow-lg:0 30px 60px rgba(15,23,42,.18);
-            --radius:22px;
-        }
-
-        *{box-sizing:border-box;margin:0;padding:0}
-        body{
-            font-family:'Inter',sans-serif;
-            background:var(--bg);
-            color:var(--text);
-            overflow-x:hidden;
-        }
-
-        .hidden{display:none !important;}
-
-        /* AUTH */
-        #auth-page{
-            min-height:100vh;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            background:
-                radial-gradient(circle at top right, rgba(37,99,235,.18), transparent 28%),
-                radial-gradient(circle at bottom left, rgba(59,130,246,.15), transparent 25%),
-                linear-gradient(135deg,#0f172a 0%, #111827 40%, #020617 100%);
-            padding:24px;
-            position:relative;
-        }
-
-        .auth-card{
-            width:100%;
-            max-width:460px;
-            background:rgba(255,255,255,.98);
-            backdrop-filter:blur(16px);
-            border:1px solid rgba(255,255,255,.2);
-            border-radius:28px;
-            box-shadow:var(--shadow-lg);
-            padding:2.4rem;
-            position:relative;
-            overflow:hidden;
-        }
-
-        .auth-card::before{
-            content:"";
-            position:absolute;
-            top:-80px;
-            right:-80px;
-            width:180px;
-            height:180px;
-            background:radial-gradient(circle, rgba(37,99,235,.18), transparent 70%);
-            border-radius:50%;
-        }
-
-        .auth-top-badge{
-            display:inline-flex;
-            align-items:center;
-            gap:8px;
-            padding:8px 14px;
-            border-radius:999px;
-            font-size:.72rem;
-            font-weight:700;
-            color:var(--accent);
-            background:#eff6ff;
-            border:1px solid #dbeafe;
-            margin-bottom:18px;
-        }
-
-        .auth-header{
-            text-align:center;
-            margin-bottom:2rem;
-            position:relative;
-            z-index:1;
-        }
-
-        .auth-header h1{
-            font-size:2rem;
-            font-weight:800;
-            letter-spacing:-1px;
-            color:var(--primary);
-        }
-
-        .auth-header p{
-            color:var(--muted);
-            font-size:.92rem;
-            margin-top:8px;
-        }
-
-        .tab-menu{
-            display:flex;
-            gap:10px;
-            margin-bottom:1.8rem;
-            background:#f8fafc;
-            padding:6px;
-            border-radius:16px;
-            border:1px solid var(--border);
-            position:relative;
-            z-index:1;
-        }
-
-        .tab-btn{
-            flex:1;
-            padding:12px;
-            border:none;
-            background:none;
-            font-weight:700;
-            cursor:pointer;
-            border-radius:12px;
-            color:var(--muted);
-            transition:.25s ease;
-            font-size:.92rem;
-        }
-
-        .tab-btn.active{
-            background:#fff;
-            color:var(--accent);
-            box-shadow:0 6px 18px rgba(15,23,42,.06);
-        }
-
-        .auth-form{display:none}
-        .auth-form.active{display:block;animation:fadeIn .35s ease}
-
-        @keyframes fadeIn{
-            from{opacity:0;transform:translateY(10px)}
-            to{opacity:1;transform:translateY(0)}
-        }
-
-        .form-group{
-            margin-bottom:1.15rem;
-            position:relative;
-        }
-
-        .form-group label{
-            display:block;
-            font-size:.72rem;
-            font-weight:800;
-            color:var(--muted);
-            margin-bottom:.55rem;
-            text-transform:uppercase;
-            letter-spacing:.4px;
-        }
-
-        .input-wrap{
-            position:relative;
-        }
-
-        .input-wrap i{
-            position:absolute;
-            left:14px;
-            top:50%;
-            transform:translateY(-50%);
-            color:#94a3b8;
-            font-size:.9rem;
-        }
-
-        .form-group input{
-            width:100%;
-            padding:.95rem 1rem .95rem 2.7rem;
-            border:1px solid var(--border);
-            border-radius:14px;
-            outline:none;
-            transition:.25s ease;
-            font-size:.95rem;
-            background:#fff;
-        }
-
-        .form-group input:focus{
-            border-color:var(--accent);
-            box-shadow:0 0 0 4px rgba(37,99,235,.10);
-        }
-
-        .btn{
-            width:100%;
-            padding:.95rem 1rem;
-            border:none;
-            border-radius:14px;
-            background:linear-gradient(135deg,var(--accent),var(--accent-2));
-            color:#fff;
-            font-weight:700;
-            cursor:pointer;
-            transition:.25s ease;
-            font-size:.95rem;
-        }
-
-        .btn:hover{
-            transform:translateY(-1px);
-            box-shadow:0 12px 22px rgba(37,99,235,.20);
-        }
-
-        .btn:disabled{
-            background:#94a3b8;
-            cursor:not-allowed;
-            transform:none;
-            box-shadow:none;
-        }
-
-        .btn-dark{
-            background:linear-gradient(135deg,#0f172a,#1e293b) !important;
-        }
-
-        .forgot-link{
-            display:block;
-            text-align:center;
-            margin-top:1.35rem;
-            font-size:.88rem;
-            color:var(--muted);
-            text-decoration:none;
-            cursor:pointer;
-            transition:.2s;
-        }
-
-        .forgot-link:hover{color:var(--accent)}
-
-        .auth-footer-note{
-            margin-top:18px;
-            display:flex;
-            justify-content:center;
-            gap:14px;
-            flex-wrap:wrap;
-            color:#94a3b8;
-            font-size:.76rem;
-        }
-
-        /* DASHBOARD */
-        #dashboard{display:none;min-height:100vh;background:var(--bg)}
-
-        header{
-            background:rgba(255,255,255,.92);
-            backdrop-filter:blur(14px);
-            border-bottom:1px solid var(--border);
-            padding:1rem 4%;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            position:sticky;
-            top:0;
-            z-index:100;
-        }
-
-        .brand{
-            display:flex;
-            align-items:center;
-            gap:14px;
-        }
-
-        .brand-logo{
-            width:44px;
-            height:44px;
-            border-radius:14px;
-            background:linear-gradient(135deg,var(--accent),#60a5fa);
-            color:white;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:1.05rem;
-            box-shadow:0 10px 24px rgba(37,99,235,.25);
-        }
-
-        .brand-title{
-            font-weight:800;
-            color:var(--primary);
-            font-size:1.05rem;
-            letter-spacing:-.4px;
-        }
-
-        .brand-sub{
-            font-size:.78rem;
-            color:var(--muted);
-            margin-top:3px;
-        }
-
-        .header-right{
-            display:flex;
-            align-items:center;
-            gap:14px;
-        }
-
-        .user-pill{
-            display:flex;
-            align-items:center;
-            gap:10px;
-            background:#fff;
-            border:1px solid var(--border);
-            padding:8px 14px;
-            border-radius:999px;
-            box-shadow:0 8px 20px rgba(15,23,42,.05);
-        }
-
-        .user-avatar{
-            width:34px;
-            height:34px;
-            border-radius:50%;
-            background:linear-gradient(135deg,#dbeafe,#bfdbfe);
-            color:var(--accent);
-            font-weight:800;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:.9rem;
-        }
-
-        .logout-btn{
-            color:var(--danger);
-            border:none;
-            background:none;
-            font-weight:800;
-            cursor:pointer;
-            font-size:.92rem;
-        }
-
-        .dashboard-shell{
-            max-width:1280px;
-            margin:0 auto;
-            padding:26px 18px 40px;
-        }
-
-        .hero{
-            background:linear-gradient(135deg,#0f172a 0%, #1e3a8a 100%);
-            border-radius:30px;
-            padding:28px;
-            color:#fff;
-            position:relative;
-            overflow:hidden;
-            box-shadow:var(--shadow);
-        }
-
-        .hero::before{
-            content:"";
-            position:absolute;
-            right:-60px;
-            top:-60px;
-            width:220px;
-            height:220px;
-            background:radial-gradient(circle, rgba(255,255,255,.18), transparent 70%);
-            border-radius:50%;
-        }
-
-        .hero-grid{
-            display:grid;
-            grid-template-columns:1.35fr .8fr;
-            gap:20px;
-            align-items:stretch;
-            position:relative;
-            z-index:1;
-        }
-
-        .hero-left h2{
-            font-size:2rem;
-            font-weight:800;
-            letter-spacing:-1px;
-            margin-bottom:10px;
-        }
-
-        .hero-left p{
-            color:rgba(255,255,255,.82);
-            max-width:680px;
-            line-height:1.7;
-            font-size:.95rem;
-        }
-
-        .hero-actions{
-            margin-top:20px;
-            display:flex;
-            gap:12px;
-            flex-wrap:wrap;
-        }
-
-        .hero-btn{
-            display:inline-flex;
-            align-items:center;
-            gap:9px;
-            padding:12px 16px;
-            border-radius:14px;
-            border:1px solid rgba(255,255,255,.18);
-            background:rgba(255,255,255,.10);
-            color:#fff;
-            font-weight:700;
-            cursor:pointer;
-            transition:.25s ease;
-        }
-
-        .hero-btn:hover{
-            background:rgba(255,255,255,.16);
-            transform:translateY(-1px);
-        }
-
-        .hero-side{
-            display:grid;
-            gap:12px;
-        }
-
-        .hero-mini{
-            background:rgba(255,255,255,.10);
-            border:1px solid rgba(255,255,255,.12);
-            border-radius:20px;
-            padding:18px;
-        }
-
-        .hero-mini-label{
-            font-size:.76rem;
-            color:rgba(255,255,255,.72);
-            text-transform:uppercase;
-            font-weight:700;
-            margin-bottom:8px;
-        }
-
-        .hero-mini-value{
-            font-size:1.3rem;
-            font-weight:800;
-        }
-
-        .top-grid{
-            display:grid;
-            grid-template-columns:1fr 1fr 1fr 1fr;
-            gap:16px;
-            margin-top:22px;
-        }
-
-        .stat-card{
-            background:var(--card);
-            border:1px solid var(--border);
-            border-radius:22px;
-            padding:18px;
-            box-shadow:0 8px 22px rgba(15,23,42,.04);
-        }
-
-        .stat-top{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:14px;
-        }
-
-        .stat-icon{
-            width:42px;
-            height:42px;
-            border-radius:14px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:1rem;
-        }
-
-        .stat-blue{background:#eff6ff;color:#2563eb}
-        .stat-green{background:#ecfdf5;color:#16a34a}
-        .stat-orange{background:#fff7ed;color:#ea580c}
-        .stat-purple{background:#f5f3ff;color:#7c3aed}
-
-        .stat-label{
-            color:var(--muted);
-            font-size:.76rem;
-            font-weight:700;
-            text-transform:uppercase;
-            letter-spacing:.35px;
-        }
-
-        .stat-value{
-            margin-top:6px;
-            font-size:1.55rem;
-            font-weight:800;
-            color:var(--primary);
-        }
-
-        .stat-note{
-            margin-top:6px;
-            font-size:.8rem;
-            color:#94a3b8;
-        }
-
-        .main-grid{
-            display:grid;
-            grid-template-columns:1.15fr .85fr;
-            gap:18px;
-            margin-top:18px;
-        }
-
-        .panel{
-            background:var(--card);
-            border:1px solid var(--border);
-            border-radius:24px;
-            padding:20px;
-            box-shadow:0 10px 30px rgba(15,23,42,.04);
-        }
-
-        .panel-header{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:12px;
-            margin-bottom:18px;
-        }
-
-        .panel-title{
-            font-size:1.02rem;
-            font-weight:800;
-            color:var(--primary);
-            display:flex;
-            align-items:center;
-            gap:10px;
-        }
-
-        .panel-title i{
-            color:var(--accent);
-        }
-
-        .panel-sub{
-            color:var(--muted);
-            font-size:.84rem;
-            margin-top:4px;
-        }
-
-        .ghost-btn{
-            padding:10px 14px;
-            border-radius:12px;
-            border:1px solid var(--border);
-            background:#fff;
-            color:var(--primary);
-            font-weight:700;
-            cursor:pointer;
-        }
-
-        .quick-actions{
-            display:grid;
-            grid-template-columns:1fr 1fr;
-            gap:12px;
-        }
-
-        .action-card{
-            border:1px solid var(--border);
-            border-radius:18px;
-            padding:16px;
-            background:linear-gradient(180deg,#fff,#f8fafc);
-            cursor:pointer;
-            transition:.25s ease;
-        }
-
-        .action-card:hover{
-            transform:translateY(-2px);
-            box-shadow:0 12px 24px rgba(15,23,42,.06);
-        }
-
-        .action-icon{
-            width:42px;
-            height:42px;
-            border-radius:14px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            margin-bottom:12px;
-            font-size:1rem;
-            background:#eff6ff;
-            color:var(--accent);
-        }
-
-        .action-title{
-            font-weight:800;
-            color:var(--primary);
-            margin-bottom:5px;
-            font-size:.95rem;
-        }
-
-        .action-desc{
-            color:var(--muted);
-            font-size:.82rem;
-            line-height:1.5;
-        }
-
-        .profile-card{
-            display:flex;
-            align-items:center;
-            gap:14px;
-            padding:14px;
-            border:1px solid var(--border);
-            border-radius:18px;
-            background:#f8fafc;
-        }
-
-        .profile-avatar{
-            width:56px;
-            height:56px;
-            border-radius:18px;
-            background:linear-gradient(135deg,#2563eb,#60a5fa);
-            color:#fff;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:1.2rem;
-            font-weight:800;
-        }
-
-        .profile-name{
-            font-size:1rem;
-            font-weight:800;
-            color:var(--primary);
-        }
-
-        .profile-meta{
-            color:var(--muted);
-            font-size:.82rem;
-            margin-top:4px;
-        }
-
-        .profile-badges{
-            margin-top:12px;
-            display:flex;
-            gap:8px;
-            flex-wrap:wrap;
-        }
-
-        .badge{
-            display:inline-flex;
-            align-items:center;
-            gap:6px;
-            padding:7px 12px;
-            border-radius:999px;
-            font-size:.74rem;
-            font-weight:700;
-            border:1px solid var(--border);
-            background:#fff;
-        }
-
-        .badge-success{
-            background:var(--success-bg);
-            color:#166534;
-            border-color:#bbf7d0;
-        }
-
-        .badge-blue{
-            background:#eff6ff;
-            color:#1d4ed8;
-            border-color:#dbeafe;
-        }
-
-        .salary-highlight{
-            margin-top:16px;
-            background:linear-gradient(135deg,#f8fafc,#eff6ff);
-            border:1px solid #dbeafe;
-            border-radius:20px;
-            padding:16px;
-        }
-
-        .salary-amount{
-            font-size:1.7rem;
-            font-weight:800;
-            color:var(--primary);
-            margin-top:6px;
-        }
-
-        .salary-meta{
-            display:grid;
-            grid-template-columns:1fr 1fr;
-            gap:10px;
-            margin-top:14px;
-        }
-
-        .mini-info{
-            background:#fff;
-            border:1px solid var(--border);
-            border-radius:16px;
-            padding:12px;
-        }
-
-        .mini-info-label{
-            font-size:.7rem;
-            color:var(--muted);
-            text-transform:uppercase;
-            font-weight:700;
-            margin-bottom:5px;
-        }
-
-        .mini-info-value{
-            font-size:.9rem;
-            font-weight:800;
-            color:var(--primary);
-        }
-
-        .table-wrap{
-            overflow:auto;
-            border-radius:18px;
-            border:1px solid var(--border);
-            margin-top:14px;
-        }
-
-        table{
-            width:100%;
-            border-collapse:collapse;
-            margin-top:0;
-            min-width:760px;
-            background:#fff;
-        }
-
-        th{
-            text-align:left;
-            padding:15px 16px;
-            font-size:.72rem;
-            color:var(--muted);
-            border-bottom:1px solid var(--border);
-            text-transform:uppercase;
-            letter-spacing:.35px;
-            background:#f8fafc;
-            white-space:nowrap;
-        }
-
-        td{
-            padding:16px;
-            border-bottom:1px solid #eef2f7;
-            font-size:.88rem;
-            vertical-align:middle;
-            white-space:nowrap;
-        }
-
-        tr:hover td{
-            background:#fcfdff;
-        }
-
-        .status-badge{
-            padding:6px 12px;
-            border-radius:999px;
-            font-size:.72rem;
-            background:#dcfce7;
-            color:#166534;
-            font-weight:800;
-            display:inline-flex;
-            align-items:center;
-            gap:6px;
-        }
-
-        .download-btn{
-            border:none;
-            background:#eff6ff;
-            color:var(--accent);
-            font-weight:800;
-            cursor:pointer;
-            padding:10px 14px;
-            border-radius:12px;
-            transition:.2s ease;
-        }
-
-        .download-btn:hover{
-            background:#dbeafe;
-        }
-
-        .history-empty{
-            text-align:center;
-            padding:28px;
-            color:var(--muted);
-            font-size:.9rem;
-        }
-
-        .recent-list{
-            display:flex;
-            flex-direction:column;
-            gap:12px;
-        }
-
-        .recent-item{
-            display:flex;
-            align-items:flex-start;
-            gap:12px;
-            border:1px solid var(--border);
-            border-radius:18px;
-            padding:14px;
-            background:#fff;
-        }
-
-        .recent-icon{
-            width:38px;
-            height:38px;
-            flex:0 0 38px;
-            border-radius:12px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            background:#eff6ff;
-            color:var(--accent);
-            font-size:.92rem;
-        }
-
-        .recent-title{
-            font-size:.9rem;
-            font-weight:800;
-            color:var(--primary);
-        }
-
-        .recent-desc{
-            font-size:.82rem;
-            color:var(--muted);
-            margin-top:4px;
-            line-height:1.5;
-        }
-
-        .recent-time{
-            font-size:.74rem;
-            color:#94a3b8;
-            margin-top:6px;
-        }
-
-        .dashboard-footer{
-            margin-top:18px;
-            text-align:center;
-            color:#94a3b8;
-            font-size:.78rem;
-        }
-
-        @media (max-width: 1100px){
-            .hero-grid,
-            .main-grid{
-                grid-template-columns:1fr;
-            }
-            .top-grid{
-                grid-template-columns:1fr 1fr;
-            }
-        }
-
-        @media (max-width: 700px){
-            .top-grid,
-            .quick-actions,
-            .salary-meta{
-                grid-template-columns:1fr;
-            }
-
-            .auth-card{
-                padding:1.5rem;
-            }
-
-            .hero{
-                padding:20px;
-            }
-
-            .hero-left h2{
-                font-size:1.5rem;
-            }
-
-            header{
-                padding:1rem 16px;
-            }
-
-            .dashboard-shell{
-                padding:18px 14px 34px;
-            }
-
-            .user-pill span{
-                display:none;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HGX Salary Slip - Secure Portal</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --primary:#0f172a;
+      --primary2:#1e293b;
+      --accent:#2563eb;
+      --accent2:#1d4ed8;
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --text:#334155;
+      --muted:#64748b;
+      --soft:#94a3b8;
+      --border:#e2e8f0;
+      --success:#16a34a;
+      --success-bg:#dcfce7;
+      --danger:#ef4444;
+      --warning:#f59e0b;
+      --blue-bg:#eff6ff;
+      --shadow:0 14px 40px rgba(15,23,42,.08);
+      --shadow-lg:0 30px 80px rgba(15,23,42,.22);
+      --radius:24px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"Inter",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    button,input{font-family:inherit}
+    .hidden{display:none!important}
+
+    /* AUTH */
+    #auth-page{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:
+        radial-gradient(circle at 15% 10%,rgba(59,130,246,.25),transparent 30%),
+        radial-gradient(circle at 90% 90%,rgba(37,99,235,.18),transparent 28%),
+        linear-gradient(135deg,#020617 0%,#0f172a 48%,#111827 100%);
+    }
+
+    .auth-card{
+      width:100%;
+      max-width:460px;
+      background:rgba(255,255,255,.98);
+      border:1px solid rgba(255,255,255,.28);
+      border-radius:30px;
+      padding:2.4rem;
+      box-shadow:var(--shadow-lg);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .auth-card:before{
+      content:"";
+      position:absolute;
+      width:210px;
+      height:210px;
+      border-radius:50%;
+      right:-105px;
+      top:-105px;
+      background:radial-gradient(circle,rgba(37,99,235,.18),transparent 68%);
+    }
+
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 14px;
+      border-radius:999px;
+      background:var(--blue-bg);
+      color:var(--accent);
+      border:1px solid #dbeafe;
+      font-size:.74rem;
+      font-weight:800;
+      margin-bottom:18px;
+      position:relative;
+      z-index:1;
+    }
+
+    .auth-header{
+      text-align:center;
+      margin-bottom:1.8rem;
+      position:relative;
+      z-index:1;
+    }
+
+    .auth-header h1{
+      font-size:2rem;
+      font-weight:900;
+      color:var(--primary);
+      letter-spacing:-1px;
+    }
+
+    .auth-header p{
+      color:var(--muted);
+      font-size:.9rem;
+      margin-top:8px;
+      line-height:1.55;
+    }
+
+    .tab-menu{
+      display:flex;
+      gap:8px;
+      background:#f8fafc;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:6px;
+      margin-bottom:1.6rem;
+      position:relative;
+      z-index:1;
+    }
+
+    .tab-btn{
+      flex:1;
+      border:none;
+      background:transparent;
+      padding:12px;
+      border-radius:14px;
+      font-weight:800;
+      color:var(--muted);
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .tab-btn.active{
+      background:#fff;
+      color:var(--accent);
+      box-shadow:0 10px 22px rgba(15,23,42,.06);
+    }
+
+    .auth-form{display:none}
+    .auth-form.active{display:block;animation:fadeIn .28s ease}
+
+    @keyframes fadeIn{
+      from{opacity:0;transform:translateY(10px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    .form-group{margin-bottom:1rem}
+    .form-group label{
+      display:block;
+      font-size:.72rem;
+      color:var(--muted);
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.35px;
+      margin-bottom:.55rem;
+    }
+
+    .input-wrap{position:relative}
+    .input-wrap i{
+      position:absolute;
+      left:15px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#94a3b8;
+    }
+
+    .form-group input{
+      width:100%;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:.95rem 1rem .95rem 2.8rem;
+      font-size:.95rem;
+      outline:none;
+      transition:.2s ease;
+      background:#fff;
+    }
+
+    .form-group input:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(37,99,235,.1);
+    }
+
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:16px;
+      padding:.98rem 1rem;
+      color:white;
+      font-weight:900;
+      cursor:pointer;
+      font-size:.95rem;
+      transition:.2s ease;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 14px 24px rgba(37,99,235,.22);
+    }
+
+    .btn:disabled{
+      background:#94a3b8;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
+    }
+
+    .btn-dark{background:linear-gradient(135deg,#0f172a,#1e293b)!important}
+
+    .forgot-link{
+      display:block;
+      text-align:center;
+      margin-top:1.25rem;
+      color:var(--muted);
+      font-size:.86rem;
+      cursor:pointer;
+      text-decoration:none;
+    }
+
+    .forgot-link:hover{color:var(--accent)}
+
+    .auth-footer{
+      margin-top:18px;
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:10px;
+      color:#94a3b8;
+      font-size:.74rem;
+      font-weight:700;
+    }
+
+    /* DASHBOARD */
+    #dashboard{display:none;min-height:100vh}
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:100;
+      background:rgba(255,255,255,.92);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+      padding:14px 4%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .brand-logo{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      background:linear-gradient(135deg,#2563eb,#60a5fa);
+      box-shadow:0 14px 28px rgba(37,99,235,.22);
+      flex:0 0 46px;
+    }
+
+    .brand-title{
+      font-size:1.02rem;
+      color:var(--primary);
+      font-weight:900;
+      letter-spacing:-.4px;
+    }
+
+    .brand-sub{
+      margin-top:3px;
+      color:var(--muted);
+      font-size:.78rem;
+      font-weight:500;
+    }
+
+    .topbar-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .user-pill{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:8px 14px 8px 8px;
+      box-shadow:0 10px 26px rgba(15,23,42,.06);
+    }
+
+    .user-avatar{
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#dbeafe;
+      color:var(--accent);
+      font-weight:900;
+    }
+
+    .logout-btn{
+      border:none;
+      background:#fff;
+      color:var(--danger);
+      border:1px solid var(--border);
+      padding:10px 14px;
+      border-radius:14px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .shell{
+      width:min(1280px,calc(100% - 32px));
+      margin:0 auto;
+      padding:28px 0 42px;
+    }
+
+    .hero{
+      border-radius:32px;
+      background:
+        radial-gradient(circle at 90% 20%,rgba(255,255,255,.18),transparent 30%),
+        linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);
+      color:white;
+      padding:30px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.3fr .7fr;
+      gap:22px;
+      align-items:stretch;
+    }
+
+    .hero h2{
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:-1px;
+      margin-bottom:12px;
+    }
+
+    .hero p{
+      max-width:740px;
+      color:rgba(255,255,255,.82);
+      font-size:.96rem;
+      line-height:1.75;
+    }
+
+    .hero-actions{
+      margin-top:20px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .hero-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+      border:1px solid rgba(255,255,255,.18);
+      color:white;
+      background:rgba(255,255,255,.12);
+      padding:12px 16px;
+      border-radius:16px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .hero-btn:hover{
+      background:rgba(255,255,255,.18);
+      transform:translateY(-1px);
+    }
+
+    .hero-side{
+      display:grid;
+      gap:14px;
+    }
+
+    .hero-mini{
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.11);
+      border-radius:22px;
+      padding:18px;
+    }
+
+    .hero-mini-label{
+      font-size:.72rem;
+      font-weight:900;
+      color:rgba(255,255,255,.72);
+      text-transform:uppercase;
+      margin-bottom:8px;
+      letter-spacing:.4px;
+    }
+
+    .hero-mini-value{
+      font-size:1.25rem;
+      font-weight:900;
+      word-break:break-word;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .stat-card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:0 8px 24px rgba(15,23,42,.04);
+      min-height:134px;
+    }
+
+    .stat-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .stat-label{
+      font-size:.72rem;
+      color:var(--muted);
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.4px;
+    }
+
+    .stat-value{
+      margin-top:8px;
+      font-size:1.5rem;
+      font-weight:900;
+      color:var(--primary);
+      line-height:1.15;
+      word-break:break-word;
+    }
+
+    .stat-note{
+      margin-top:12px;
+      color:#8aa0bd;
+      font-size:.8rem;
+      font-weight:600;
+    }
+
+    .stat-icon{
+      width:42px;
+      height:42px;
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex:0 0 42px;
+    }
+
+    .blue{background:#eff6ff;color:#2563eb}
+    .green{background:#ecfdf5;color:#16a34a}
+    .orange{background:#fff7ed;color:#ea580c}
+    .purple{background:#f5f3ff;color:#7c3aed}
+
+    .grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:18px;
+      margin-top:18px;
+      align-items:start;
+    }
+
+    .panel{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:26px;
+      padding:20px;
+      box-shadow:0 10px 30px rgba(15,23,42,.045);
+    }
+
+    .panel + .panel{margin-top:18px}
+
+    .panel-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .panel-title{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:var(--primary);
+      font-weight:900;
+      font-size:1.02rem;
+    }
+
+    .panel-title i{color:var(--accent)}
+
+    .panel-sub{
+      color:var(--muted);
+      font-size:.84rem;
+      margin-top:5px;
+      line-height:1.45;
+    }
+
+    .ghost-btn{
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--primary);
+      padding:10px 14px;
+      border-radius:14px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .table-wrap{
+      overflow:auto;
+      border:1px solid var(--border);
+      border-radius:20px;
+      background:#fff;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:720px;
+    }
+
+    th{
+      text-align:left;
+      padding:15px 16px;
+      font-size:.72rem;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.35px;
+      background:#f8fafc;
+      border-bottom:1px solid var(--border);
+      white-space:nowrap;
+    }
+
+    td{
+      padding:16px;
+      border-bottom:1px solid #eef2f7;
+      font-size:.88rem;
+      color:var(--text);
+      white-space:nowrap;
+      vertical-align:middle;
+    }
+
+    tbody tr:last-child td{border-bottom:none}
+    tr:hover td{background:#fcfdff}
+
+    .status-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 12px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:.72rem;
+      background:var(--success-bg);
+      color:#166534;
+    }
+
+    .download-btn{
+      border:none;
+      background:#eff6ff;
+      color:var(--accent);
+      padding:10px 14px;
+      border-radius:14px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .download-btn:hover{background:#dbeafe}
+
+    .history-empty{
+      text-align:center;
+      color:var(--muted);
+      padding:30px!important;
+    }
+
+    .profile-card{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      background:#f8fafc;
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:14px;
+    }
+
+    .profile-avatar{
+      width:58px;
+      height:58px;
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(135deg,#2563eb,#60a5fa);
+      color:white;
+      font-size:1.25rem;
+      font-weight:900;
+      flex:0 0 58px;
+    }
+
+    .profile-name{
+      color:var(--primary);
+      font-weight:900;
+      font-size:1.04rem;
+    }
+
+    .profile-meta{
+      color:var(--muted);
+      margin-top:4px;
+      font-size:.82rem;
+      line-height:1.45;
+      word-break:break-word;
+    }
+
+    .profile-badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:999px;
+      padding:7px 11px;
+      font-size:.74rem;
+      font-weight:900;
+      color:var(--text);
+      max-width:100%;
+      word-break:break-word;
+    }
+
+    .badge-success{
+      background:var(--success-bg);
+      color:#166534;
+      border-color:#bbf7d0;
+    }
+
+    .badge-blue{
+      background:#eff6ff;
+      color:#1d4ed8;
+      border-color:#dbeafe;
+    }
+
+    .salary-highlight{
+      margin-top:16px;
+      border:1px solid #dbeafe;
+      background:linear-gradient(135deg,#f8fafc,#eff6ff);
+      border-radius:24px;
+      padding:16px;
+    }
+
+    .salary-caption{
+      color:var(--muted);
+      font-size:.82rem;
+      font-weight:700;
+    }
+
+    .salary-amount{
+      margin-top:6px;
+      font-size:1.75rem;
+      color:var(--primary);
+      font-weight:900;
+    }
+
+    .salary-meta{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .mini-info{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:12px;
+      min-height:74px;
+    }
+
+    .mini-info-label{
+      font-size:.68rem;
+      color:var(--muted);
+      text-transform:uppercase;
+      font-weight:900;
+      letter-spacing:.35px;
+      margin-bottom:6px;
+    }
+
+    .mini-info-value{
+      font-size:.9rem;
+      font-weight:900;
+      color:var(--primary);
+      word-break:break-word;
+      line-height:1.35;
+    }
+
+    .quick-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .action-card{
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:16px;
+      background:linear-gradient(180deg,#fff,#f8fafc);
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .action-card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 28px rgba(15,23,42,.06);
+    }
+
+    .action-icon{
+      width:42px;
+      height:42px;
+      border-radius:16px;
+      background:#eff6ff;
+      color:var(--accent);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:12px;
+    }
+
+    .action-title{
+      color:var(--primary);
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .action-desc{
+      color:var(--muted);
+      font-size:.82rem;
+      line-height:1.5;
+    }
+
+    .recent-list{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .recent-item{
+      display:flex;
+      gap:12px;
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:14px;
+      background:#fff;
+    }
+
+    .recent-icon{
+      width:38px;
+      height:38px;
+      flex:0 0 38px;
+      border-radius:14px;
+      background:#eff6ff;
+      color:var(--accent);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .recent-title{
+      color:var(--primary);
+      font-weight:900;
+      font-size:.9rem;
+    }
+
+    .recent-desc{
+      color:var(--muted);
+      font-size:.82rem;
+      line-height:1.5;
+      margin-top:4px;
+    }
+
+    .recent-time{
+      color:#94a3b8;
+      font-size:.74rem;
+      margin-top:6px;
+      font-weight:600;
+    }
+
+    .footer{
+      text-align:center;
+      color:#94a3b8;
+      font-size:.78rem;
+      margin-top:20px;
+      font-weight:600;
+    }
+
+    @media(max-width:1100px){
+      .hero-grid,.grid{grid-template-columns:1fr}
+      .stats{grid-template-columns:1fr 1fr}
+    }
+
+    @media(max-width:720px){
+      .topbar{padding:12px 16px}
+      .brand-sub{display:none}
+      .logout-btn{padding:9px 11px}
+      .user-pill span{display:none}
+      .shell{width:calc(100% - 24px);padding-top:18px}
+      .hero{padding:22px}
+      .hero h2{font-size:1.45rem}
+      .stats,.quick-actions,.salary-meta{grid-template-columns:1fr}
+      .auth-card{padding:1.5rem}
+      table{min-width:620px}
+    }
+  </style>
 </head>
+
 <body>
 
 <section id="auth-page">
-    <div class="auth-card">
-        <div class="auth-top-badge">
-            <i class="fas fa-shield-alt"></i>
-            Secure Staff Access
-        </div>
-
-        <div class="auth-header">
-            <h1>HGX <span style="color:var(--accent)">SALARY</span></h1>
-            <p>Portal Slip Gaji Staff dengan tampilan lebih modern, aman, dan profesional.</p>
-        </div>
-
-        <div class="tab-menu">
-            <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Masuk</button>
-            <button class="tab-btn" id="tab-reg" onclick="switchTab('register')">Daftar</button>
-        </div>
-
-        <div id="login-form" class="auth-form active">
-            <div class="form-group">
-                <label>ID Karyawan</label>
-                <div class="input-wrap">
-                    <i class="fas fa-id-badge"></i>
-                    <input type="text" id="login-id" placeholder="Masukkan ID">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <div class="input-wrap">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="login-pass" placeholder="••••••••">
-                </div>
-            </div>
-            <button class="btn" id="btn-login" onclick="handleLogin()">Masuk ke Dashboard</button>
-            <a class="forgot-link" onclick="handleForgot()">Lupa Password? Hubungi Admin</a>
-        </div>
-
-        <div id="register-form" class="auth-form">
-            <div class="form-group">
-                <label>Nama Lengkap</label>
-                <div class="input-wrap">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="reg-name" placeholder="Nama Lengkap">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>ID Karyawan</label>
-                <div class="input-wrap">
-                    <i class="fas fa-id-card"></i>
-                    <input type="text" id="reg-id" placeholder="ID Karyawan">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Password Baru</label>
-                <div class="input-wrap">
-                    <i class="fas fa-key"></i>
-                    <input type="password" id="reg-pass" placeholder="Min. 6 Karakter">
-                </div>
-            </div>
-            <button class="btn btn-dark" id="btn-reg" onclick="handleRegister()">Daftar Staff</button>
-        </div>
-
-        <div class="auth-footer-note">
-            <span><i class="fas fa-lock"></i> Protected Login</span>
-            <span><i class="fas fa-file-invoice-dollar"></i> Salary Slip Access</span>
-            <span><i class="fas fa-user-shield"></i> Staff Only</span>
-        </div>
+  <div class="auth-card">
+    <div class="auth-badge">
+      <i class="fas fa-shield-alt"></i>
+      Secure Staff Access
     </div>
+
+    <div class="auth-header">
+      <h1>HGX <span style="color:var(--accent)">SALARY</span></h1>
+      <p>Portal slip gaji staff dengan akses aman, rapi, dan profesional.</p>
+    </div>
+
+    <div class="tab-menu">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Masuk</button>
+      <button class="tab-btn" id="tab-reg" onclick="switchTab('register')">Daftar</button>
+    </div>
+
+    <div id="login-form" class="auth-form active">
+      <div class="form-group">
+        <label>ID Karyawan</label>
+        <div class="input-wrap">
+          <i class="fas fa-id-badge"></i>
+          <input type="text" id="login-id" placeholder="Masukkan ID">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="login-pass" placeholder="••••••••">
+        </div>
+      </div>
+
+      <button class="btn" id="btn-login" onclick="handleLogin()">Masuk ke Dashboard</button>
+      <a class="forgot-link" onclick="handleForgot()">Lupa Password? Hubungi Admin</a>
+    </div>
+
+    <div id="register-form" class="auth-form">
+      <div class="form-group">
+        <label>Nama Lengkap</label>
+        <div class="input-wrap">
+          <i class="fas fa-user"></i>
+          <input type="text" id="reg-name" placeholder="Nama Lengkap">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>ID Karyawan</label>
+        <div class="input-wrap">
+          <i class="fas fa-id-card"></i>
+          <input type="text" id="reg-id" placeholder="ID Karyawan">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Password Baru</label>
+        <div class="input-wrap">
+          <i class="fas fa-key"></i>
+          <input type="password" id="reg-pass" placeholder="Min. 6 Karakter">
+        </div>
+      </div>
+
+      <button class="btn btn-dark" id="btn-reg" onclick="handleRegister()">Daftar Staff</button>
+    </div>
+
+    <div class="auth-footer">
+      <span><i class="fas fa-lock"></i> Protected Login</span>
+      <span><i class="fas fa-file-invoice-dollar"></i> Salary Slip Access</span>
+      <span><i class="fas fa-user-shield"></i> Staff Only</span>
+    </div>
+  </div>
 </section>
 
 <section id="dashboard">
-    <header>
-        <div class="brand">
-            <div class="brand-logo">
-                <i class="fas fa-wallet"></i>
-            </div>
-            <div>
-                <div class="brand-title">HGX Salary Dashboard</div>
-                <div class="brand-sub">Secure employee payroll portal</div>
-            </div>
-        </div>
-
-        <div class="header-right">
-            <div class="user-pill">
-                <div class="user-avatar" id="user-avatar">H</div>
-                <span id="user-display" style="font-size:.85rem;font-weight:700;"></span>
-            </div>
-            <button class="logout-btn" onclick="handleLogout()">Keluar</button>
-        </div>
-    </header>
-
-    <div class="dashboard-shell">
-        <section class="hero">
-            <div class="hero-grid">
-                <div class="hero-left">
-                    <h2>Selamat datang di portal salary slip HGX</h2>
-                    <p>
-                        Sistem ini dirancang untuk memberikan akses yang cepat, rapi, dan aman ke data slip gaji staff.
-                        Kamu bisa melihat riwayat slip, status pembayaran, ringkasan payroll, dan informasi personal dalam satu dashboard yang lebih premium.
-                    </p>
-
-                    <div class="hero-actions">
-                        <button class="hero-btn" onclick="scrollToHistory()">
-                            <i class="fas fa-file-alt"></i>
-                            Lihat Slip Gaji
-                        </button>
-                        <button class="hero-btn" onclick="handleForgot()">
-                            <i class="fas fa-headset"></i>
-                            Hubungi Admin
-                        </button>
-                    </div>
-                </div>
-
-                <div class="hero-side">
-                    <div class="hero-mini">
-                        <div class="hero-mini-label">Status Akun</div>
-                        <div class="hero-mini-value">Aktif & Aman</div>
-                    </div>
-                    <div class="hero-mini">
-                        <div class="hero-mini-label">Akses Terakhir</div>
-                        <div class="hero-mini-value" id="last-login-time">Hari Ini</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="top-grid">
-            <div class="stat-card">
-                <div class="stat-top">
-                    <div>
-                        <div class="stat-label">Total Slip</div>
-                        <div class="stat-value">12</div>
-                    </div>
-                    <div class="stat-icon stat-blue"><i class="fas fa-folder-open"></i></div>
-                </div>
-                <div class="stat-note">Riwayat slip gaji tersimpan</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-top">
-                    <div>
-                        <div class="stat-label">Status Pembayaran</div>
-                        <div class="stat-value">Paid</div>
-                    </div>
-                    <div class="stat-icon stat-green"><i class="fas fa-circle-check"></i></div>
-                </div>
-                <div class="stat-note">Slip terbaru sudah dibayarkan</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-top">
-                    <div>
-                        <div class="stat-label">Periode Aktif</div>
-                        <div class="stat-value">Apr 2026</div>
-                    </div>
-                    <div class="stat-icon stat-orange"><i class="fas fa-calendar-days"></i></div>
-                </div>
-                <div class="stat-note">Periode slip terakhir</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-top">
-                    <div>
-                        <div class="stat-label">Akses User</div>
-                        <div class="stat-value">Staff</div>
-                    </div>
-                    <div class="stat-icon stat-purple"><i class="fas fa-user-shield"></i></div>
-                </div>
-                <div class="stat-note">Portal pribadi karyawan</div>
-            </div>
-        </section>
-
-        <section class="main-grid">
-            <div>
-                <div class="panel" id="salary-history-section">
-                    <div class="panel-header">
-                        <div>
-                            <div class="panel-title">
-                                <i class="fas fa-receipt"></i>
-                                Riwayat Slip Gaji
-                            </div>
-                            <div class="panel-sub">Daftar slip gaji yang tersedia untuk akun kamu.</div>
-                        </div>
-                        <button class="ghost-btn">Export</button>
-                    </div>
-
-                    <div class="table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Periode</th>
-                                    <th>Tanggal</th>
-                                    <th>Status</th>
-                                    <th>Metode</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="history-body">
-                                <tr>
-                                    <td><b>April 2026</b></td>
-                                    <td>20/04/2026</td>
-                                    <td><span class="status-badge"><i class="fas fa-check"></i> PAID</span></td>
-                                    <td>Transfer</td>
-                                    <td><button class="download-btn">Download PDF</button></td>
-                                </tr>
-                                <tr>
-                                    <td><b>Maret 2026</b></td>
-                                    <td>20/03/2026</td>
-                                    <td><span class="status-badge"><i class="fas fa-check"></i> PAID</span></td>
-                                    <td>Transfer</td>
-                                    <td><button class="download-btn">Download PDF</button></td>
-                                </tr>
-                                <tr>
-                                    <td><b>Februari 2026</b></td>
-                                    <td>20/02/2026</td>
-                                    <td><span class="status-badge"><i class="fas fa-check"></i> PAID</span></td>
-                                    <td>Transfer</td>
-                                    <td><button class="download-btn">Download PDF</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="panel" style="margin-top:18px;">
-                    <div class="panel-header">
-                        <div>
-                            <div class="panel-title">
-                                <i class="fas fa-bolt"></i>
-                                Quick Actions
-                            </div>
-                            <div class="panel-sub">Akses cepat ke fungsi penting portal salary.</div>
-                        </div>
-                    </div>
-
-                    <div class="quick-actions">
-                        <div class="action-card" onclick="scrollToHistory()">
-                            <div class="action-icon"><i class="fas fa-file-invoice"></i></div>
-                            <div class="action-title">Lihat Slip</div>
-                            <div class="action-desc">Buka daftar slip gaji dan cek status pembayaran terbaru.</div>
-                        </div>
-
-                        <div class="action-card" onclick="handleForgot()">
-                            <div class="action-icon"><i class="fas fa-life-ring"></i></div>
-                            <div class="action-title">Hubungi Admin</div>
-                            <div class="action-desc">Ajukan bantuan untuk reset password atau pertanyaan payroll.</div>
-                        </div>
-
-                        <div class="action-card" onclick="simulateDownload()">
-                            <div class="action-icon"><i class="fas fa-download"></i></div>
-                            <div class="action-title">Download Cepat</div>
-                            <div class="action-desc">Unduh slip terbaru dengan lebih cepat dari dashboard.</div>
-                        </div>
-
-                        <div class="action-card" onclick="showInfo()">
-                            <div class="action-icon"><i class="fas fa-circle-info"></i></div>
-                            <div class="action-title">Info Salary</div>
-                            <div class="action-desc">Lihat penjelasan singkat terkait status slip dan periode gaji.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="panel">
-                    <div class="panel-header">
-                        <div>
-                            <div class="panel-title">
-                                <i class="fas fa-user-circle"></i>
-                                Profil Staff
-                            </div>
-                            <div class="panel-sub">Informasi singkat akun yang sedang login.</div>
-                        </div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-avatar" id="profile-avatar">H</div>
-                        <div>
-                            <div class="profile-name" id="profile-name">Nama Staff</div>
-                            <div class="profile-meta">Portal salary pribadi • Akses aman</div>
-                        </div>
-                    </div>
-
-                    <div class="profile-badges">
-                        <span class="badge badge-success"><i class="fas fa-circle-check"></i> Active Account</span>
-                        <span class="badge badge-blue"><i class="fas fa-shield-halved"></i> Protected Access</span>
-                    </div>
-
-                    <div class="salary-highlight">
-                        <div class="panel-sub" style="margin:0;color:var(--muted);">Slip Terbaru</div>
-                        <div class="salary-amount">$ 500.00</div>
-
-                        <div class="salary-meta">
-                            <div class="mini-info">
-                                <div class="mini-info-label">Periode</div>
-                                <div class="mini-info-value">April 2026</div>
-                            </div>
-                            <div class="mini-info">
-                                <div class="mini-info-label">Status</div>
-                                <div class="mini-info-value" style="color:var(--success);">PAID</div>
-                            </div>
-                            <div class="mini-info">
-                                <div class="mini-info-label">Tanggal Bayar</div>
-                                <div class="mini-info-value">20/04/2026</div>
-                            </div>
-                            <div class="mini-info">
-                                <div class="mini-info-label">Metode</div>
-                                <div class="mini-info-value">Transfer</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel" style="margin-top:18px;">
-                    <div class="panel-header">
-                        <div>
-                            <div class="panel-title">
-                                <i class="fas fa-clock-rotate-left"></i>
-                                Aktivitas Terbaru
-                            </div>
-                            <div class="panel-sub">Catatan aktivitas akun di portal ini.</div>
-                        </div>
-                    </div>
-
-                    <div class="recent-list">
-                        <div class="recent-item">
-                            <div class="recent-icon"><i class="fas fa-right-to-bracket"></i></div>
-                            <div>
-                                <div class="recent-title">Login berhasil</div>
-                                <div class="recent-desc">Kamu berhasil masuk ke portal salary slip HGX.</div>
-                                <div class="recent-time" id="activity-login-time">Baru saja</div>
-                            </div>
-                        </div>
-
-                        <div class="recent-item">
-                            <div class="recent-icon"><i class="fas fa-file-arrow-down"></i></div>
-                            <div>
-                                <div class="recent-title">Slip tersedia</div>
-                                <div class="recent-desc">Slip gaji bulan terbaru sudah tersedia untuk diunduh.</div>
-                                <div class="recent-time">Hari ini</div>
-                            </div>
-                        </div>
-
-                        <div class="recent-item">
-                            <div class="recent-icon"><i class="fas fa-shield"></i></div>
-                            <div>
-                                <div class="recent-title">Akses aman aktif</div>
-                                <div class="recent-desc">Session login tersimpan di browser ini sampai logout manual.</div>
-                                <div class="recent-time">Sesi aktif</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="dashboard-footer">
-            HGX Salary Portal • Tampilan diperbarui tanpa mengubah logika backend
-        </div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-logo">
+        <i class="fas fa-wallet"></i>
+      </div>
+      <div>
+        <div class="brand-title">HGX Salary Dashboard</div>
+        <div class="brand-sub">Secure employee payroll portal</div>
+      </div>
     </div>
+
+    <div class="topbar-right">
+      <div class="user-pill">
+        <div class="user-avatar" id="user-avatar">H</div>
+        <span id="user-display" style="font-size:.86rem;font-weight:900;"></span>
+      </div>
+      <button class="logout-btn" onclick="handleLogout()">Keluar</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <h2>Selamat datang di portal salary slip HGX</h2>
+          <p>
+            Sistem ini membantu staff melihat data profil, informasi rekening, riwayat slip gaji,
+            status pembayaran, dan file PDF slip gaji dengan tampilan yang lebih rapi dan profesional.
+          </p>
+
+          <div class="hero-actions">
+            <button class="hero-btn" onclick="scrollToHistory()">
+              <i class="fas fa-file-alt"></i>
+              Lihat Slip Gaji
+            </button>
+            <button class="hero-btn" onclick="handleForgot()">
+              <i class="fas fa-headset"></i>
+              Hubungi Admin
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-side">
+          <div class="hero-mini">
+            <div class="hero-mini-label">Status Akun</div>
+            <div class="hero-mini-value" id="hero-account-status">Aktif & Aman</div>
+          </div>
+          <div class="hero-mini">
+            <div class="hero-mini-label">Akses Terakhir</div>
+            <div class="hero-mini-value" id="last-login-time">Hari Ini</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat-card">
+        <div class="stat-top">
+          <div>
+            <div class="stat-label">Total Slip</div>
+            <div class="stat-value" id="stat-total-slip">0</div>
+          </div>
+          <div class="stat-icon blue"><i class="fas fa-folder-open"></i></div>
+        </div>
+        <div class="stat-note">Riwayat slip gaji tersedia</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <div>
+            <div class="stat-label">Status Pembayaran</div>
+            <div class="stat-value" id="stat-payment-status">-</div>
+          </div>
+          <div class="stat-icon green"><i class="fas fa-circle-check"></i></div>
+        </div>
+        <div class="stat-note">Status slip terbaru</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <div>
+            <div class="stat-label">Periode Aktif</div>
+            <div class="stat-value" id="stat-active-period">-</div>
+          </div>
+          <div class="stat-icon orange"><i class="fas fa-calendar-days"></i></div>
+        </div>
+        <div class="stat-note">Periode slip terakhir</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <div>
+            <div class="stat-label">Akses User</div>
+            <div class="stat-value" id="stat-user-access">Staff</div>
+          </div>
+          <div class="stat-icon purple"><i class="fas fa-user-shield"></i></div>
+        </div>
+        <div class="stat-note">Portal pribadi karyawan</div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div>
+        <div class="panel" id="salary-history-section">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">
+                <i class="fas fa-receipt"></i>
+                Riwayat Slip Gaji
+              </div>
+              <div class="panel-sub">Daftar slip gaji yang tersedia untuk akun kamu.</div>
+            </div>
+            <button class="ghost-btn" onclick="exportSalaryCSV()">Export</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Periode</th>
+                  <th>Tanggal Bayar</th>
+                  <th>Status</th>
+                  <th>Total Gaji</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="history-body">
+                <tr>
+                  <td colspan="5" class="history-empty">Memuat data salary...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">
+                <i class="fas fa-bolt"></i>
+                Quick Actions
+              </div>
+              <div class="panel-sub">Akses cepat ke fungsi penting portal salary.</div>
+            </div>
+          </div>
+
+          <div class="quick-actions">
+            <div class="action-card" onclick="scrollToHistory()">
+              <div class="action-icon"><i class="fas fa-file-invoice"></i></div>
+              <div class="action-title">Lihat Slip</div>
+              <div class="action-desc">Buka daftar slip gaji dan cek status pembayaran terbaru.</div>
+            </div>
+
+            <div class="action-card" onclick="handleForgot()">
+              <div class="action-icon"><i class="fas fa-life-ring"></i></div>
+              <div class="action-title">Hubungi Admin</div>
+              <div class="action-desc">Ajukan bantuan untuk reset password atau pertanyaan payroll.</div>
+            </div>
+
+            <div class="action-card" onclick="downloadLatestPDF()">
+              <div class="action-icon"><i class="fas fa-download"></i></div>
+              <div class="action-title">Download Cepat</div>
+              <div class="action-desc">Unduh slip terbaru berdasarkan data PDF dari Google Sheet.</div>
+            </div>
+
+            <div class="action-card" onclick="showInfo()">
+              <div class="action-icon"><i class="fas fa-circle-info"></i></div>
+              <div class="action-title">Info Salary</div>
+              <div class="action-desc">Lihat penjelasan singkat terkait status slip dan periode gaji.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">
+                <i class="fas fa-user-circle"></i>
+                Profil Staff
+              </div>
+              <div class="panel-sub">Informasi akun yang sedang login.</div>
+            </div>
+          </div>
+
+          <div class="profile-card">
+            <div class="profile-avatar" id="profile-avatar">H</div>
+            <div>
+              <div class="profile-name" id="profile-name">Nama Staff</div>
+              <div class="profile-meta" id="profile-meta">Memuat data profil...</div>
+            </div>
+          </div>
+
+          <div class="profile-badges" id="profile-badges">
+            <span class="badge badge-blue"><i class="fas fa-spinner"></i> Loading...</span>
+          </div>
+
+          <div class="salary-highlight">
+            <div class="salary-caption">Slip Terbaru</div>
+            <div class="salary-amount" id="latest-salary-amount">$ 0.00</div>
+
+            <div class="salary-meta">
+              <div class="mini-info">
+                <div class="mini-info-label">Periode</div>
+                <div class="mini-info-value" id="latest-period">-</div>
+              </div>
+              <div class="mini-info">
+                <div class="mini-info-label">Status</div>
+                <div class="mini-info-value" id="latest-status">-</div>
+              </div>
+              <div class="mini-info">
+                <div class="mini-info-label">Tanggal Bayar</div>
+                <div class="mini-info-value" id="latest-paid-date">-</div>
+              </div>
+              <div class="mini-info">
+                <div class="mini-info-label">Metode</div>
+                <div class="mini-info-value">Transfer</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">
+                <i class="fas fa-clock-rotate-left"></i>
+                Aktivitas Terbaru
+              </div>
+              <div class="panel-sub">Catatan aktivitas akun di portal ini.</div>
+            </div>
+          </div>
+
+          <div class="recent-list">
+            <div class="recent-item">
+              <div class="recent-icon"><i class="fas fa-right-to-bracket"></i></div>
+              <div>
+                <div class="recent-title">Login berhasil</div>
+                <div class="recent-desc">Kamu berhasil masuk ke portal salary slip HGX.</div>
+                <div class="recent-time" id="activity-login-time">Baru saja</div>
+              </div>
+            </div>
+
+            <div class="recent-item">
+              <div class="recent-icon"><i class="fas fa-file-arrow-down"></i></div>
+              <div>
+                <div class="recent-title">Data salary aktif</div>
+                <div class="recent-desc">Data ditarik langsung dari Google Sheet sesuai ID login.</div>
+                <div class="recent-time">Realtime</div>
+              </div>
+            </div>
+
+            <div class="recent-item">
+              <div class="recent-icon"><i class="fas fa-shield"></i></div>
+              <div>
+                <div class="recent-title">Akses aman aktif</div>
+                <div class="recent-desc">Session login tersimpan di browser ini sampai logout manual.</div>
+                <div class="recent-time">Sesi aktif</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      HGX Salary Portal • Data staff dan salary otomatis dari Google Sheet
+    </div>
+  </main>
 </section>
 
 <script>
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyQvuShqYlykOnb8-k2jrRU1EJTxIry1wZZJEsAEDCgXMEism7aMoqvEajHntH2_WwrOw/exec";
+  const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyQvuShqYlykOnb8-k2jrRU1EJTxIry1wZZJEsAEDCgXMEism7aMoqvEajHntH2_WwrOw/exec";
+  let latestPdfUrl = "";
+  let currentSalaryList = [];
 
-    function switchTab(type) {
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+  function switchTab(type) {
+    document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+    document.querySelectorAll(".auth-form").forEach(form => form.classList.remove("active"));
 
-        if (type === 'login') {
-            document.getElementById('tab-login').classList.add('active');
-            document.getElementById('login-form').classList.add('active');
-        } else {
-            document.getElementById('tab-reg').classList.add('active');
-            document.getElementById('register-form').classList.add('active');
-        }
+    if (type === "login") {
+      document.getElementById("tab-login").classList.add("active");
+      document.getElementById("login-form").classList.add("active");
+    } else {
+      document.getElementById("tab-reg").classList.add("active");
+      document.getElementById("register-form").classList.add("active");
     }
+  }
 
-    function requestJsonp(params) {
-        return new Promise((resolve, reject) => {
-            const callbackName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-            const url = new URL(BACKEND_URL);
+  function requestJsonp(params) {
+    return new Promise((resolve, reject) => {
+      const callbackName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+      const url = new URL(BACKEND_URL);
 
-            Object.entries(params).forEach(([key, value]) => {
-                url.searchParams.set(key, value);
-            });
+      Object.entries(params).forEach(([key, value]) => {
+        url.searchParams.set(key, value);
+      });
 
-            url.searchParams.set("callback", callbackName);
-            url.searchParams.set("_t", Date.now().toString());
+      url.searchParams.set("callback", callbackName);
+      url.searchParams.set("_t", Date.now().toString());
 
-            const script = document.createElement("script");
-            let finished = false;
+      const script = document.createElement("script");
+      let finished = false;
 
-            function cleanup() {
-                if (script.parentNode) script.parentNode.removeChild(script);
-                try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
-            }
+      function cleanup() {
+        if (script.parentNode) script.parentNode.removeChild(script);
+        try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
+      }
 
-            window[callbackName] = function(data) {
-                if (finished) return;
-                finished = true;
-                cleanup();
-                resolve(data);
-            };
+      window[callbackName] = function(data) {
+        if (finished) return;
+        finished = true;
+        cleanup();
+        resolve(data);
+      };
 
-            script.onerror = function() {
-                if (finished) return;
-                finished = true;
-                cleanup();
-                reject(new Error("Gagal memuat JSONP dari Apps Script"));
-            };
+      script.onerror = function() {
+        if (finished) return;
+        finished = true;
+        cleanup();
+        reject(new Error("Gagal memuat JSONP dari Apps Script"));
+      };
 
-            script.src = url.toString();
-            document.body.appendChild(script);
+      script.src = url.toString();
+      document.body.appendChild(script);
 
-            setTimeout(() => {
-                if (finished) return;
-                finished = true;
-                cleanup();
-                reject(new Error("Request timeout"));
-            }, 15000);
-        });
-    }
-
-    async function handleLogin() {
-        const id = document.getElementById('login-id').value.trim();
-        const pass = document.getElementById('login-pass').value.trim();
-        const btn = document.getElementById('btn-login');
-
-        if (!id || !pass) {
-            alert("Lengkapi data!");
-            return;
-        }
-
-        btn.disabled = true;
-        btn.innerText = "Memproses...";
-
-        try {
-            const data = await requestJsonp({
-                action: "login",
-                id: id,
-                pass: pass
-            });
-
-            if (data.result === "success") {
-                localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("currentUser", data.name || id);
-                localStorage.setItem("currentUserId", data.id || id);
-                localStorage.setItem("lastLoginAt", new Date().toLocaleString("id-ID"));
-                showDashboard();
-            } else {
-                alert(data.message || "ID atau Password salah!");
-            }
-        } catch (error) {
-            console.error("LOGIN ERROR:", error);
-            alert("Gagal terhubung ke database. Pastikan Apps Script sudah benar dan aktif.");
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "Masuk ke Dashboard";
-        }
-    }
-
-    async function handleRegister() {
-        const name = document.getElementById('reg-name').value.trim();
-        const id = document.getElementById('reg-id').value.trim();
-        const pass = document.getElementById('reg-pass').value.trim();
-        const btn = document.getElementById('btn-reg');
-
-        if (!name || !id || !pass) {
-            alert("Lengkapi data!");
-            return;
-        }
-
-        if (pass.length < 6) {
-            alert("Password minimal 6 karakter!");
-            return;
-        }
-
-        btn.disabled = true;
-        btn.innerText = "Mendaftarkan...";
-
-        try {
-            const data = await requestJsonp({
-                action: "register",
-                id: id,
-                name: name,
-                pass: pass
-            });
-
-            if (data.result === "success") {
-                alert(data.message || "Pendaftaran berhasil! Silakan masuk.");
-                document.getElementById('reg-name').value = "";
-                document.getElementById('reg-id').value = "";
-                document.getElementById('reg-pass').value = "";
-                switchTab('login');
-            } else {
-                alert(data.message || "Pendaftaran gagal.");
-            }
-        } catch (error) {
-            console.error("REGISTER ERROR:", error);
-            alert("Pendaftaran gagal dikirim. Pastikan Apps Script aktif.");
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "Daftar Staff";
-        }
-    }
-
-    function handleForgot() {
-        window.open("https://wa.me/628123456789?text=Halo%20Admin,%20saya%20lupa%20password%20HGX%20Salary", "_blank");
-    }
-
-    function getInitial(name) {
-        if (!name) return "H";
-        return String(name).trim().charAt(0).toUpperCase();
-    }
-
-    function showDashboard() {
-        const currentUser = localStorage.getItem('currentUser') || "";
-        const currentUserId = localStorage.getItem('currentUserId') || "";
-        const lastLogin = localStorage.getItem('lastLoginAt') || "Hari Ini";
-
-        document.getElementById('auth-page').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-
-        document.getElementById('user-display').innerText = currentUser;
-        document.getElementById('user-avatar').innerText = getInitial(currentUser);
-        document.getElementById('profile-avatar').innerText = getInitial(currentUser);
-        document.getElementById('profile-name').innerText = currentUser || "Nama Staff";
-        document.getElementById('last-login-time').innerText = lastLogin;
-        document.getElementById('activity-login-time').innerText = lastLogin;
-
-        if (currentUserId) {
-            loadStaffData(currentUserId);
-        }
-    }
-
-    function formatMoney(value) {
-        const num = Number(value || 0);
-        return "$ " + num.toLocaleString("en-US", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-    }
-
-    async function loadStaffData(id) {
-        try {
-            const profileData = await requestJsonp({
-                action: "getProfile",
-                id: id
-            });
-
-            if (profileData.result === "success" && profileData.profile) {
-                const p = profileData.profile;
-
-                document.getElementById("profile-name").innerText = p.name || "-";
-                document.getElementById("user-display").innerText = p.name || id;
-                document.getElementById("user-avatar").innerText = getInitial(p.name || id);
-                document.getElementById("profile-avatar").innerText = getInitial(p.name || id);
-
-                const profileMeta = document.querySelector(".profile-meta");
-                if (profileMeta) {
-                    profileMeta.innerText = `${p.department || "-"} • ${p.position || "-"} • ${p.country || "-"}`;
-                }
-
-                const badgeWrap = document.querySelector(".profile-badges");
-                if (badgeWrap) {
-                    badgeWrap.innerHTML = `
-                        <span class="badge badge-success"><i class="fas fa-circle-check"></i> ${p.status || "Active"}</span>
-                        <span class="badge badge-blue"><i class="fas fa-building-columns"></i> ${p.bank_name || "-"}</span>
-                        <span class="badge badge-blue"><i class="fas fa-credit-card"></i> ${p.bank_account || "-"}</span>
-                        <span class="badge badge-blue"><i class="fas fa-user"></i> ${p.account_name || "-"}</span>
-                    `;
-                }
-            }
-
-            const salaryData = await requestJsonp({
-                action: "getSalary",
-                id: id
-            });
-
-            if (salaryData.result === "success") {
-                renderSalaryData(salaryData.salary || []);
-            }
-
-        } catch (err) {
-            console.error("LOAD STAFF DATA ERROR:", err);
-            alert("Gagal mengambil data staff / salary dari Google Sheet.");
-        }
-    }
-
-    function renderSalaryData(salaryList) {
-        const tbody = document.getElementById("history-body");
-        const statValues = document.querySelectorAll(".stat-value");
-        const miniValues = document.querySelectorAll(".mini-info-value");
-
-        if (!salaryList.length) {
-            if (tbody) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="history-empty">Belum ada data slip gaji untuk akun ini.</td>
-                    </tr>
-                `;
-            }
-
-            document.querySelector(".salary-amount").innerText = "$ 0.00";
-
-            if (statValues[0]) statValues[0].innerText = "0";
-            if (statValues[1]) statValues[1].innerText = "-";
-            if (statValues[2]) statValues[2].innerText = "-";
-
-            if (miniValues[0]) miniValues[0].innerText = "-";
-            if (miniValues[1]) miniValues[1].innerText = "-";
-            if (miniValues[2]) miniValues[2].innerText = "-";
-            if (miniValues[3]) miniValues[3].innerText = "-";
-
-            return;
-        }
-
-        const latest = salaryList[0];
-
-        document.querySelector(".salary-amount").innerText = formatMoney(latest.total_salary);
-
-        if (statValues[0]) statValues[0].innerText = salaryList.length;
-        if (statValues[1]) statValues[1].innerText = latest.status || "-";
-        if (statValues[2]) statValues[2].innerText = latest.period || "-";
-        if (statValues[3]) statValues[3].innerText = "Staff";
-
-        if (miniValues[0]) miniValues[0].innerText = latest.period || "-";
-        if (miniValues[1]) miniValues[1].innerText = latest.status || "-";
-        if (miniValues[2]) miniValues[2].innerText = latest.paid_date || "-";
-        if (miniValues[3]) miniValues[3].innerText = "Transfer";
-
-        if (tbody) {
-            tbody.innerHTML = salaryList.map(item => {
-                const pdfBtn = item.pdf_url
-                    ? `<button class="download-btn" onclick="window.open('${item.pdf_url}', '_blank')">Download PDF</button>`
-                    : `<button class="download-btn" onclick="alert('PDF belum tersedia')">Belum Ada PDF</button>`;
-
-                return `
-                    <tr>
-                        <td><b>${item.period || "-"}</b></td>
-                        <td>${item.paid_date || "-"}</td>
-                        <td><span class="status-badge"><i class="fas fa-check"></i> ${item.status || "-"}</span></td>
-                        <td>${formatMoney(item.total_salary)}</td>
-                        <td>${pdfBtn}</td>
-                    </tr>
-                `;
-            }).join("");
-        }
-    }
-
-    function handleLogout() {
-        localStorage.removeItem("isLoggedIn");
-        localStorage.removeItem("currentUser");
-        localStorage.removeItem("currentUserId");
-        localStorage.removeItem("lastLoginAt");
-        location.reload();
-    }
-
-    function scrollToHistory() {
-        const el = document.getElementById("salary-history-section");
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    function simulateDownload() {
-        alert("Fitur download cepat akan mengikuti data PDF dari Google Sheet kolom pdf_url.");
-    }
-
-    function showInfo() {
-        alert("Data staff dan salary sekarang diambil langsung dari Google Sheet sesuai ID login.");
-    }
-
-    document.getElementById("login-id").addEventListener("keydown", function(event) {
-        if (event.key === "Enter") handleLogin();
+      setTimeout(() => {
+        if (finished) return;
+        finished = true;
+        cleanup();
+        reject(new Error("Request timeout"));
+      }, 15000);
     });
+  }
 
-    document.getElementById("login-pass").addEventListener("keydown", function(event) {
-        if (event.key === "Enter") handleLogin();
-    });
+  async function handleLogin() {
+    const id = document.getElementById("login-id").value.trim();
+    const pass = document.getElementById("login-pass").value.trim();
+    const btn = document.getElementById("btn-login");
 
-    document.getElementById("reg-name").addEventListener("keydown", function(event) {
-        if (event.key === "Enter") handleRegister();
-    });
+    if (!id || !pass) {
+      alert("Lengkapi data!");
+      return;
+    }
 
-    document.getElementById("reg-id").addEventListener("keydown", function(event) {
-        if (event.key === "Enter") handleRegister();
-    });
+    btn.disabled = true;
+    btn.innerText = "Memproses...";
 
-    document.getElementById("reg-pass").addEventListener("keydown", function(event) {
-        if (event.key === "Enter") handleRegister();
-    });
+    try {
+      const data = await requestJsonp({
+        action: "login",
+        id: id,
+        pass: pass
+      });
 
-    if (localStorage.getItem("isLoggedIn") === "true") {
+      if (data.result === "success") {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("currentUser", data.name || id);
+        localStorage.setItem("currentUserId", data.id || id);
+        localStorage.setItem("lastLoginAt", new Date().toLocaleString("id-ID"));
         showDashboard();
+      } else {
+        alert(data.message || "ID atau Password salah!");
+      }
+    } catch (error) {
+      console.error("LOGIN ERROR:", error);
+      alert("Gagal terhubung ke database. Pastikan Apps Script sudah benar dan aktif.");
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Masuk ke Dashboard";
     }
+  }
+
+  async function handleRegister() {
+    const name = document.getElementById("reg-name").value.trim();
+    const id = document.getElementById("reg-id").value.trim();
+    const pass = document.getElementById("reg-pass").value.trim();
+    const btn = document.getElementById("btn-reg");
+
+    if (!name || !id || !pass) {
+      alert("Lengkapi data!");
+      return;
+    }
+
+    if (pass.length < 6) {
+      alert("Password minimal 6 karakter!");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerText = "Mendaftarkan...";
+
+    try {
+      const data = await requestJsonp({
+        action: "register",
+        id: id,
+        name: name,
+        pass: pass
+      });
+
+      if (data.result === "success") {
+        alert(data.message || "Pendaftaran berhasil! Silakan masuk.");
+        document.getElementById("reg-name").value = "";
+        document.getElementById("reg-id").value = "";
+        document.getElementById("reg-pass").value = "";
+        switchTab("login");
+      } else {
+        alert(data.message || "Pendaftaran gagal.");
+      }
+    } catch (error) {
+      console.error("REGISTER ERROR:", error);
+      alert("Pendaftaran gagal dikirim. Pastikan Apps Script aktif.");
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Daftar Staff";
+    }
+  }
+
+  function handleForgot() {
+    window.open("https://wa.me/628123456789?text=Halo%20Admin,%20saya%20lupa%20password%20HGX%20Salary", "_blank");
+  }
+
+  function getInitial(name) {
+    if (!name) return "H";
+    return String(name).trim().charAt(0).toUpperCase();
+  }
+
+  function showDashboard() {
+    const currentUser = localStorage.getItem("currentUser") || "";
+    const currentUserId = localStorage.getItem("currentUserId") || "";
+    const lastLogin = localStorage.getItem("lastLoginAt") || "Hari Ini";
+
+    document.getElementById("auth-page").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+
+    document.getElementById("user-display").innerText = currentUser;
+    document.getElementById("user-avatar").innerText = getInitial(currentUser);
+    document.getElementById("profile-avatar").innerText = getInitial(currentUser);
+    document.getElementById("profile-name").innerText = currentUser || "Nama Staff";
+    document.getElementById("last-login-time").innerText = lastLogin;
+    document.getElementById("activity-login-time").innerText = lastLogin;
+
+    if (currentUserId) {
+      loadStaffData(currentUserId);
+    }
+  }
+
+  function formatMoney(value) {
+    const num = Number(value || 0);
+    return "$ " + num.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  function formatDisplayDate(value) {
+    if (!value) return "-";
+
+    const raw = String(value).trim();
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+      const parts = raw.split("-");
+      return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+
+    const d = new Date(raw);
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      });
+    }
+
+    return raw;
+  }
+
+  function formatPeriod(value) {
+    if (!value) return "-";
+
+    const raw = String(value).trim();
+    const d = new Date(raw);
+
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString("id-ID", {
+        month: "long",
+        year: "numeric"
+      });
+    }
+
+    return raw;
+  }
+
+  async function loadStaffData(id) {
+    try {
+      const profileData = await requestJsonp({
+        action: "getProfile",
+        id: id
+      });
+
+      if (profileData.result === "success" && profileData.profile) {
+        renderProfile(profileData.profile, id);
+      } else {
+        document.getElementById("profile-meta").innerText = profileData.message || "Data staff tidak ditemukan.";
+        document.getElementById("profile-badges").innerHTML = `
+          <span class="badge badge-blue"><i class="fas fa-triangle-exclamation"></i> Staff data kosong</span>
+        `;
+      }
+
+      const salaryData = await requestJsonp({
+        action: "getSalary",
+        id: id
+      });
+
+      if (salaryData.result === "success") {
+        renderSalaryData(salaryData.salary || []);
+      } else {
+        renderSalaryData([]);
+      }
+
+    } catch (err) {
+      console.error("LOAD STAFF DATA ERROR:", err);
+      alert("Gagal mengambil data staff / salary dari Google Sheet.");
+    }
+  }
+
+  function renderProfile(p, id) {
+    const displayName = p.name || id || "-";
+
+    document.getElementById("profile-name").innerText = displayName;
+    document.getElementById("user-display").innerText = displayName;
+    document.getElementById("user-avatar").innerText = getInitial(displayName);
+    document.getElementById("profile-avatar").innerText = getInitial(displayName);
+
+    document.getElementById("profile-meta").innerText =
+      `${p.department || "-"} • ${p.position || "-"} • ${p.country || "-"}`;
+
+    document.getElementById("hero-account-status").innerText = p.status || "Aktif & Aman";
+
+    document.getElementById("profile-badges").innerHTML = `
+      <span class="badge badge-success"><i class="fas fa-circle-check"></i> ${p.status || "Active"}</span>
+      <span class="badge badge-blue"><i class="fas fa-building-columns"></i> ${p.bank_name || "-"}</span>
+      <span class="badge badge-blue"><i class="fas fa-credit-card"></i> ${p.bank_account || "-"}</span>
+      <span class="badge badge-blue"><i class="fas fa-user"></i> ${p.account_name || "-"}</span>
+    `;
+  }
+
+  function renderSalaryData(salaryList) {
+    currentSalaryList = salaryList || [];
+    const tbody = document.getElementById("history-body");
+
+    if (!currentSalaryList.length) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5" class="history-empty">Belum ada data slip gaji untuk akun ini.</td>
+        </tr>
+      `;
+
+      latestPdfUrl = "";
+      document.getElementById("latest-salary-amount").innerText = "$ 0.00";
+      document.getElementById("stat-total-slip").innerText = "0";
+      document.getElementById("stat-payment-status").innerText = "-";
+      document.getElementById("stat-active-period").innerText = "-";
+      document.getElementById("latest-period").innerText = "-";
+      document.getElementById("latest-status").innerText = "-";
+      document.getElementById("latest-paid-date").innerText = "-";
+      return;
+    }
+
+    const latest = currentSalaryList[0];
+    latestPdfUrl = latest.pdf_url || "";
+
+    document.getElementById("latest-salary-amount").innerText = formatMoney(latest.total_salary);
+    document.getElementById("stat-total-slip").innerText = currentSalaryList.length;
+    document.getElementById("stat-payment-status").innerText = latest.status || "-";
+    document.getElementById("stat-active-period").innerText = formatPeriod(latest.period);
+    document.getElementById("latest-period").innerText = formatPeriod(latest.period);
+    document.getElementById("latest-status").innerText = latest.status || "-";
+    document.getElementById("latest-paid-date").innerText = formatDisplayDate(latest.paid_date);
+
+    tbody.innerHTML = currentSalaryList.map(item => {
+      const pdfBtn = item.pdf_url
+        ? `<button class="download-btn" onclick="window.open('${escapeAttr(item.pdf_url)}', '_blank')">Download PDF</button>`
+        : `<button class="download-btn" onclick="alert('PDF belum tersedia')">Belum Ada PDF</button>`;
+
+      return `
+        <tr>
+          <td><b>${escapeHtml(formatPeriod(item.period))}</b></td>
+          <td>${escapeHtml(formatDisplayDate(item.paid_date))}</td>
+          <td><span class="status-badge"><i class="fas fa-check"></i> ${escapeHtml(item.status || "-")}</span></td>
+          <td>${escapeHtml(formatMoney(item.total_salary))}</td>
+          <td>${pdfBtn}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function escapeAttr(value) {
+    return String(value || "").replace(/'/g, "\\'");
+  }
+
+  function downloadLatestPDF() {
+    if (latestPdfUrl) {
+      window.open(latestPdfUrl, "_blank");
+    } else {
+      alert("PDF slip terbaru belum tersedia.");
+    }
+  }
+
+  function exportSalaryCSV() {
+    if (!currentSalaryList.length) {
+      alert("Belum ada data salary untuk diexport.");
+      return;
+    }
+
+    const rows = [
+      ["Period", "Paid Date", "Status", "Base Salary", "Bonus", "Deduction", "Total Salary", "PDF URL", "Note"]
+    ];
+
+    currentSalaryList.forEach(item => {
+      rows.push([
+        formatPeriod(item.period),
+        formatDisplayDate(item.paid_date),
+        item.status || "",
+        item.base_salary || 0,
+        item.bonus || 0,
+        item.deduction || 0,
+        item.total_salary || 0,
+        item.pdf_url || "",
+        item.note || ""
+      ]);
+    });
+
+    const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "hgx_salary_export.csv";
+    a.click();
+
+    URL.revokeObjectURL(url);
+  }
+
+  function handleLogout() {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("currentUserId");
+    localStorage.removeItem("lastLoginAt");
+    location.reload();
+  }
+
+  function scrollToHistory() {
+    const el = document.getElementById("salary-history-section");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function showInfo() {
+    alert("Data staff dan salary diambil langsung dari Google Sheet sesuai ID login.");
+  }
+
+  ["login-id","login-pass"].forEach(id => {
+    document.getElementById(id).addEventListener("keydown", e => {
+      if (e.key === "Enter") handleLogin();
+    });
+  });
+
+  ["reg-name","reg-id","reg-pass"].forEach(id => {
+    document.getElementById(id).addEventListener("keydown", e => {
+      if (e.key === "Enter") handleRegister();
+    });
+  });
+
+  if (localStorage.getItem("isLoggedIn") === "true") {
+    showDashboard();
+  }
 </script>
+
 </body>
 </html>
