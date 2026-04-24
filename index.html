@@ -9,690 +9,736 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
-  :root{
-    --primary:#ffffff;
-    --accent:#2f7cff;
-    --accent2:#a855f7;
-    --bg:#020617;
-    --card:rgba(8,13,30,.82);
-    --text:#e5e7eb;
-    --muted:#94a3b8;
-    --border:rgba(148,163,184,.22);
-    --success:#22c55e;
-    --success-bg:rgba(34,197,94,.16);
-    --danger:#fb3b6b;
-    --blue-bg:rgba(47,124,255,.16);
-    --shadow:0 22px 60px rgba(0,0,0,.45);
-  }
-
-  *{box-sizing:border-box;margin:0;padding:0}
-
-  body{
-    font-family:"Inter",sans-serif;
-    color:var(--text);
-    min-height:100vh;
-    overflow-x:hidden;
-    background:
-      radial-gradient(circle at 20% 10%,rgba(47,124,255,.22),transparent 30%),
-      radial-gradient(circle at 85% 20%,rgba(236,72,153,.18),transparent 28%),
-      radial-gradient(circle at 50% 100%,rgba(168,85,247,.16),transparent 35%),
-      #020617;
-    position:relative;
-  }
-
-  body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    z-index:-3;
-    background:
-      linear-gradient(115deg,transparent 0%,transparent 44%,rgba(47,124,255,.75) 45%,rgba(168,85,247,.9) 46%,transparent 48%,transparent 100%),
-      linear-gradient(125deg,transparent 0%,transparent 62%,rgba(236,72,153,.7) 63%,rgba(47,124,255,.75) 64%,transparent 66%,transparent 100%),
-      linear-gradient(110deg,transparent 0%,transparent 22%,rgba(59,130,246,.45) 23%,transparent 25%,transparent 100%);
-    background-size:180% 180%;
-    animation:laserMove 6s linear infinite;
-    opacity:.9;
-  }
-
-  body::after{
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    z-index:-2;
-    background:
-      radial-gradient(circle at 30% 40%,rgba(47,124,255,.16),transparent 25%),
-      repeating-linear-gradient(115deg,transparent 0 90px,rgba(59,130,246,.10) 91px,transparent 94px),
-      repeating-linear-gradient(125deg,transparent 0 120px,rgba(236,72,153,.10) 121px,transparent 124px);
-    animation:starDrift 12s linear infinite;
-  }
-
-  @keyframes laserMove{
-    0%{background-position:200% 0, -180% 0, 160% 0}
-    100%{background-position:-200% 0, 180% 0, -160% 0}
-  }
-
-  @keyframes starDrift{
-    0%{transform:translate3d(0,0,0)}
-    100%{transform:translate3d(-80px,80px,0)}
-  }
-
-  button,input{font-family:inherit}
-
-  #auth-page{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
-    background:transparent;
-    position:relative;
-    overflow:hidden;
-  }
-
-  #auth-page::before,
-  #auth-page::after{
-    content:"";
-    position:absolute;
-    width:2px;
-    height:520px;
-    background:linear-gradient(to bottom,transparent,#38bdf8,#ec4899,transparent);
-    box-shadow:0 0 24px #38bdf8,0 0 46px #ec4899;
-    transform:rotate(62deg);
-    animation:meteor 4.2s linear infinite;
-    opacity:.9;
-  }
-
-  #auth-page::before{top:-240px;left:18%;animation-delay:0s}
-  #auth-page::after{top:-260px;right:15%;animation-delay:1.8s}
-
-  @keyframes meteor{
-    0%{transform:translate(-220px,-220px) rotate(62deg);opacity:0}
-    10%{opacity:1}
-    100%{transform:translate(520px,720px) rotate(62deg);opacity:0}
-  }
-
-  .auth-card{
-    width:100%;
-    max-width:480px;
-    background:rgba(5,10,25,.82);
-    backdrop-filter:blur(18px);
-    border:1px solid rgba(148,163,184,.28);
-    border-radius:30px;
-    padding:38px;
-    box-shadow:
-      0 35px 90px rgba(0,0,0,.55),
-      inset 0 0 0 1px rgba(255,255,255,.035);
-    position:relative;
-    z-index:1;
-  }
-
-  .auth-card::before{
-    content:"";
-    position:absolute;
-    inset:-1px;
-    border-radius:30px;
-    padding:1px;
-    background:linear-gradient(135deg,rgba(47,124,255,.9),rgba(168,85,247,.25),rgba(236,72,153,.75));
-    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-    -webkit-mask-composite:xor;
-    mask-composite:exclude;
-    pointer-events:none;
-  }
-
-  .auth-header{
-    text-align:center;
-    margin-bottom:28px;
-  }
-
-  .auth-header h1{
-    font-size:2.25rem;
-    font-weight:900;
-    color:#fff;
-    letter-spacing:-1px;
-  }
-
-  .auth-header h1 span{
-    background:linear-gradient(135deg,#38bdf8,#2f7cff,#a855f7,#ec4899);
-    -webkit-background-clip:text;
-    color:transparent!important;
-  }
-
-  .auth-header p{
-    margin-top:10px;
-    color:var(--muted);
-    font-size:.95rem;
-  }
-
-  .tab-menu{
-    display:flex;
-    gap:8px;
-    background:rgba(15,23,42,.72);
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:6px;
-    margin-bottom:24px;
-    position:relative;
-    overflow:hidden;
-  }
-
-  .tab-menu::after{
-    content:"";
-    position:absolute;
-    left:6px;
-    bottom:0;
-    width:calc(50% - 6px);
-    height:2px;
-    background:linear-gradient(90deg,#38bdf8,#a855f7,#ec4899);
-    box-shadow:0 0 14px #38bdf8;
-  }
-
-  .tab-btn{
-    flex:1;
-    border:none;
-    background:transparent;
-    padding:12px;
-    border-radius:12px;
-    font-weight:800;
-    color:#94a3b8;
-    cursor:pointer;
-  }
-
-  .tab-btn.active{
-    background:rgba(47,124,255,.12);
-    color:#fff;
-  }
-
-  .auth-form{display:none}
-  .auth-form.active{display:block}
-
-  .form-group{margin-bottom:17px}
-
-  .form-group label{
-    display:block;
-    font-size:.75rem;
-    color:#cbd5e1;
-    font-weight:800;
-    margin-bottom:9px;
-  }
-
-  .input-wrap{position:relative}
-
-  .input-wrap i{
-    position:absolute;
-    left:16px;
-    top:50%;
-    transform:translateY(-50%);
-    color:#94a3b8;
-  }
-
-  .form-group input{
-    width:100%;
-    border:1px solid rgba(148,163,184,.28);
-    border-radius:15px;
-    padding:15px 15px 15px 46px;
-    outline:none;
-    font-size:.95rem;
-    background:rgba(2,6,23,.55);
-    color:#e5e7eb;
-  }
-
-  .form-group input::placeholder{color:#7c879b}
-
-  .form-group input:focus{
-    border-color:#38bdf8;
-    box-shadow:0 0 0 4px rgba(56,189,248,.10),0 0 22px rgba(47,124,255,.22);
-  }
-
-  .btn{
-    width:100%;
-    border:none;
-    border-radius:15px;
-    padding:15px;
-    background:linear-gradient(135deg,#2f7cff,#7c3aed,#ec4899);
-    color:white;
-    font-weight:900;
-    cursor:pointer;
-    font-size:.95rem;
-    box-shadow:0 14px 35px rgba(47,124,255,.28);
-  }
-
-  .btn:disabled{
-    background:#64748b;
-    cursor:not-allowed;
-    box-shadow:none;
-  }
-
-  .btn-dark{
-    background:linear-gradient(135deg,#111827,#2f7cff,#7c3aed);
-  }
-
-  .forgot-link{
-    display:block;
-    text-align:center;
-    margin-top:18px;
-    color:#60a5fa;
-    font-size:.86rem;
-    cursor:pointer;
-    text-decoration:none;
-  }
-
-  #dashboard{
-    display:none;
-    min-height:100vh;
-  }
-
-  .topbar{
-    background:rgba(2,6,23,.76);
-    backdrop-filter:blur(18px);
-    border-bottom:1px solid rgba(148,163,184,.18);
-    padding:16px 5%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    position:sticky;
-    top:0;
-    z-index:100;
-  }
-
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:12px;
-  }
-
-  .brand-logo{
-    width:42px;
-    height:42px;
-    border-radius:14px;
-    background:linear-gradient(135deg,#2f7cff,#7c3aed);
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow:0 0 25px rgba(47,124,255,.45);
-  }
-
-  .brand-title{
-    font-size:1.05rem;
-    font-weight:900;
-    color:#fff;
-  }
-
-  .brand-sub{
-    font-size:.78rem;
-    color:#94a3b8;
-    margin-top:2px;
-  }
-
-  .topbar-right{
-    display:flex;
-    align-items:center;
-    gap:12px;
-  }
-
-  .user-pill{
-    background:rgba(15,23,42,.72);
-    border:1px solid rgba(148,163,184,.24);
-    padding:9px 14px;
-    border-radius:999px;
-    font-weight:800;
-    color:#fff;
-    font-size:.86rem;
-  }
-
-  .logout-btn{
-    border:none;
-    background:rgba(239,68,68,.12);
-    color:#fb7185;
-    font-weight:900;
-    cursor:pointer;
-    border-radius:12px;
-    padding:9px 12px;
-  }
-
-  .container{
-    max-width:1100px;
-    margin:0 auto;
-    padding:28px 18px 42px;
-  }
-
-  .page-title{
-    margin-bottom:18px;
-    background:linear-gradient(135deg,rgba(15,23,42,.82),rgba(30,58,138,.38));
-    border:1px solid rgba(148,163,184,.20);
-    border-radius:26px;
-    padding:22px;
-    box-shadow:var(--shadow);
-  }
-
-  .page-title h2{
-    font-size:1.65rem;
-    font-weight:900;
-    color:#fff;
-    letter-spacing:-.7px;
-  }
-
-  .page-title p{
-    margin-top:6px;
-    color:#94a3b8;
-    font-size:.92rem;
-  }
-
-  .grid{
-    display:grid;
-    grid-template-columns:.85fr 1.15fr;
-    gap:18px;
-    align-items:start;
-  }
-
-  .card{
-    background:rgba(5,10,25,.82);
-    backdrop-filter:blur(18px);
-    border:1px solid rgba(148,163,184,.22);
-    border-radius:26px;
-    box-shadow:var(--shadow);
-    overflow:hidden;
-  }
-
-  .card-header{
-    padding:18px 20px;
-    border-bottom:1px solid rgba(148,163,184,.18);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-  }
-
-  .card-title{
-    font-size:1rem;
-    font-weight:900;
-    color:#fff;
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-
-  .card-title i{
-    color:#60a5fa;
-    text-shadow:0 0 12px rgba(96,165,250,.7);
-  }
-
-  .card-body{
-    padding:20px;
-  }
-
-  .profile-main{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    margin-bottom:18px;
-  }
-
-  .avatar{
-    width:58px;
-    height:58px;
-    border-radius:18px;
-    background:linear-gradient(135deg,#2f7cff,#7c3aed);
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:1.3rem;
-    font-weight:900;
-    flex:0 0 58px;
-    box-shadow:0 0 28px rgba(47,124,255,.38);
-  }
-
-  .profile-name{
-    font-size:1.15rem;
-    color:#fff;
-    font-weight:900;
-  }
-
-  .profile-id{
-    color:#94a3b8;
-    margin-top:3px;
-    font-size:.84rem;
-    font-weight:600;
-  }
-
-  .info-list{
-    display:grid;
-    gap:10px;
-  }
-
-  .info-row{
-    border:1px solid rgba(148,163,184,.18);
-    background:rgba(15,23,42,.68);
-    border-radius:16px;
-    padding:12px 14px;
-  }
-
-  .info-label{
-    font-size:.68rem;
-    text-transform:uppercase;
-    color:#94a3b8;
-    font-weight:900;
-    margin-bottom:5px;
-  }
-
-  .info-value{
-    color:#e5e7eb;
-    font-weight:800;
-    word-break:break-word;
-    font-size:.9rem;
-  }
-
-  .salary-summary{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    margin-bottom:16px;
-  }
-
-  .summary-box{
-    border:1px solid rgba(148,163,184,.18);
-    background:rgba(15,23,42,.68);
-    border-radius:18px;
-    padding:14px;
-  }
-
-  .summary-label{
-    font-size:.68rem;
-    color:#94a3b8;
-    text-transform:uppercase;
-    font-weight:900;
-    margin-bottom:6px;
-  }
-
-  .summary-value{
-    font-size:1.25rem;
-    font-weight:900;
-    color:#fff;
-    word-break:break-word;
-  }
-
-  .table-wrap{
-    border:1px solid rgba(148,163,184,.18);
-    border-radius:18px;
-    overflow:auto;
-    background:rgba(2,6,23,.55);
-  }
-
-  table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:700px;
-  }
-
-  th{
-    text-align:left;
-    padding:14px 16px;
-    background:rgba(15,23,42,.92);
-    color:#94a3b8;
-    font-size:.72rem;
-    font-weight:900;
-    text-transform:uppercase;
-    border-bottom:1px solid rgba(148,163,184,.18);
-    white-space:nowrap;
-  }
-
-  td{
-    padding:15px 16px;
-    border-bottom:1px solid rgba(148,163,184,.13);
-    white-space:nowrap;
-    font-size:.88rem;
-    color:#e5e7eb;
-  }
-
-  tbody tr:last-child td{border-bottom:none}
-
-  .status-badge{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    padding:6px 12px;
-    border-radius:999px;
-    background:rgba(34,197,94,.16);
-    color:#4ade80;
-    font-size:.72rem;
-    font-weight:900;
-  }
-
-  .download-btn{
-    border:none;
-    background:linear-gradient(135deg,rgba(47,124,255,.22),rgba(168,85,247,.18));
-    color:#93c5fd;
-    padding:9px 13px;
-    border-radius:12px;
-    font-weight:900;
-    cursor:pointer;
-  }
-
-  .empty{
-    text-align:center;
-    color:#94a3b8;
-    padding:28px!important;
-  }
-
-  @media(max-width:900px){
-    .grid{grid-template-columns:1fr}
-    .salary-summary{grid-template-columns:1fr}
-  }
-
-  @media(max-width:600px){
-    body::before{
-      background:
-        linear-gradient(120deg,transparent 0%,transparent 38%,rgba(47,124,255,.65) 39%,rgba(236,72,153,.85) 40%,transparent 42%,transparent 100%),
-        linear-gradient(125deg,transparent 0%,transparent 70%,rgba(96,165,250,.55) 71%,transparent 73%,transparent 100%);
-      animation-duration:5s;
+    :root{
+      --bg:#020617;
+      --panel:#070d1c;
+      --panel2:#0b1224;
+      --card:rgba(10,16,34,.86);
+      --card2:rgba(15,23,42,.72);
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --soft:#64748b;
+      --border:rgba(148,163,184,.20);
+      --blue:#2f7cff;
+      --cyan:#38bdf8;
+      --purple:#7c3aed;
+      --pink:#ec4899;
+      --green:#22c55e;
+      --danger:#fb3b6b;
+      --shadow:0 24px 70px rgba(0,0,0,.48);
     }
 
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:"Inter",sans-serif;
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+      background:
+        radial-gradient(circle at 15% 10%,rgba(47,124,255,.18),transparent 28%),
+        radial-gradient(circle at 85% 18%,rgba(236,72,153,.16),transparent 26%),
+        radial-gradient(circle at 50% 100%,rgba(124,58,237,.16),transparent 34%),
+        #020617;
+      position:relative;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-3;
+      background:
+        linear-gradient(115deg,transparent 0%,transparent 43%,rgba(47,124,255,.85) 44%,rgba(168,85,247,.95) 45%,transparent 47%,transparent 100%),
+        linear-gradient(125deg,transparent 0%,transparent 64%,rgba(236,72,153,.72) 65%,rgba(47,124,255,.75) 66%,transparent 68%,transparent 100%),
+        linear-gradient(110deg,transparent 0%,transparent 24%,rgba(56,189,248,.45) 25%,transparent 27%,transparent 100%);
+      background-size:180% 180%;
+      animation:laserMove 6s linear infinite;
+      opacity:.85;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-2;
+      background:
+        repeating-linear-gradient(115deg,transparent 0 90px,rgba(59,130,246,.08) 91px,transparent 94px),
+        repeating-linear-gradient(125deg,transparent 0 130px,rgba(236,72,153,.08) 131px,transparent 134px);
+      animation:starDrift 12s linear infinite;
+    }
+
+    @keyframes laserMove{
+      0%{background-position:200% 0,-180% 0,160% 0}
+      100%{background-position:-200% 0,180% 0,-160% 0}
+    }
+
+    @keyframes starDrift{
+      0%{transform:translate3d(0,0,0)}
+      100%{transform:translate3d(-80px,80px,0)}
+    }
+
+    button,input{font-family:inherit}
+
     #auth-page{
-      padding:18px;
-      align-items:flex-start;
-      padding-top:60px;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:transparent;
+      position:relative;
+      overflow:hidden;
+    }
+
+    #auth-page::before,
+    #auth-page::after{
+      content:"";
+      position:absolute;
+      width:2px;
+      height:560px;
+      background:linear-gradient(to bottom,transparent,#38bdf8,#ec4899,transparent);
+      box-shadow:0 0 24px #38bdf8,0 0 46px #ec4899;
+      transform:rotate(62deg);
+      animation:meteor 4.3s linear infinite;
+      opacity:.9;
+    }
+
+    #auth-page::before{top:-260px;left:15%;animation-delay:0s}
+    #auth-page::after{top:-260px;right:14%;animation-delay:1.8s}
+
+    @keyframes meteor{
+      0%{transform:translate(-260px,-260px) rotate(62deg);opacity:0}
+      12%{opacity:1}
+      100%{transform:translate(620px,820px) rotate(62deg);opacity:0}
     }
 
     .auth-card{
-      padding:28px 22px;
-      border-radius:28px;
-      max-width:100%;
+      width:100%;
+      max-width:500px;
+      background:rgba(5,10,25,.84);
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(148,163,184,.28);
+      border-radius:32px;
+      padding:40px;
+      box-shadow:var(--shadow), inset 0 0 0 1px rgba(255,255,255,.035);
+      position:relative;
+      z-index:1;
     }
 
-    .auth-header h1{font-size:1.85rem}
+    .auth-card::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius:32px;
+      padding:1px;
+      background:linear-gradient(135deg,rgba(47,124,255,.9),rgba(168,85,247,.25),rgba(236,72,153,.75));
+      -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+      pointer-events:none;
+    }
+
+    .auth-lock{
+      width:68px;
+      height:68px;
+      margin:0 auto 18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-size:1.55rem;
+      border-radius:22px;
+      background:linear-gradient(135deg,var(--blue),var(--purple),var(--pink));
+      box-shadow:0 0 30px rgba(47,124,255,.55);
+    }
+
+    .auth-header{text-align:center;margin-bottom:28px}
+    .auth-header h1{
+      font-size:2.25rem;
+      font-weight:900;
+      color:#fff;
+      letter-spacing:-1px;
+    }
+    .auth-header h1 span{
+      background:linear-gradient(135deg,#38bdf8,#2f7cff,#a855f7,#ec4899);
+      -webkit-background-clip:text;
+      color:transparent!important;
+    }
+    .auth-header p{margin-top:10px;color:var(--muted);font-size:.95rem}
+
+    .tab-menu{
+      display:flex;
+      gap:8px;
+      background:rgba(15,23,42,.72);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:6px;
+      margin-bottom:24px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .tab-btn{
+      flex:1;
+      border:none;
+      background:transparent;
+      padding:12px;
+      border-radius:12px;
+      font-weight:800;
+      color:#94a3b8;
+      cursor:pointer;
+    }
+
+    .tab-btn.active{
+      background:linear-gradient(135deg,rgba(47,124,255,.20),rgba(168,85,247,.16));
+      color:#fff;
+    }
+
+    .auth-form{display:none}
+    .auth-form.active{display:block}
+
+    .form-group{margin-bottom:17px}
+    .form-group label{
+      display:block;
+      font-size:.75rem;
+      color:#cbd5e1;
+      font-weight:800;
+      margin-bottom:9px;
+    }
+
+    .input-wrap{position:relative}
+    .input-wrap i{
+      position:absolute;
+      left:16px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#94a3b8;
+    }
+
+    .form-group input{
+      width:100%;
+      border:1px solid rgba(148,163,184,.28);
+      border-radius:15px;
+      padding:15px 15px 15px 46px;
+      outline:none;
+      font-size:.95rem;
+      background:rgba(2,6,23,.55);
+      color:#e5e7eb;
+    }
+
+    .form-group input::placeholder{color:#7c879b}
+    .form-group input:focus{
+      border-color:#38bdf8;
+      box-shadow:0 0 0 4px rgba(56,189,248,.10),0 0 22px rgba(47,124,255,.22);
+    }
+
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:15px;
+      padding:15px;
+      background:linear-gradient(135deg,#2f7cff,#7c3aed,#ec4899);
+      color:white;
+      font-weight:900;
+      cursor:pointer;
+      font-size:.95rem;
+      box-shadow:0 14px 35px rgba(47,124,255,.28);
+    }
+
+    .btn:disabled{background:#64748b;cursor:not-allowed;box-shadow:none}
+    .btn-dark{background:linear-gradient(135deg,#111827,#2f7cff,#7c3aed)}
+    .forgot-link{
+      display:block;
+      text-align:center;
+      margin-top:18px;
+      color:#60a5fa;
+      font-size:.86rem;
+      cursor:pointer;
+      text-decoration:none;
+    }
+
+    #dashboard{display:none;min-height:100vh}
+
+    .app-layout{
+      display:grid;
+      grid-template-columns:230px 1fr;
+      min-height:100vh;
+    }
+
+    .sidebar{
+      position:sticky;
+      top:0;
+      height:100vh;
+      padding:24px 18px;
+      background:rgba(5,10,25,.86);
+      backdrop-filter:blur(20px);
+      border-right:1px solid rgba(148,163,184,.18);
+      box-shadow:18px 0 60px rgba(0,0,0,.26);
+      display:flex;
+      flex-direction:column;
+      z-index:120;
+    }
+
+    .side-brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:34px;
+      color:white;
+      font-weight:900;
+      font-size:1.05rem;
+    }
+
+    .side-brand i{
+      width:34px;
+      height:34px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--blue),var(--purple));
+      box-shadow:0 0 22px rgba(47,124,255,.45);
+    }
+
+    .side-brand span{
+      background:linear-gradient(135deg,#fff,#38bdf8,#a855f7);
+      -webkit-background-clip:text;
+      color:transparent;
+    }
+
+    .side-menu{
+      display:grid;
+      gap:10px;
+    }
+
+    .side-link{
+      border:none;
+      width:100%;
+      text-align:left;
+      padding:13px 14px;
+      border-radius:15px;
+      background:transparent;
+      color:#94a3b8;
+      font-weight:800;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:11px;
+      transition:.2s ease;
+      position:relative;
+    }
+
+    .side-link:hover,
+    .side-link.active{
+      color:#fff;
+      background:linear-gradient(90deg,rgba(47,124,255,.24),rgba(236,72,153,.13));
+      box-shadow:inset 3px 0 0 #2f7cff, inset -3px 0 0 #ec4899;
+    }
+
+    .side-link i{width:18px;text-align:center}
+
+    .side-bottom{
+      margin-top:auto;
+      border:1px solid rgba(148,163,184,.18);
+      border-radius:18px;
+      padding:14px;
+      background:rgba(15,23,42,.55);
+      color:#94a3b8;
+      font-size:.78rem;
+      line-height:1.7;
+    }
+
+    .online-dot{
+      display:inline-block;
+      width:8px;
+      height:8px;
+      background:#22c55e;
+      border-radius:50%;
+      margin-right:6px;
+      box-shadow:0 0 12px #22c55e;
+    }
+
+    .main{
+      min-width:0;
+      padding:24px;
+    }
 
     .topbar{
-      padding:12px 14px;
-      border-radius:0 0 22px 22px;
+      background:rgba(5,10,25,.72);
+      backdrop-filter:blur(18px);
+      border:1px solid rgba(148,163,184,.18);
+      border-radius:24px;
+      padding:16px 18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:18px;
     }
 
-    .brand-logo{
-      width:38px;
-      height:38px;
-      border-radius:13px;
+    .mobile-menu-btn{
+      display:none;
+      border:none;
+      color:#fff;
+      background:rgba(47,124,255,.18);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:1rem;
     }
 
-    .brand-title{font-size:.95rem}
-    .brand-sub{display:none}
-    .user-pill{display:none}
+    .user-area{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-left:auto;
+    }
+
+    .user-pill{
+      background:rgba(15,23,42,.72);
+      border:1px solid rgba(148,163,184,.24);
+      padding:9px 14px;
+      border-radius:999px;
+      font-weight:800;
+      color:#fff;
+      font-size:.86rem;
+    }
 
     .logout-btn{
-      padding:8px 10px;
-      font-size:.82rem;
+      border:none;
+      background:rgba(239,68,68,.12);
+      color:#fb7185;
+      font-weight:900;
+      cursor:pointer;
+      border-radius:12px;
+      padding:9px 12px;
     }
 
-    .container{
-      padding:18px 14px 34px;
+    .welcome{
+      position:relative;
+      overflow:hidden;
+      border-radius:26px;
+      border:1px solid rgba(148,163,184,.18);
+      background:
+        radial-gradient(circle at 90% 20%,rgba(47,124,255,.34),transparent 22%),
+        radial-gradient(circle at 80% 100%,rgba(236,72,153,.20),transparent 30%),
+        linear-gradient(135deg,rgba(15,23,42,.90),rgba(30,58,138,.36));
+      padding:24px;
+      margin-bottom:18px;
+      box-shadow:var(--shadow);
     }
 
-    .page-title{
-      padding:20px;
-      border-radius:24px;
+    .welcome::after{
+      content:"";
+      position:absolute;
+      right:-60px;
+      top:-40px;
+      width:240px;
+      height:180px;
+      background:linear-gradient(135deg,rgba(56,189,248,.25),rgba(236,72,153,.20));
+      filter:blur(20px);
+      transform:rotate(-15deg);
     }
 
-    .page-title h2{
+    .welcome h2{
+      font-size:1.7rem;
+      color:#fff;
+      font-weight:900;
+      letter-spacing:-.6px;
+    }
+
+    .welcome p{
+      margin-top:8px;
+      color:#94a3b8;
+      font-size:.92rem;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .stat-box{
+      background:rgba(5,10,25,.82);
+      border:1px solid rgba(148,163,184,.20);
+      border-radius:22px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .stat-label{
+      color:#94a3b8;
+      font-size:.72rem;
+      font-weight:900;
+      text-transform:uppercase;
+      margin-bottom:8px;
+    }
+
+    .stat-value{
       font-size:1.28rem;
-      line-height:1.25;
+      color:#fff;
+      font-weight:900;
+      word-break:break-word;
     }
 
-    .page-title p{
-      font-size:.84rem;
-      line-height:1.55;
+    .grid{
+      display:grid;
+      grid-template-columns:.85fr 1.15fr;
+      gap:18px;
+      align-items:start;
     }
 
     .card{
-      border-radius:24px;
+      background:rgba(5,10,25,.82);
+      backdrop-filter:blur(18px);
+      border:1px solid rgba(148,163,184,.22);
+      border-radius:26px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
     }
 
-    .card-header{padding:16px}
-    .card-body{padding:16px}
+    .card-header{
+      padding:18px 20px;
+      border-bottom:1px solid rgba(148,163,184,.18);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .card-title{
+      font-size:1rem;
+      font-weight:900;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .card-title i{
+      color:#60a5fa;
+      text-shadow:0 0 12px rgba(96,165,250,.7);
+    }
+
+    .card-body{padding:20px}
 
     .profile-main{
-      align-items:flex-start;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:18px;
     }
 
     .avatar{
-      width:52px;
-      height:52px;
-      border-radius:16px;
-      flex:0 0 52px;
+      width:58px;
+      height:58px;
+      border-radius:18px;
+      background:linear-gradient(135deg,#2f7cff,#7c3aed);
+      color:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.3rem;
+      font-weight:900;
+      flex:0 0 58px;
+      box-shadow:0 0 28px rgba(47,124,255,.38);
     }
 
+    .profile-name{font-size:1.15rem;color:#fff;font-weight:900}
+    .profile-id{color:#94a3b8;margin-top:3px;font-size:.84rem;font-weight:600}
+
+    .info-list{display:grid;gap:10px}
     .info-row{
-      padding:11px 12px;
-      border-radius:15px;
+      border:1px solid rgba(148,163,184,.18);
+      background:rgba(15,23,42,.68);
+      border-radius:16px;
+      padding:12px 14px;
+    }
+
+    .info-label{
+      font-size:.68rem;
+      text-transform:uppercase;
+      color:#94a3b8;
+      font-weight:900;
+      margin-bottom:5px;
+    }
+
+    .info-value{
+      color:#e5e7eb;
+      font-weight:800;
+      word-break:break-word;
+      font-size:.9rem;
+    }
+
+    .salary-summary{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .summary-box{
+      border:1px solid rgba(148,163,184,.18);
+      background:rgba(15,23,42,.68);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .summary-label{
+      font-size:.68rem;
+      color:#94a3b8;
+      text-transform:uppercase;
+      font-weight:900;
+      margin-bottom:6px;
     }
 
     .summary-value{
-      font-size:1.1rem;
+      font-size:1.25rem;
+      font-weight:900;
+      color:#fff;
+      word-break:break-word;
+    }
+
+    .table-wrap{
+      border:1px solid rgba(148,163,184,.18);
+      border-radius:18px;
+      overflow:auto;
+      background:rgba(2,6,23,.55);
     }
 
     table{
-      min-width:760px;
+      width:100%;
+      border-collapse:collapse;
+      min-width:700px;
     }
 
-    th,td{
-      padding:13px 14px;
+    th{
+      text-align:left;
+      padding:14px 16px;
+      background:rgba(15,23,42,.92);
+      color:#94a3b8;
+      font-size:.72rem;
+      font-weight:900;
+      text-transform:uppercase;
+      border-bottom:1px solid rgba(148,163,184,.18);
+      white-space:nowrap;
     }
-  }
-</style>
+
+    td{
+      padding:15px 16px;
+      border-bottom:1px solid rgba(148,163,184,.13);
+      white-space:nowrap;
+      font-size:.88rem;
+      color:#e5e7eb;
+    }
+
+    tbody tr:last-child td{border-bottom:none}
+
+    .status-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 12px;
+      border-radius:999px;
+      background:rgba(34,197,94,.16);
+      color:#4ade80;
+      font-size:.72rem;
+      font-weight:900;
+    }
+
+    .download-btn{
+      border:none;
+      background:linear-gradient(135deg,rgba(47,124,255,.22),rgba(168,85,247,.18));
+      color:#93c5fd;
+      padding:9px 13px;
+      border-radius:12px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .empty{
+      text-align:center;
+      color:#94a3b8;
+      padding:28px!important;
+    }
+
+    .mobile-overlay{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.55);
+      z-index:110;
+    }
+
+    @media(max-width:980px){
+      .app-layout{grid-template-columns:1fr}
+      .sidebar{
+        position:fixed;
+        left:-260px;
+        top:0;
+        width:230px;
+        transition:.25s ease;
+      }
+      .sidebar.open{left:0}
+      .mobile-overlay.show{display:block}
+      .mobile-menu-btn{display:inline-flex}
+      .main{padding:14px}
+      .grid{grid-template-columns:1fr}
+      .stats{grid-template-columns:1fr}
+      .salary-summary{grid-template-columns:1fr}
+    }
+
+    @media(max-width:600px){
+      body::before{
+        background:
+          linear-gradient(120deg,transparent 0%,transparent 38%,rgba(47,124,255,.65) 39%,rgba(236,72,153,.85) 40%,transparent 42%,transparent 100%),
+          linear-gradient(125deg,transparent 0%,transparent 70%,rgba(96,165,250,.55) 71%,transparent 73%,transparent 100%);
+        animation-duration:5s;
+      }
+
+      #auth-page{
+        padding:18px;
+        align-items:flex-start;
+        padding-top:56px;
+      }
+
+      .auth-card{
+        padding:28px 22px;
+        border-radius:28px;
+        max-width:100%;
+      }
+
+      .auth-header h1{font-size:1.85rem}
+      .topbar{padding:12px 14px;border-radius:0 0 20px 20px}
+      .user-pill{display:none}
+      .welcome{padding:20px;border-radius:22px}
+      .welcome h2{font-size:1.35rem}
+      .card{border-radius:22px}
+      .card-header{padding:16px}
+      .card-body{padding:16px}
+      table{min-width:760px}
+      th,td{padding:13px 14px}
+    }
+  </style>
 </head>
 
 <body>
 
 <section id="auth-page">
   <div class="auth-card">
+    <div class="auth-lock"><i class="fas fa-lock"></i></div>
+
     <div class="auth-header">
-      <h1>HGX <span style="color:var(--accent)">SALARY</span></h1>
-      <p>Login untuk melihat data staff dan slip gaji.</p>
+      <h1>HGX <span>SALARY</span></h1>
+      <p>Masuk untuk mengakses slip gaji dan informasi akun kamu.</p>
     </div>
 
     <div class="tab-menu">
-      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Masuk</button>
-      <button class="tab-btn" id="tab-reg" onclick="switchTab('register')">Daftar</button>
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')"><i class="fas fa-user"></i> Masuk</button>
+      <button class="tab-btn" id="tab-reg" onclick="switchTab('register')"><i class="fas fa-user-plus"></i> Daftar</button>
     </div>
 
     <div id="login-form" class="auth-form active">
@@ -708,11 +754,11 @@
         <label>Password</label>
         <div class="input-wrap">
           <i class="fas fa-lock"></i>
-          <input type="password" id="login-pass" placeholder="••••••••">
+          <input type="password" id="login-pass" placeholder="Masukkan password">
         </div>
       </div>
 
-      <button class="btn" id="btn-login" onclick="handleLogin()">Masuk</button>
+      <button class="btn" id="btn-login" onclick="handleLogin()">Masuk ke Dashboard</button>
       <a class="forgot-link" onclick="handleForgot()">Lupa Password? Hubungi Admin</a>
     </div>
 
@@ -741,149 +787,186 @@
         </div>
       </div>
 
-      <button class="btn btn-dark" id="btn-reg" onclick="handleRegister()">Daftar</button>
+      <button class="btn btn-dark" id="btn-reg" onclick="handleRegister()">Daftar Staff</button>
     </div>
   </div>
 </section>
 
 <section id="dashboard">
-  <header class="topbar">
-    <div class="brand">
-      <div class="brand-logo">
-        <i class="fas fa-file-invoice-dollar"></i>
+  <div class="mobile-overlay" id="mobile-overlay" onclick="toggleSidebar(false)"></div>
+
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="side-brand">
+        <i class="fas fa-gem"></i>
+        <span>HGX SALARY</span>
       </div>
-      <div>
-        <div class="brand-title">HGX Salary Slip</div>
-        <div class="brand-sub">Staff salary information</div>
+
+      <div class="side-menu">
+        <button class="side-link active" onclick="scrollToSection('dashboard-top')">
+          <i class="fas fa-home"></i> Dashboard
+        </button>
+        <button class="side-link" onclick="scrollToSection('salary-section')">
+          <i class="fas fa-receipt"></i> Riwayat Slip
+        </button>
+        <button class="side-link" onclick="scrollToSection('profile-section')">
+          <i class="fas fa-user"></i> Profil Saya
+        </button>
+        <button class="side-link" onclick="handleForgot()">
+          <i class="fas fa-circle-question"></i> Bantuan
+        </button>
+        <button class="side-link" onclick="handleLogout()" style="color:#fb7185;">
+          <i class="fas fa-right-from-bracket"></i> Keluar
+        </button>
       </div>
-    </div>
 
-    <div class="topbar-right">
-      <div class="user-pill" id="user-display">Staff</div>
-      <button class="logout-btn" onclick="handleLogout()">Keluar</button>
-    </div>
-  </header>
+      <div class="side-bottom">
+        <div>Akses Terakhir</div>
+        <b id="last-access-text">Aktif</b><br>
+        <span><i class="online-dot"></i>Online</span>
+      </div>
+    </aside>
 
-  <main class="container">
-    <div class="page-title">
-      <h2>Data Staff & Slip Gaji</h2>
-      <p>Informasi di bawah ini mengikuti data yang ada di Google Sheet.</p>
-    </div>
+    <main class="main" id="dashboard-top">
+      <header class="topbar">
+        <button class="mobile-menu-btn" onclick="toggleSidebar(true)">
+          <i class="fas fa-bars"></i>
+        </button>
 
-    <section class="grid">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <i class="fas fa-user"></i>
-            Data Staff
+        <div class="user-area">
+          <div class="user-pill" id="user-display">Staff</div>
+          <button class="logout-btn" onclick="handleLogout()">Keluar</button>
+        </div>
+      </header>
+
+      <section class="welcome">
+        <h2>Selamat datang, <span id="welcome-name">Staff</span> 👋</h2>
+        <p>Berikut data staff dan slip gaji sesuai informasi yang tersimpan di Google Sheet.</p>
+      </section>
+
+      <section class="stats">
+        <div class="stat-box">
+          <div class="stat-label">Total Slip</div>
+          <div class="stat-value" id="stat-total-slip">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Status Pembayaran</div>
+          <div class="stat-value" id="stat-payment-status">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Periode Aktif</div>
+          <div class="stat-value" id="stat-active-period">-</div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card" id="profile-section">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-user"></i>
+              Data Staff
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="profile-main">
+              <div class="avatar" id="profile-avatar">H</div>
+              <div>
+                <div class="profile-name" id="profile-name">Nama Staff</div>
+                <div class="profile-id" id="profile-id">ID: -</div>
+              </div>
+            </div>
+
+            <div class="info-list">
+              <div class="info-row">
+                <div class="info-label">Department</div>
+                <div class="info-value" id="profile-department">-</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">Position</div>
+                <div class="info-value" id="profile-position">-</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">Country</div>
+                <div class="info-value" id="profile-country">-</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">Join Date</div>
+                <div class="info-value" id="profile-join-date">-</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">Bank Name</div>
+                <div class="info-value" id="profile-bank-name">-</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">Bank Account</div>
+                <div class="info-value" id="profile-bank-account">-</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">Account Name</div>
+                <div class="info-value" id="profile-account-name">-</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">Status</div>
+                <div class="info-value" id="profile-status">-</div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="card-body">
-          <div class="profile-main">
-            <div class="avatar" id="profile-avatar">H</div>
-            <div>
-              <div class="profile-name" id="profile-name">Nama Staff</div>
-              <div class="profile-id" id="profile-id">ID: -</div>
+        <div class="card" id="salary-section">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-receipt"></i>
+              Slip Gaji
             </div>
+            <button class="download-btn" onclick="exportSalaryCSV()">Export</button>
           </div>
 
-          <div class="info-list">
-            <div class="info-row">
-              <div class="info-label">Department</div>
-              <div class="info-value" id="profile-department">-</div>
+          <div class="card-body">
+            <div class="salary-summary">
+              <div class="summary-box">
+                <div class="summary-label">Slip Terbaru</div>
+                <div class="summary-value" id="latest-period">-</div>
+              </div>
+
+              <div class="summary-box">
+                <div class="summary-label">Total Gaji</div>
+                <div class="summary-value" id="latest-total">$ 0.00</div>
+              </div>
+
+              <div class="summary-box">
+                <div class="summary-label">Status</div>
+                <div class="summary-value" id="latest-status">-</div>
+              </div>
             </div>
 
-            <div class="info-row">
-              <div class="info-label">Position</div>
-              <div class="info-value" id="profile-position">-</div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Periode</th>
+                    <th>Base</th>
+                    <th>Bonus</th>
+                    <th>Deduction</th>
+                    <th>Total</th>
+                    <th>Paid Date</th>
+                    <th>Status</th>
+                    <th>PDF</th>
+                  </tr>
+                </thead>
+                <tbody id="history-body">
+                  <tr>
+                    <td colspan="8" class="empty">Memuat data salary...</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-
-            <div class="info-row">
-              <div class="info-label">Country</div>
-              <div class="info-value" id="profile-country">-</div>
-            </div>
-
-            <div class="info-row">
-              <div class="info-label">Join Date</div>
-              <div class="info-value" id="profile-join-date">-</div>
-            </div>
-
-            <div class="info-row">
-              <div class="info-label">Bank Name</div>
-              <div class="info-value" id="profile-bank-name">-</div>
-            </div>
-
-            <div class="info-row">
-              <div class="info-label">Bank Account</div>
-              <div class="info-value" id="profile-bank-account">-</div>
-            </div>
-
-            <div class="info-row">
-              <div class="info-label">Account Name</div>
-              <div class="info-value" id="profile-account-name">-</div>
-            </div>
-
-            <div class="info-row">
-              <div class="info-label">Status</div>
-              <div class="info-value" id="profile-status">-</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <i class="fas fa-receipt"></i>
-            Slip Gaji
-          </div>
-          <button class="download-btn" onclick="exportSalaryCSV()">Export</button>
-        </div>
-
-        <div class="card-body">
-          <div class="salary-summary">
-            <div class="summary-box">
-              <div class="summary-label">Slip Terbaru</div>
-              <div class="summary-value" id="latest-period">-</div>
-            </div>
-
-            <div class="summary-box">
-              <div class="summary-label">Total Gaji</div>
-              <div class="summary-value" id="latest-total">$ 0.00</div>
-            </div>
-
-            <div class="summary-box">
-              <div class="summary-label">Status</div>
-              <div class="summary-value" id="latest-status">-</div>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Periode</th>
-                  <th>Base</th>
-                  <th>Bonus</th>
-                  <th>Deduction</th>
-                  <th>Total</th>
-                  <th>Paid Date</th>
-                  <th>Status</th>
-                  <th>PDF</th>
-                </tr>
-              </thead>
-              <tbody id="history-body">
-                <tr>
-                  <td colspan="8" class="empty">Memuat data salary...</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
+  </div>
 </section>
 
 <script>
@@ -974,6 +1057,7 @@
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("currentUser", data.name || id);
         localStorage.setItem("currentUserId", data.id || id);
+        localStorage.setItem("lastAccess", new Date().toLocaleString("id-ID"));
         showDashboard();
       } else {
         alert(data.message || "ID atau Password salah!");
@@ -983,7 +1067,7 @@
       alert("Gagal terhubung ke database.");
     } finally {
       btn.disabled = false;
-      btn.innerText = "Masuk";
+      btn.innerText = "Masuk ke Dashboard";
     }
   }
 
@@ -1028,17 +1112,20 @@
       alert("Pendaftaran gagal dikirim.");
     } finally {
       btn.disabled = false;
-      btn.innerText = "Daftar";
+      btn.innerText = "Daftar Staff";
     }
   }
 
   function showDashboard() {
     const currentUser = localStorage.getItem("currentUser") || "";
     const currentUserId = localStorage.getItem("currentUserId") || "";
+    const lastAccess = localStorage.getItem("lastAccess") || "-";
 
     document.getElementById("auth-page").style.display = "none";
     document.getElementById("dashboard").style.display = "block";
     document.getElementById("user-display").innerText = currentUser || "Staff";
+    document.getElementById("welcome-name").innerText = currentUser || "Staff";
+    document.getElementById("last-access-text").innerText = lastAccess;
 
     if (currentUserId) {
       loadStaffData(currentUserId);
@@ -1091,17 +1178,22 @@
     document.getElementById("profile-account-name").innerText = p.account_name || "-";
     document.getElementById("profile-status").innerText = p.status || "-";
     document.getElementById("user-display").innerText = name;
+    document.getElementById("welcome-name").innerText = name;
   }
 
   function renderSalaryData(salaryList) {
     currentSalaryList = salaryList || [];
     const tbody = document.getElementById("history-body");
 
+    document.getElementById("stat-total-slip").innerText = currentSalaryList.length || 0;
+
     if (!currentSalaryList.length) {
       tbody.innerHTML = `<tr><td colspan="8" class="empty">Belum ada data slip gaji untuk akun ini.</td></tr>`;
       document.getElementById("latest-period").innerText = "-";
       document.getElementById("latest-total").innerText = "$ 0.00";
       document.getElementById("latest-status").innerText = "-";
+      document.getElementById("stat-payment-status").innerText = "-";
+      document.getElementById("stat-active-period").innerText = "-";
       return;
     }
 
@@ -1110,6 +1202,8 @@
     document.getElementById("latest-period").innerText = formatPeriod(latest.period);
     document.getElementById("latest-total").innerText = formatMoney(latest.total_salary);
     document.getElementById("latest-status").innerText = latest.status || "-";
+    document.getElementById("stat-payment-status").innerText = latest.status || "-";
+    document.getElementById("stat-active-period").innerText = formatPeriod(latest.period);
 
     tbody.innerHTML = currentSalaryList.map(item => {
       const pdfBtn = item.pdf_url
@@ -1236,7 +1330,28 @@
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("currentUser");
     localStorage.removeItem("currentUserId");
+    localStorage.removeItem("lastAccess");
     location.reload();
+  }
+
+  function scrollToSection(id) {
+    toggleSidebar(false);
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  function toggleSidebar(open) {
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("mobile-overlay");
+    if (!sidebar || !overlay) return;
+
+    if (open) {
+      sidebar.classList.add("open");
+      overlay.classList.add("show");
+    } else {
+      sidebar.classList.remove("open");
+      overlay.classList.remove("show");
+    }
   }
 
   ["login-id","login-pass"].forEach(id => {
