@@ -1250,11 +1250,12 @@
     function requestJsonp(params) {
         return new Promise((resolve, reject) => {
             const callbackName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-
             const url = new URL(BACKEND_URL);
+
             Object.entries(params).forEach(([key, value]) => {
                 url.searchParams.set(key, value);
             });
+
             url.searchParams.set("callback", callbackName);
             url.searchParams.set("_t", Date.now().toString());
 
@@ -1315,6 +1316,7 @@
             if (data.result === "success") {
                 localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("currentUser", data.name || id);
+                localStorage.setItem("currentUserId", data.id || id);
                 localStorage.setItem("lastLoginAt", new Date().toLocaleString("id-ID"));
                 showDashboard();
             } else {
@@ -1385,6 +1387,7 @@
 
     function showDashboard() {
         const currentUser = localStorage.getItem('currentUser') || "";
+        const currentUserId = localStorage.getItem('currentUserId') || "";
         const lastLogin = localStorage.getItem('lastLoginAt') || "Hari Ini";
 
         document.getElementById('auth-page').style.display = 'none';
@@ -1396,11 +1399,131 @@
         document.getElementById('profile-name').innerText = currentUser || "Nama Staff";
         document.getElementById('last-login-time').innerText = lastLogin;
         document.getElementById('activity-login-time').innerText = lastLogin;
+
+        if (currentUserId) {
+            loadStaffData(currentUserId);
+        }
+    }
+
+    function formatMoney(value) {
+        const num = Number(value || 0);
+        return "$ " + num.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    async function loadStaffData(id) {
+        try {
+            const profileData = await requestJsonp({
+                action: "getProfile",
+                id: id
+            });
+
+            if (profileData.result === "success" && profileData.profile) {
+                const p = profileData.profile;
+
+                document.getElementById("profile-name").innerText = p.name || "-";
+                document.getElementById("user-display").innerText = p.name || id;
+                document.getElementById("user-avatar").innerText = getInitial(p.name || id);
+                document.getElementById("profile-avatar").innerText = getInitial(p.name || id);
+
+                const profileMeta = document.querySelector(".profile-meta");
+                if (profileMeta) {
+                    profileMeta.innerText = `${p.department || "-"} • ${p.position || "-"} • ${p.country || "-"}`;
+                }
+
+                const badgeWrap = document.querySelector(".profile-badges");
+                if (badgeWrap) {
+                    badgeWrap.innerHTML = `
+                        <span class="badge badge-success"><i class="fas fa-circle-check"></i> ${p.status || "Active"}</span>
+                        <span class="badge badge-blue"><i class="fas fa-building-columns"></i> ${p.bank_name || "-"}</span>
+                        <span class="badge badge-blue"><i class="fas fa-credit-card"></i> ${p.bank_account || "-"}</span>
+                        <span class="badge badge-blue"><i class="fas fa-user"></i> ${p.account_name || "-"}</span>
+                    `;
+                }
+            }
+
+            const salaryData = await requestJsonp({
+                action: "getSalary",
+                id: id
+            });
+
+            if (salaryData.result === "success") {
+                renderSalaryData(salaryData.salary || []);
+            }
+
+        } catch (err) {
+            console.error("LOAD STAFF DATA ERROR:", err);
+            alert("Gagal mengambil data staff / salary dari Google Sheet.");
+        }
+    }
+
+    function renderSalaryData(salaryList) {
+        const tbody = document.getElementById("history-body");
+        const statValues = document.querySelectorAll(".stat-value");
+        const miniValues = document.querySelectorAll(".mini-info-value");
+
+        if (!salaryList.length) {
+            if (tbody) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="history-empty">Belum ada data slip gaji untuk akun ini.</td>
+                    </tr>
+                `;
+            }
+
+            document.querySelector(".salary-amount").innerText = "$ 0.00";
+
+            if (statValues[0]) statValues[0].innerText = "0";
+            if (statValues[1]) statValues[1].innerText = "-";
+            if (statValues[2]) statValues[2].innerText = "-";
+
+            if (miniValues[0]) miniValues[0].innerText = "-";
+            if (miniValues[1]) miniValues[1].innerText = "-";
+            if (miniValues[2]) miniValues[2].innerText = "-";
+            if (miniValues[3]) miniValues[3].innerText = "-";
+
+            return;
+        }
+
+        const latest = salaryList[0];
+
+        document.querySelector(".salary-amount").innerText = formatMoney(latest.total_salary);
+
+        if (statValues[0]) statValues[0].innerText = salaryList.length;
+        if (statValues[1]) statValues[1].innerText = latest.status || "-";
+        if (statValues[2]) statValues[2].innerText = latest.period || "-";
+        if (statValues[3]) statValues[3].innerText = "Staff";
+
+        if (miniValues[0]) miniValues[0].innerText = latest.period || "-";
+        if (miniValues[1]) miniValues[1].innerText = latest.status || "-";
+        if (miniValues[2]) miniValues[2].innerText = latest.paid_date || "-";
+        if (miniValues[3]) miniValues[3].innerText = "Transfer";
+
+        if (tbody) {
+            tbody.innerHTML = salaryList.map(item => {
+                const pdfBtn = item.pdf_url
+                    ? `<button class="download-btn" onclick="window.open('${item.pdf_url}', '_blank')">Download PDF</button>`
+                    : `<button class="download-btn" onclick="alert('PDF belum tersedia')">Belum Ada PDF</button>`;
+
+                return `
+                    <tr>
+                        <td><b>${item.period || "-"}</b></td>
+                        <td>${item.paid_date || "-"}</td>
+                        <td><span class="status-badge"><i class="fas fa-check"></i> ${item.status || "-"}</span></td>
+                        <td>${formatMoney(item.total_salary)}</td>
+                        <td>${pdfBtn}</td>
+                    </tr>
+                `;
+            }).join("");
+        }
     }
 
     function handleLogout() {
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("currentUser");
+        localStorage.removeItem("currentUserId");
         localStorage.removeItem("lastLoginAt");
         location.reload();
     }
@@ -1411,11 +1534,11 @@
     }
 
     function simulateDownload() {
-        alert("Fitur download cepat siap dihubungkan ke file slip gaji PDF.");
+        alert("Fitur download cepat akan mengikuti data PDF dari Google Sheet kolom pdf_url.");
     }
 
     function showInfo() {
-        alert("Dashboard ini sudah di-upgrade tampilannya tanpa mengubah logika backend atau script data yang berjalan.");
+        alert("Data staff dan salary sekarang diambil langsung dari Google Sheet sesuai ID login.");
     }
 
     document.getElementById("login-id").addEventListener("keydown", function(event) {
