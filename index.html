@@ -30,7 +30,6 @@
 
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-
   body{
     font-family:"Inter",sans-serif;
     color:var(--text);
@@ -81,13 +80,15 @@
     100%{background-position:0 70px; opacity:.34}
   }
 
-  .dgi-bg{
+  .dgi-bg,.laser-layer,.meteor-layer{
     position:fixed;
     inset:0;
-    z-index:-3;
     pointer-events:none;
     overflow:hidden;
   }
+  .dgi-bg{z-index:-3}
+  .laser-layer{z-index:-2}
+  .meteor-layer{z-index:-1}
 
   .dgi-orb{
     position:absolute;
@@ -96,41 +97,15 @@
     border-radius:50%;
     filter:blur(4px);
     opacity:.42;
-    transform-style:preserve-3d;
     animation:orbFloat 10s ease-in-out infinite;
   }
-
-  .dgi-orb.one{
-    left:-140px;
-    top:8%;
-    background:radial-gradient(circle,rgba(47,124,255,.45),rgba(47,124,255,.08),transparent 68%);
-  }
-
-  .dgi-orb.two{
-    right:-160px;
-    top:16%;
-    background:radial-gradient(circle,rgba(236,72,153,.40),rgba(124,58,237,.12),transparent 70%);
-    animation-delay:2s;
-  }
-
-  .dgi-orb.three{
-    left:35%;
-    bottom:-210px;
-    background:radial-gradient(circle,rgba(56,189,248,.28),rgba(124,58,237,.10),transparent 72%);
-    animation-delay:4s;
-  }
+  .dgi-orb.one{left:-140px;top:8%;background:radial-gradient(circle,rgba(47,124,255,.45),rgba(47,124,255,.08),transparent 68%)}
+  .dgi-orb.two{right:-160px;top:16%;background:radial-gradient(circle,rgba(236,72,153,.40),rgba(124,58,237,.12),transparent 70%);animation-delay:2s}
+  .dgi-orb.three{left:35%;bottom:-210px;background:radial-gradient(circle,rgba(56,189,248,.28),rgba(124,58,237,.10),transparent 72%);animation-delay:4s}
 
   @keyframes orbFloat{
     0%,100%{transform:translate3d(0,0,0) scale(1)}
     50%{transform:translate3d(45px,-35px,80px) scale(1.12)}
-  }
-
-  .laser-layer{
-    position:fixed;
-    inset:0;
-    z-index:-2;
-    pointer-events:none;
-    overflow:hidden;
   }
 
   .laser{
@@ -143,7 +118,6 @@
     opacity:.85;
     animation:laserSweep 5.8s linear infinite;
   }
-
   .laser.l1{top:12%;left:-80%;animation-delay:0s}
   .laser.l2{top:34%;left:-90%;animation-delay:1.4s;transform:rotate(22deg)}
   .laser.l3{top:62%;left:-80%;animation-delay:2.6s}
@@ -153,14 +127,6 @@
     0%{translate:-20vw 0;opacity:0}
     12%{opacity:.95}
     100%{translate:180vw 0;opacity:0}
-  }
-
-  .meteor-layer{
-    position:fixed;
-    inset:0;
-    z-index:-1;
-    pointer-events:none;
-    overflow:hidden;
   }
 
   .meteor{
@@ -173,7 +139,6 @@
     animation:meteorFall 4.5s linear infinite;
     opacity:.8;
   }
-
   .meteor.m1{top:-220px;left:12%;animation-delay:.2s}
   .meteor.m2{top:-260px;left:42%;animation-delay:1.5s}
   .meteor.m3{top:-240px;left:72%;animation-delay:2.8s}
@@ -224,22 +189,6 @@
     pointer-events:none;
   }
 
-  .auth-card::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    border-radius:32px;
-    background:linear-gradient(120deg,transparent,rgba(255,255,255,.08),transparent);
-    transform:translateX(-120%);
-    animation:cardShine 5s ease-in-out infinite;
-    pointer-events:none;
-  }
-
-  @keyframes cardShine{
-    0%,55%{transform:translateX(-120%)}
-    100%{transform:translateX(120%)}
-  }
-
   .auth-lock{
     width:68px;
     height:68px;
@@ -255,19 +204,12 @@
   }
 
   .auth-header{text-align:center;margin-bottom:28px}
-  .auth-header h1{
-    font-size:2.25rem;
-    font-weight:900;
-    color:#fff;
-    letter-spacing:-1px;
-  }
-
+  .auth-header h1{font-size:2.25rem;font-weight:900;color:#fff;letter-spacing:-1px}
   .auth-header h1 span{
     background:linear-gradient(135deg,#38bdf8,#2f7cff,#a855f7,#ec4899);
     -webkit-background-clip:text;
     color:transparent!important;
   }
-
   .auth-header p{margin-top:10px;color:var(--muted);font-size:.95rem}
 
   .tab-menu{
@@ -278,8 +220,6 @@
     border-radius:16px;
     padding:6px;
     margin-bottom:24px;
-    position:relative;
-    overflow:hidden;
   }
 
   .tab-btn{
@@ -302,22 +242,9 @@
   .auth-form.active{display:block}
 
   .form-group{margin-bottom:17px}
-  .form-group label{
-    display:block;
-    font-size:.75rem;
-    color:#cbd5e1;
-    font-weight:800;
-    margin-bottom:9px;
-  }
-
+  .form-group label{display:block;font-size:.75rem;color:#cbd5e1;font-weight:800;margin-bottom:9px}
   .input-wrap{position:relative}
-  .input-wrap i{
-    position:absolute;
-    left:16px;
-    top:50%;
-    transform:translateY(-50%);
-    color:#94a3b8;
-  }
+  .input-wrap i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#94a3b8}
 
   .form-group input{
     width:100%;
@@ -351,24 +278,10 @@
 
   .btn:disabled{background:#64748b;cursor:not-allowed;box-shadow:none}
   .btn-dark{background:linear-gradient(135deg,#111827,#2f7cff,#7c3aed)}
-
-  .forgot-link{
-    display:block;
-    text-align:center;
-    margin-top:18px;
-    color:#60a5fa;
-    font-size:.86rem;
-    cursor:pointer;
-    text-decoration:none;
-  }
+  .forgot-link{display:block;text-align:center;margin-top:18px;color:#60a5fa;font-size:.86rem;cursor:pointer;text-decoration:none}
 
   #dashboard{display:none;min-height:100vh}
-
-  .app-layout{
-    display:grid;
-    grid-template-columns:230px 1fr;
-    min-height:100vh;
-  }
+  .app-layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
 
   .sidebar{
     position:sticky;
@@ -384,27 +297,12 @@
     z-index:120;
   }
 
-  .side-brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:34px;
-    color:white;
-    font-weight:900;
-    font-size:1.05rem;
-  }
-
+  .side-brand{display:flex;align-items:center;gap:10px;margin-bottom:34px;color:white;font-weight:900;font-size:1.05rem}
   .side-brand i{
-    width:34px;
-    height:34px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:12px;
-    background:linear-gradient(135deg,var(--blue),var(--purple));
+    width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+    border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--purple));
     box-shadow:0 0 22px rgba(47,124,255,.45);
   }
-
   .side-brand span{
     background:linear-gradient(135deg,#fff,#38bdf8,#a855f7);
     -webkit-background-clip:text;
@@ -412,58 +310,25 @@
   }
 
   .side-menu{display:grid;gap:10px}
-
   .side-link{
-    border:none;
-    width:100%;
-    text-align:left;
-    padding:13px 14px;
-    border-radius:15px;
-    background:transparent;
-    color:#94a3b8;
-    font-weight:800;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    gap:11px;
-    transition:.2s ease;
+    border:none;width:100%;text-align:left;padding:13px 14px;border-radius:15px;
+    background:transparent;color:#94a3b8;font-weight:800;cursor:pointer;
+    display:flex;align-items:center;gap:11px;transition:.2s ease;
   }
-
-  .side-link:hover,
-  .side-link.active{
+  .side-link:hover,.side-link.active{
     color:#fff;
     background:linear-gradient(90deg,rgba(47,124,255,.24),rgba(236,72,153,.13));
     box-shadow:inset 3px 0 0 #2f7cff, inset -3px 0 0 #ec4899;
   }
-
   .side-link i{width:18px;text-align:center}
 
   .side-bottom{
-    margin-top:auto;
-    border:1px solid rgba(148,163,184,.18);
-    border-radius:18px;
-    padding:14px;
-    background:rgba(15,23,42,.55);
-    color:#94a3b8;
-    font-size:.78rem;
-    line-height:1.7;
+    margin-top:auto;border:1px solid rgba(148,163,184,.18);border-radius:18px;
+    padding:14px;background:rgba(15,23,42,.55);color:#94a3b8;font-size:.78rem;line-height:1.7;
   }
+  .online-dot{display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%;margin-right:6px;box-shadow:0 0 12px #22c55e}
 
-  .online-dot{
-    display:inline-block;
-    width:8px;
-    height:8px;
-    background:#22c55e;
-    border-radius:50%;
-    margin-right:6px;
-    box-shadow:0 0 12px #22c55e;
-  }
-
-  .main{
-    min-width:0;
-    padding:24px;
-  }
-
+  .main{min-width:0;padding:24px}
   .topbar{
     background:rgba(5,10,25,.72);
     backdrop-filter:blur(18px);
@@ -476,163 +341,50 @@
     margin-bottom:18px;
   }
 
-  .mobile-menu-btn{
-    display:none;
-    border:none;
-    color:#fff;
-    background:rgba(47,124,255,.18);
-    border-radius:12px;
-    padding:10px 12px;
-    font-size:1rem;
-  }
+  .mobile-menu-btn{display:none;border:none;color:#fff;background:rgba(47,124,255,.18);border-radius:12px;padding:10px 12px;font-size:1rem}
+  .user-area{display:flex;align-items:center;gap:12px;margin-left:auto}
+  .user-pill{background:rgba(15,23,42,.72);border:1px solid rgba(148,163,184,.24);padding:9px 14px;border-radius:999px;font-weight:800;color:#fff;font-size:.86rem}
+  .logout-btn{border:none;background:rgba(239,68,68,.12);color:#fb7185;font-weight:900;cursor:pointer;border-radius:12px;padding:9px 12px}
 
-  .user-area{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-left:auto;
-  }
-
-  .user-pill{
-    background:rgba(15,23,42,.72);
-    border:1px solid rgba(148,163,184,.24);
-    padding:9px 14px;
-    border-radius:999px;
-    font-weight:800;
-    color:#fff;
-    font-size:.86rem;
-  }
-
-  .logout-btn{
-    border:none;
-    background:rgba(239,68,68,.12);
-    color:#fb7185;
-    font-weight:900;
-    cursor:pointer;
-    border-radius:12px;
-    padding:9px 12px;
-  }
+  .page-view{display:none}
+  .page-view.active{display:block;animation:fadeIn .25s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
   .welcome{
-    position:relative;
-    overflow:hidden;
-    border-radius:26px;
-    border:1px solid rgba(148,163,184,.18);
+    position:relative;overflow:hidden;border-radius:26px;border:1px solid rgba(148,163,184,.18);
     background:
       radial-gradient(circle at 88% 15%,rgba(47,124,255,.38),transparent 24%),
       radial-gradient(circle at 80% 100%,rgba(236,72,153,.24),transparent 30%),
       linear-gradient(135deg,rgba(15,23,42,.90),rgba(30,58,138,.36));
-    padding:24px;
-    margin-bottom:18px;
-    box-shadow:var(--shadow);
+    padding:24px;margin-bottom:18px;box-shadow:var(--shadow);
   }
+  .welcome h2{font-size:1.7rem;color:#fff;font-weight:900;letter-spacing:-.6px}
+  .welcome p{margin-top:8px;color:#94a3b8;font-size:.92rem}
 
-  .welcome h2{
-    font-size:1.7rem;
-    color:#fff;
-    font-weight:900;
-    letter-spacing:-.6px;
-  }
-
-  .welcome p{
-    margin-top:8px;
-    color:#94a3b8;
-    font-size:.92rem;
-  }
-
-  .stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:14px;
-    margin-bottom:18px;
-  }
-
-  .stat-box{
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+  .stat-box,.card{
     background:rgba(5,10,25,.82);
     border:1px solid rgba(148,163,184,.20);
     border-radius:22px;
-    padding:16px;
     box-shadow:var(--shadow);
   }
+  .stat-box{padding:16px}
+  .stat-label{color:#94a3b8;font-size:.72rem;font-weight:900;text-transform:uppercase;margin-bottom:8px}
+  .stat-value{font-size:1.28rem;color:#fff;font-weight:900;word-break:break-word}
 
-  .stat-label{
-    color:#94a3b8;
-    font-size:.72rem;
-    font-weight:900;
-    text-transform:uppercase;
-    margin-bottom:8px;
-  }
-
-  .stat-value{
-    font-size:1.28rem;
-    color:#fff;
-    font-weight:900;
-    word-break:break-word;
-  }
-
-  .grid{
-    display:grid;
-    grid-template-columns:.85fr 1.15fr;
-    gap:18px;
-    align-items:start;
-  }
-
-  .card{
-    background:rgba(5,10,25,.82);
-    backdrop-filter:blur(18px);
-    border:1px solid rgba(148,163,184,.22);
-    border-radius:26px;
-    box-shadow:var(--shadow);
-    overflow:hidden;
-  }
-
-  .card-header{
-    padding:18px 20px;
-    border-bottom:1px solid rgba(148,163,184,.18);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-  }
-
-  .card-title{
-    font-size:1rem;
-    font-weight:900;
-    color:#fff;
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-
-  .card-title i{
-    color:#60a5fa;
-    text-shadow:0 0 12px rgba(96,165,250,.7);
-  }
-
+  .grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:18px;align-items:start}
+  .card{backdrop-filter:blur(18px);border-radius:26px;overflow:hidden}
+  .card-header{padding:18px 20px;border-bottom:1px solid rgba(148,163,184,.18);display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .card-title{font-size:1rem;font-weight:900;color:#fff;display:flex;align-items:center;gap:10px}
+  .card-title i{color:#60a5fa;text-shadow:0 0 12px rgba(96,165,250,.7)}
   .card-body{padding:20px}
 
-  .profile-main{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    margin-bottom:18px;
-  }
-
+  .profile-main{display:flex;align-items:center;gap:14px;margin-bottom:18px}
   .avatar{
-    width:58px;
-    height:58px;
-    border-radius:18px;
-    background:linear-gradient(135deg,#2f7cff,#7c3aed);
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:1.3rem;
-    font-weight:900;
-    flex:0 0 58px;
+    width:58px;height:58px;border-radius:18px;background:linear-gradient(135deg,#2f7cff,#7c3aed);
+    color:white;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:900;flex:0 0 58px;
     box-shadow:0 0 28px rgba(47,124,255,.38);
   }
-
   .profile-name{font-size:1.15rem;color:#fff;font-weight:900}
   .profile-id{color:#94a3b8;margin-top:3px;font-size:.84rem;font-weight:600}
 
@@ -643,131 +395,42 @@
     border-radius:16px;
     padding:12px 14px;
   }
+  .info-label{font-size:.68rem;text-transform:uppercase;color:#94a3b8;font-weight:900;margin-bottom:5px}
+  .info-value{color:#e5e7eb;font-weight:800;word-break:break-word;font-size:.9rem}
 
-  .info-label{
-    font-size:.68rem;
-    text-transform:uppercase;
-    color:#94a3b8;
-    font-weight:900;
-    margin-bottom:5px;
-  }
+  .salary-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+  .summary-box{border:1px solid rgba(148,163,184,.18);background:rgba(15,23,42,.68);border-radius:18px;padding:14px}
+  .summary-label{font-size:.68rem;color:#94a3b8;text-transform:uppercase;font-weight:900;margin-bottom:6px}
+  .summary-value{font-size:1.25rem;font-weight:900;color:#fff;word-break:break-word}
 
-  .info-value{
-    color:#e5e7eb;
-    font-weight:800;
-    word-break:break-word;
-    font-size:.9rem;
-  }
-
-  .salary-summary{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    margin-bottom:16px;
-  }
-
-  .summary-box{
-    border:1px solid rgba(148,163,184,.18);
-    background:rgba(15,23,42,.68);
-    border-radius:18px;
-    padding:14px;
-  }
-
-  .summary-label{
-    font-size:.68rem;
-    color:#94a3b8;
-    text-transform:uppercase;
-    font-weight:900;
-    margin-bottom:6px;
-  }
-
-  .summary-value{
-    font-size:1.25rem;
-    font-weight:900;
-    color:#fff;
-    word-break:break-word;
-  }
-
-  .table-wrap{
-    border:1px solid rgba(148,163,184,.18);
-    border-radius:18px;
-    overflow:auto;
-    background:rgba(2,6,23,.55);
-  }
-
-  table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:700px;
-  }
-
+  .table-wrap{border:1px solid rgba(148,163,184,.18);border-radius:18px;overflow:auto;background:rgba(2,6,23,.55)}
+  table{width:100%;border-collapse:collapse;min-width:700px}
   th{
-    text-align:left;
-    padding:14px 16px;
-    background:rgba(15,23,42,.92);
-    color:#94a3b8;
-    font-size:.72rem;
-    font-weight:900;
-    text-transform:uppercase;
-    border-bottom:1px solid rgba(148,163,184,.18);
-    white-space:nowrap;
+    text-align:left;padding:14px 16px;background:rgba(15,23,42,.92);color:#94a3b8;
+    font-size:.72rem;font-weight:900;text-transform:uppercase;border-bottom:1px solid rgba(148,163,184,.18);white-space:nowrap;
   }
-
-  td{
-    padding:15px 16px;
-    border-bottom:1px solid rgba(148,163,184,.13);
-    white-space:nowrap;
-    font-size:.88rem;
-    color:#e5e7eb;
-  }
-
+  td{padding:15px 16px;border-bottom:1px solid rgba(148,163,184,.13);white-space:nowrap;font-size:.88rem;color:#e5e7eb}
   tbody tr:last-child td{border-bottom:none}
 
   .status-badge{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    padding:6px 12px;
-    border-radius:999px;
-    background:rgba(34,197,94,.16);
-    color:#4ade80;
-    font-size:.72rem;
-    font-weight:900;
+    display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;
+    background:rgba(34,197,94,.16);color:#4ade80;font-size:.72rem;font-weight:900;
   }
-
   .download-btn{
-    border:none;
-    background:linear-gradient(135deg,rgba(47,124,255,.22),rgba(168,85,247,.18));
-    color:#93c5fd;
-    padding:9px 13px;
-    border-radius:12px;
-    font-weight:900;
-    cursor:pointer;
+    border:none;background:linear-gradient(135deg,rgba(47,124,255,.22),rgba(168,85,247,.18));
+    color:#93c5fd;padding:9px 13px;border-radius:12px;font-weight:900;cursor:pointer;
   }
+  .empty{text-align:center;color:#94a3b8;padding:28px!important}
 
-  .empty{
-    text-align:center;
-    color:#94a3b8;
-    padding:28px!important;
-  }
+  .help-box{line-height:1.8;color:#cbd5e1}
+  .help-box b{color:#fff}
+  .help-box code{background:rgba(15,23,42,.8);padding:3px 6px;border-radius:6px;color:#93c5fd}
 
-  .mobile-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.55);
-    z-index:110;
-  }
+  .mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:110}
 
   @media(max-width:980px){
     .app-layout{grid-template-columns:1fr}
-    .sidebar{
-      position:fixed;
-      left:-260px;
-      top:0;
-      width:230px;
-      transition:.25s ease;
-    }
+    .sidebar{position:fixed;left:-260px;top:0;width:230px;transition:.25s ease}
     .sidebar.open{left:0}
     .mobile-overlay.show{display:block}
     .mobile-menu-btn{display:inline-flex}
@@ -778,38 +441,12 @@
   }
 
   @media(max-width:600px){
-    body::before{
-      inset:-30%;
-      animation-duration:7s;
-    }
-
-    .dgi-orb{
-      width:260px;
-      height:260px;
-    }
-
-    .laser{
-      width:105vw;
-      animation-duration:4.2s;
-    }
-
-    .meteor{
-      height:120px;
-      animation-duration:3.6s;
-    }
-
-    #auth-page{
-      padding:18px;
-      align-items:flex-start;
-      padding-top:56px;
-    }
-
-    .auth-card{
-      padding:28px 22px;
-      border-radius:28px;
-      max-width:100%;
-    }
-
+    body::before{inset:-30%;animation-duration:7s}
+    .dgi-orb{width:260px;height:260px}
+    .laser{width:105vw;animation-duration:4.2s}
+    .meteor{height:120px;animation-duration:3.6s}
+    #auth-page{padding:18px;align-items:flex-start;padding-top:56px}
+    .auth-card{padding:28px 22px;border-radius:28px;max-width:100%}
     .auth-header h1{font-size:1.85rem}
     .topbar{padding:12px 14px;border-radius:0 0 20px 20px}
     .user-pill{display:none}
@@ -821,12 +458,12 @@
     table{min-width:760px}
     th,td{padding:13px 14px}
   }
-</style>
+  </style>
 </head>
 
 <body>
 
-  <div class="dgi-bg">
+<div class="dgi-bg">
   <div class="dgi-orb one"></div>
   <div class="dgi-orb two"></div>
   <div class="dgi-orb three"></div>
@@ -845,7 +482,7 @@
   <div class="meteor m3"></div>
   <div class="meteor m4"></div>
 </div>
-  
+
 <section id="auth-page">
   <div class="auth-card">
     <div class="auth-lock"><i class="fas fa-lock"></i></div>
@@ -922,16 +559,16 @@
       </div>
 
       <div class="side-menu">
-        <button class="side-link active" onclick="scrollToSection('dashboard-top')">
+        <button class="side-link active" data-page="dashboard-page" onclick="showPage('dashboard-page', this)">
           <i class="fas fa-home"></i> Dashboard
         </button>
-        <button class="side-link" onclick="scrollToSection('salary-section')">
+        <button class="side-link" data-page="salary-page" onclick="showPage('salary-page', this)">
           <i class="fas fa-receipt"></i> Riwayat Slip
         </button>
-        <button class="side-link" onclick="scrollToSection('profile-section')">
+        <button class="side-link" data-page="profile-page" onclick="showPage('profile-page', this)">
           <i class="fas fa-user"></i> Profil Saya
         </button>
-        <button class="side-link" onclick="handleForgot()">
+        <button class="side-link" data-page="help-page" onclick="showPage('help-page', this)">
           <i class="fas fa-circle-question"></i> Bantuan
         </button>
         <button class="side-link" onclick="handleLogout()" style="color:#fb7185;">
@@ -946,7 +583,7 @@
       </div>
     </aside>
 
-    <main class="main" id="dashboard-top">
+    <main class="main">
       <header class="topbar">
         <button class="mobile-menu-btn" onclick="toggleSidebar(true)">
           <i class="fas fa-bars"></i>
@@ -958,106 +595,91 @@
         </div>
       </header>
 
-      <section class="welcome">
-        <h2>Selamat datang, <span id="welcome-name">Staff</span> 👋</h2>
-        <p>Berikut data staff dan slip gaji sesuai informasi yang tersimpan di Google Sheet.</p>
-      </section>
+      <section id="dashboard-page" class="page-view active">
+        <section class="welcome">
+          <h2>Selamat datang, <span id="welcome-name">Staff</span> 👋</h2>
+          <p>Berikut ringkasan data staff dan slip gaji sesuai informasi yang tersimpan di Google Sheet.</p>
+        </section>
 
-      <section class="stats">
-        <div class="stat-box">
-          <div class="stat-label">Total Slip</div>
-          <div class="stat-value" id="stat-total-slip">0</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">Status Pembayaran</div>
-          <div class="stat-value" id="stat-payment-status">-</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">Periode Aktif</div>
-          <div class="stat-value" id="stat-active-period">-</div>
-        </div>
-      </section>
+        <section class="stats">
+          <div class="stat-box">
+            <div class="stat-label">Total Slip</div>
+            <div class="stat-value" id="stat-total-slip">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Status Pembayaran</div>
+            <div class="stat-value" id="stat-payment-status">-</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Periode Aktif</div>
+            <div class="stat-value" id="stat-active-period">-</div>
+          </div>
+        </section>
 
-      <section class="grid">
-        <div class="card" id="profile-section">
-          <div class="card-header">
-            <div class="card-title">
-              <i class="fas fa-user"></i>
-              Data Staff
+        <section class="grid">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fas fa-user"></i> Profil Singkat</div>
+            </div>
+            <div class="card-body">
+              <div class="profile-main">
+                <div class="avatar" id="profile-avatar">H</div>
+                <div>
+                  <div class="profile-name" id="profile-name">Nama Staff</div>
+                  <div class="profile-id" id="profile-id">ID: -</div>
+                </div>
+              </div>
+              <div class="info-list">
+                <div class="info-row">
+                  <div class="info-label">Department</div>
+                  <div class="info-value" id="profile-department">-</div>
+                </div>
+                <div class="info-row">
+                  <div class="info-label">Position</div>
+                  <div class="info-value" id="profile-position">-</div>
+                </div>
+                <div class="info-row">
+                  <div class="info-label">Status</div>
+                  <div class="info-value" id="profile-status">-</div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="card-body">
-            <div class="profile-main">
-              <div class="avatar" id="profile-avatar">H</div>
-              <div>
-                <div class="profile-name" id="profile-name">Nama Staff</div>
-                <div class="profile-id" id="profile-id">ID: -</div>
-              </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fas fa-receipt"></i> Slip Terbaru</div>
             </div>
-
-            <div class="info-list">
-              <div class="info-row">
-                <div class="info-label">Department</div>
-                <div class="info-value" id="profile-department">-</div>
-              </div>
-              <div class="info-row">
-                <div class="info-label">Position</div>
-                <div class="info-value" id="profile-position">-</div>
-              </div>
-              <div class="info-row">
-                <div class="info-label">Country</div>
-                <div class="info-value" id="profile-country">-</div>
-              </div>
-              <div class="info-row">
-                <div class="info-label">Join Date</div>
-                <div class="info-value" id="profile-join-date">-</div>
-              </div>
-              <div class="info-row">
-                <div class="info-label">Bank Name</div>
-                <div class="info-value" id="profile-bank-name">-</div>
-              </div>
-              <div class="info-row">
-                <div class="info-label">Bank Account</div>
-                <div class="info-value" id="profile-bank-account">-</div>
-              </div>
-              <div class="info-row">
-                <div class="info-label">Account Name</div>
-                <div class="info-value" id="profile-account-name">-</div>
-              </div>
-              <div class="info-row">
-                <div class="info-label">Status</div>
-                <div class="info-value" id="profile-status">-</div>
+            <div class="card-body">
+              <div class="salary-summary">
+                <div class="summary-box">
+                  <div class="summary-label">Periode</div>
+                  <div class="summary-value" id="latest-period">-</div>
+                </div>
+                <div class="summary-box">
+                  <div class="summary-label">Total Gaji</div>
+                  <div class="summary-value" id="latest-total">$ 0.00</div>
+                </div>
+                <div class="summary-box">
+                  <div class="summary-label">Status</div>
+                  <div class="summary-value" id="latest-status">-</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
+      </section>
 
-        <div class="card" id="salary-section">
+      <section id="salary-page" class="page-view">
+        <div class="card">
           <div class="card-header">
-            <div class="card-title">
-              <i class="fas fa-receipt"></i>
-              Slip Gaji
-            </div>
+            <div class="card-title"><i class="fas fa-receipt"></i> Riwayat Slip Gaji</div>
             <button class="download-btn" onclick="exportSalaryCSV()">Export</button>
           </div>
-
           <div class="card-body">
-            <div class="salary-summary">
-              <div class="summary-box">
-                <div class="summary-label">Slip Terbaru</div>
-                <div class="summary-value" id="latest-period">-</div>
-              </div>
-
-              <div class="summary-box">
-                <div class="summary-label">Total Gaji</div>
-                <div class="summary-value" id="latest-total">$ 0.00</div>
-              </div>
-
-              <div class="summary-box">
-                <div class="summary-label">Status</div>
-                <div class="summary-value" id="latest-status">-</div>
-              </div>
+            <div class="help-box" style="margin-bottom:16px;">
+              Untuk menambahkan riwayat gaji lama, isi sheet <b>salary</b> dengan ID yang sama.  
+              Format kolom: <code>id, period, base_salary, bonus, deduction, total_salary, paid_date, status, pdf_url, note</code>.
             </div>
 
             <div class="table-wrap">
@@ -1084,6 +706,55 @@
           </div>
         </div>
       </section>
+
+      <section id="profile-page" class="page-view">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fas fa-user"></i> Profil Saya</div>
+          </div>
+          <div class="card-body">
+            <div class="profile-main">
+              <div class="avatar" id="profile-avatar-2">H</div>
+              <div>
+                <div class="profile-name" id="profile-name-2">Nama Staff</div>
+                <div class="profile-id" id="profile-id-2">ID: -</div>
+              </div>
+            </div>
+
+            <div class="info-list">
+              <div class="info-row"><div class="info-label">Department</div><div class="info-value" id="profile-department-2">-</div></div>
+              <div class="info-row"><div class="info-label">Position</div><div class="info-value" id="profile-position-2">-</div></div>
+              <div class="info-row"><div class="info-label">Country</div><div class="info-value" id="profile-country">-</div></div>
+              <div class="info-row"><div class="info-label">Join Date</div><div class="info-value" id="profile-join-date">-</div></div>
+              <div class="info-row"><div class="info-label">Bank Name</div><div class="info-value" id="profile-bank-name">-</div></div>
+              <div class="info-row"><div class="info-label">Bank Account</div><div class="info-value" id="profile-bank-account">-</div></div>
+              <div class="info-row"><div class="info-label">Account Name</div><div class="info-value" id="profile-account-name">-</div></div>
+              <div class="info-row"><div class="info-label">Status</div><div class="info-value" id="profile-status-2">-</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="help-page" class="page-view">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fas fa-circle-question"></i> Bantuan</div>
+          </div>
+          <div class="card-body help-box">
+            <p><b>Cara mengisi data profil staff:</b></p>
+            <p>Isi Google Sheet <b>staff</b> dengan kolom:</p>
+            <p><code>id | name | department | position | country | join_date | bank_name | bank_account | account_name | status</code></p>
+            <br>
+            <p><b>Cara mengisi riwayat salary:</b></p>
+            <p>Isi Google Sheet <b>salary</b> dengan kolom:</p>
+            <p><code>id | period | base_salary | bonus | deduction | total_salary | paid_date | status | pdf_url | note</code></p>
+            <br>
+            <p>Untuk membuat beberapa riwayat slip, tambah banyak baris dengan <b>ID yang sama</b>, tapi periode berbeda.</p>
+            <br>
+            <button class="download-btn" onclick="handleForgot()">Hubungi Admin</button>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 </section>
@@ -1104,6 +775,15 @@
       document.getElementById("tab-reg").classList.add("active");
       document.getElementById("register-form").classList.add("active");
     }
+  }
+
+  function showPage(pageId, btn) {
+    toggleSidebar(false);
+    document.querySelectorAll(".page-view").forEach(p => p.classList.remove("active"));
+    document.getElementById(pageId).classList.add("active");
+
+    document.querySelectorAll(".side-link").forEach(b => b.classList.remove("active"));
+    if (btn) btn.classList.add("active");
   }
 
   function requestJsonp(params) {
@@ -1166,11 +846,7 @@
     btn.innerText = "Memproses...";
 
     try {
-      const data = await requestJsonp({
-        action: "login",
-        id: id,
-        pass: pass
-      });
+      const data = await requestJsonp({ action: "login", id: id, pass: pass });
 
       if (data.result === "success") {
         localStorage.setItem("isLoggedIn", "true");
@@ -1210,12 +886,7 @@
     btn.innerText = "Mendaftarkan...";
 
     try {
-      const data = await requestJsonp({
-        action: "register",
-        id: id,
-        name: name,
-        pass: pass
-      });
+      const data = await requestJsonp({ action: "register", id: id, name: name, pass: pass });
 
       if (data.result === "success") {
         alert(data.message || "Pendaftaran berhasil! Silakan masuk.");
@@ -1246,17 +917,12 @@
     document.getElementById("welcome-name").innerText = currentUser || "Staff";
     document.getElementById("last-access-text").innerText = lastAccess;
 
-    if (currentUserId) {
-      loadStaffData(currentUserId);
-    }
+    if (currentUserId) loadStaffData(currentUserId);
   }
 
   async function loadStaffData(id) {
     try {
-      const profileData = await requestJsonp({
-        action: "getProfile",
-        id: id
-      });
+      const profileData = await requestJsonp({ action: "getProfile", id: id });
 
       if (profileData.result === "success" && profileData.profile) {
         renderProfile(profileData.profile, id);
@@ -1265,10 +931,7 @@
         document.getElementById("profile-id").innerText = "ID: " + id;
       }
 
-      const salaryData = await requestJsonp({
-        action: "getSalary",
-        id: id
-      });
+      const salaryData = await requestJsonp({ action: "getSalary", id: id });
 
       if (salaryData.result === "success") {
         renderSalaryData(salaryData.salary || []);
@@ -1282,47 +945,59 @@
     }
   }
 
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.innerText = value || "-";
+  }
+
   function renderProfile(p, id) {
     const name = p.name || "-";
 
-    document.getElementById("profile-avatar").innerText = getInitial(name);
-    document.getElementById("profile-name").innerText = name;
-    document.getElementById("profile-id").innerText = "ID: " + (p.id || id || "-");
-    document.getElementById("profile-department").innerText = p.department || "-";
-    document.getElementById("profile-position").innerText = p.position || "-";
-    document.getElementById("profile-country").innerText = p.country || "-";
-    document.getElementById("profile-join-date").innerText = formatDisplayDate(p.join_date);
-    document.getElementById("profile-bank-name").innerText = p.bank_name || "-";
-    document.getElementById("profile-bank-account").innerText = p.bank_account || "-";
-    document.getElementById("profile-account-name").innerText = p.account_name || "-";
-    document.getElementById("profile-status").innerText = p.status || "-";
-    document.getElementById("user-display").innerText = name;
-    document.getElementById("welcome-name").innerText = name;
+    setText("profile-avatar", getInitial(name));
+    setText("profile-avatar-2", getInitial(name));
+    setText("profile-name", name);
+    setText("profile-name-2", name);
+    setText("profile-id", "ID: " + (p.id || id || "-"));
+    setText("profile-id-2", "ID: " + (p.id || id || "-"));
+    setText("profile-department", p.department);
+    setText("profile-department-2", p.department);
+    setText("profile-position", p.position);
+    setText("profile-position-2", p.position);
+    setText("profile-country", p.country);
+    setText("profile-join-date", formatDisplayDate(p.join_date));
+    setText("profile-bank-name", p.bank_name);
+    setText("profile-bank-account", p.bank_account);
+    setText("profile-account-name", p.account_name);
+    setText("profile-status", p.status);
+    setText("profile-status-2", p.status);
+    setText("user-display", name);
+    setText("welcome-name", name);
   }
 
   function renderSalaryData(salaryList) {
     currentSalaryList = salaryList || [];
     const tbody = document.getElementById("history-body");
 
-    document.getElementById("stat-total-slip").innerText = currentSalaryList.length || 0;
+    setText("stat-total-slip", currentSalaryList.length || 0);
 
     if (!currentSalaryList.length) {
       tbody.innerHTML = `<tr><td colspan="8" class="empty">Belum ada data slip gaji untuk akun ini.</td></tr>`;
-      document.getElementById("latest-period").innerText = "-";
-      document.getElementById("latest-total").innerText = "$ 0.00";
-      document.getElementById("latest-status").innerText = "-";
-      document.getElementById("stat-payment-status").innerText = "-";
-      document.getElementById("stat-active-period").innerText = "-";
+      setText("latest-period", "-");
+      setText("latest-total", "$ 0.00");
+      setText("latest-status", "-");
+      setText("stat-payment-status", "-");
+      setText("stat-active-period", "-");
       return;
     }
 
+    currentSalaryList.sort((a,b) => new Date(b.period) - new Date(a.period));
     const latest = currentSalaryList[0];
 
-    document.getElementById("latest-period").innerText = formatPeriod(latest.period);
-    document.getElementById("latest-total").innerText = formatMoney(latest.total_salary);
-    document.getElementById("latest-status").innerText = latest.status || "-";
-    document.getElementById("stat-payment-status").innerText = latest.status || "-";
-    document.getElementById("stat-active-period").innerText = formatPeriod(latest.period);
+    setText("latest-period", formatPeriod(latest.period));
+    setText("latest-total", formatMoney(latest.total_salary));
+    setText("latest-status", latest.status || "-");
+    setText("stat-payment-status", latest.status || "-");
+    setText("stat-active-period", formatPeriod(latest.period));
 
     tbody.innerHTML = currentSalaryList.map(item => {
       const pdfBtn = item.pdf_url
@@ -1346,43 +1021,32 @@
 
   function formatMoney(value) {
     const num = Number(value || 0);
-    return "$ " + num.toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
+    return "$ " + num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
   function formatDisplayDate(value) {
     if (!value) return "-";
     const raw = String(value).trim();
-
     if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
       const p = raw.split("-");
       return `${p[2]}/${p[1]}/${p[0]}`;
     }
-
     const d = new Date(raw);
     if (!isNaN(d.getTime())) {
-      return d.toLocaleDateString("id-ID", {
-        day:"2-digit",
-        month:"2-digit",
-        year:"numeric"
-      });
+      return d.toLocaleDateString("id-ID", { day:"2-digit", month:"2-digit", year:"numeric" });
     }
-
     return raw;
   }
 
   function formatPeriod(value) {
     if (!value) return "-";
     const raw = String(value).trim();
-    const d = new Date(raw);
 
+    if (/^[A-Za-zÀ-ÿ]+ \d{4}$/.test(raw) || /^[A-Za-zÀ-ÿ]+$/.test(raw)) return raw;
+
+    const d = new Date(raw);
     if (!isNaN(d.getTime())) {
-      return d.toLocaleDateString("id-ID", {
-        month:"long",
-        year:"numeric"
-      });
+      return d.toLocaleDateString("id-ID", { month:"long", year:"numeric" });
     }
 
     return raw;
@@ -1411,9 +1075,7 @@
       return;
     }
 
-    const rows = [
-      ["Period","Base","Bonus","Deduction","Total","Paid Date","Status","PDF URL","Note"]
-    ];
+    const rows = [["Period","Base","Bonus","Deduction","Total","Paid Date","Status","PDF URL","Note"]];
 
     currentSalaryList.forEach(item => {
       rows.push([
@@ -1451,12 +1113,6 @@
     localStorage.removeItem("currentUserId");
     localStorage.removeItem("lastAccess");
     location.reload();
-  }
-
-  function scrollToSection(id) {
-    toggleSidebar(false);
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
   }
 
   function toggleSidebar(open) {
