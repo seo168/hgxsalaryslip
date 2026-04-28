@@ -40,7 +40,7 @@
       isolation:isolate;
     }
 
-    button,input{font-family:inherit}
+    button,input,select{font-family:inherit}
     button{-webkit-tap-highlight-color:transparent}
 
     #three-bg{
@@ -397,41 +397,29 @@
     tbody tr:last-child td{border-bottom:none}
     .status-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(34,197,94,.16);color:#4ade80;font-size:.72rem;font-weight:900}
     .download-btn{border:none;background:linear-gradient(135deg,rgba(47,124,255,.24),rgba(139,92,246,.20));color:#bfdbfe;padding:9px 13px;border-radius:13px;font-weight:900;cursor:pointer}
+    .download-btn:hover{filter:saturate(1.2);transform:translateY(-1px)}
     .empty{text-align:center;color:#94a3b8;padding:28px!important}
     .help-box{line-height:1.8;color:#cbd5e1}
     .help-box b{color:#fff}
     .help-box code{background:rgba(15,23,42,.8);padding:3px 7px;border-radius:7px;color:#93c5fd}
     .mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.58);z-index:110}
 
-    @media(max-width:980px){
-      .app-layout{grid-template-columns:1fr}
-      .sidebar{position:fixed;left:-280px;top:0;width:250px;transition:.28s ease}
-      .sidebar.open{left:0}
-      .mobile-overlay.show{display:block}
-      .mobile-menu-btn{display:inline-flex}
-      .main{padding:14px}
-      .grid{grid-template-columns:1fr}
-      .stats{grid-template-columns:1fr}
-      .salary-summary{grid-template-columns:1fr}
+    .master-slide-box{
+      animation:masterSlideDown .28s ease;
+      background:rgba(15,23,42,.72);
+      border:1px solid rgba(55,232,255,.20);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:0 18px 45px rgba(0,0,0,.28);
     }
-
-    @media(max-width:600px){
-      .dgi-orb{width:260px;height:260px}
-      .laser{width:105vw;animation-duration:4.2s}
-      .spark{display:none}
-      #auth-page{padding:18px;align-items:flex-start;padding-top:56px}
-      .auth-card{padding:28px 22px;border-radius:28px;max-width:100%}
-      .auth-header h1{font-size:1.85rem}
-      .topbar{padding:12px 14px;border-radius:0 0 22px 22px}
-      .user-pill{display:none}
-      .welcome{padding:20px;border-radius:24px}
-      .welcome h2{font-size:1.35rem}
-      .card{border-radius:24px}
-      .card-header{padding:16px}
-      .card-body{padding:16px}
-      table{min-width:820px}
-      th,td{padding:13px 14px}
-    }
+    .master-slide-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px}
+    .master-slide-head h3{color:#fff;font-size:1.05rem;font-weight:900}
+    .master-slide-head p{color:#94a3b8;font-size:.82rem;margin-top:4px}
+    .master-profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .master-profile-grid div{background:rgba(2,6,23,.48);border:1px solid rgba(148,163,184,.16);border-radius:14px;padding:11px 13px}
+    .master-profile-grid b{display:block;color:#94a3b8;font-size:.68rem;text-transform:uppercase;margin-bottom:4px}
+    .master-profile-grid span{color:#fff;font-weight:800;font-size:.86rem}
+    @keyframes masterSlideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
 
     /* === HOLOGRAM UI UPGRADE === */
     .holo-scanlines{
@@ -613,7 +601,35 @@
       100%{left:160%;opacity:0}
     }
 
+    @media(max-width:980px){
+      .app-layout{grid-template-columns:1fr}
+      .sidebar{position:fixed;left:-280px;top:0;width:250px;transition:.28s ease}
+      .sidebar.open{left:0}
+      .mobile-overlay.show{display:block}
+      .mobile-menu-btn{display:inline-flex}
+      .main{padding:14px}
+      .grid{grid-template-columns:1fr}
+      .stats{grid-template-columns:1fr}
+      .salary-summary{grid-template-columns:1fr}
+      .master-profile-grid{grid-template-columns:1fr}
+    }
+
     @media(max-width:600px){
+      .dgi-orb{width:260px;height:260px}
+      .laser{width:105vw;animation-duration:4.2s}
+      .spark{display:none}
+      #auth-page{padding:18px;align-items:flex-start;padding-top:56px}
+      .auth-card{padding:28px 22px;border-radius:28px;max-width:100%}
+      .auth-header h1{font-size:1.85rem}
+      .topbar{padding:12px 14px;border-radius:0 0 22px 22px}
+      .user-pill{display:none}
+      .welcome{padding:20px;border-radius:24px}
+      .welcome h2{font-size:1.35rem}
+      .card{border-radius:24px}
+      .card-header{padding:16px}
+      .card-body{padding:16px}
+      table{min-width:820px}
+      th,td{padding:13px 14px}
       .holo-beam{width:115vmin;height:115vmin;opacity:.46}
       .holo-runes span{font-size:10px;opacity:.45}
       .holo-scanlines{opacity:.32}
@@ -825,7 +841,7 @@
         <div class="card">
           <div class="card-header">
             <div class="card-title"><i class="fas fa-receipt"></i> Riwayat Slip Gaji</div>
-            <button class="download-btn" onclick="exportSalaryCSV()">Export</button>
+            <button class="download-btn" onclick="exportSalaryCSV()">Export / Print Semua</button>
           </div>
           <div class="card-body">
             <div class="help-box" style="margin-bottom:16px;">
@@ -1122,7 +1138,7 @@
     dashboardPage.innerHTML = `
       <section class="welcome">
         <h2>Master Dashboard 👑</h2>
-        <p>Mode ini bisa melihat semua staff, mencari nama / ID, filter department, lalu klik staff untuk melihat profil dan slip gajinya.</p>
+        <p>Mode ini bisa melihat semua staff, mencari nama / ID, filter department, lalu klik staff untuk melihat slip gaji langsung slide turun di bawah nama staff.</p>
       </section>
 
       <section class="stats">
@@ -1191,7 +1207,7 @@
     }
 
     tbody.innerHTML = list.map(s => `
-      <tr>
+      <tr data-staff-id="${escapeAttr(s.id)}">
         <td><b>${escapeHtml(s.id)}</b></td>
         <td>${escapeHtml(s.name)}</td>
         <td>${escapeHtml(s.department)}</td>
@@ -1223,6 +1239,14 @@
   }
 
   async function openMasterStaff(targetId) {
+    const existing = document.getElementById("detail-" + targetId);
+    if (existing) {
+      existing.remove();
+      return;
+    }
+
+    document.querySelectorAll(".master-detail-row").forEach(el => el.remove());
+
     const id = localStorage.getItem("currentUserId") || "";
     const pass = localStorage.getItem("currentUserPass") || "";
 
@@ -1239,14 +1263,88 @@
         return;
       }
 
-      renderProfile(data.profile, targetId);
-      renderSalaryData(data.salary || []);
+      const profile = data.profile || {};
+      const salary = data.salary || [];
+      const targetRow = [...document.querySelectorAll("#master-staff-body tr")].find(tr => tr.dataset.staffId === targetId);
+      if (!targetRow) return;
 
-      showPage("salary-page", document.querySelector('[data-page="salary-page"]'));
+      const detailRow = document.createElement("tr");
+      detailRow.className = "master-detail-row";
+      detailRow.id = "detail-" + targetId;
+      detailRow.innerHTML = `
+        <td colspan="7">
+          <div class="master-slide-box">
+            <div class="master-slide-head">
+              <div>
+                <h3>${escapeHtml(profile.name || "-")}</h3>
+                <p>ID: ${escapeHtml(profile.id || targetId)} · ${escapeHtml(profile.department || "-")} · ${escapeHtml(profile.position || "-")}</p>
+              </div>
+              <button class="download-btn" onclick="document.getElementById('detail-${escapeAttr(targetId)}').remove()">Tutup</button>
+            </div>
+
+            <div class="master-profile-grid">
+              <div><b>Country</b><span>${escapeHtml(profile.country || "-")}</span></div>
+              <div><b>Join Date</b><span>${escapeHtml(formatDisplayDate(profile.join_date))}</span></div>
+              <div><b>Bank</b><span>${escapeHtml(profile.bank_name || "-")}</span></div>
+              <div><b>Account</b><span>${escapeHtml(profile.bank_account || "-")}</span></div>
+              <div><b>Account Name</b><span>${escapeHtml(profile.account_name || "-")}</span></div>
+              <div><b>Status</b><span>${escapeHtml(profile.status || "-")}</span></div>
+            </div>
+
+            <div class="table-wrap" style="margin-top:14px;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Periode</th>
+                    <th>Base</th>
+                    <th>Bonus</th>
+                    <th>Deduction</th>
+                    <th>Total</th>
+                    <th>Paid Date</th>
+                    <th>Status</th>
+                    <th>PDF</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${salary.length ? salary.map((item, index) => `
+                    <tr>
+                      <td><b>${escapeHtml(formatPeriod(item.period))}</b></td>
+                      <td>${escapeHtml(formatMoney(item.base_salary))}</td>
+                      <td>${escapeHtml(formatMoney(item.bonus))}</td>
+                      <td>${escapeHtml(formatMoney(item.deduction))}</td>
+                      <td><b>${escapeHtml(formatMoney(item.total_salary))}</b></td>
+                      <td>${escapeHtml(formatDisplayDate(item.paid_date))}</td>
+                      <td><span class="status-badge">${escapeHtml(item.status || "-")}</span></td>
+                      <td><button class="download-btn" onclick="printMasterSalarySlip('${escapeAttr(targetId)}',${index})">Print PDF</button></td>
+                    </tr>
+                  `).join("") : `<tr><td colspan="8" class="empty">Belum ada slip gaji.</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </td>`;
+
+      targetRow.insertAdjacentElement("afterend", detailRow);
+      detailRow.scrollIntoView({ behavior:"smooth", block:"center" });
+      window["masterSalary_" + targetId] = salary;
+      window["masterProfile_" + targetId] = profile;
     } catch (err) {
       console.error("DETAIL STAFF ERROR:", err);
       alert("Gagal membuka slip staff.");
     }
+  }
+
+  function printMasterSalarySlip(targetId, itemIndex) {
+    const oldProfile = currentProfile;
+    const oldSalary = currentSalaryList;
+
+    currentProfile = window["masterProfile_" + targetId] || {};
+    currentSalaryList = window["masterSalary_" + targetId] || [];
+
+    printSalarySlip(itemIndex);
+
+    currentProfile = oldProfile;
+    currentSalaryList = oldSalary;
   }
 
   function getDepartmentOptions(list) {
