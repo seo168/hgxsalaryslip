@@ -1524,7 +1524,7 @@ function printMasterSalarySlip(staffIndex, salaryIndex) {
     }
   }
 
-  printMasterSalarySlipById(targetId, itemIndex) {
+  function printMasterSalarySlipById(targetId, itemIndex) {
     const oldProfile = currentProfile;
     const oldSalary = currentSalaryList;
 
@@ -1798,6 +1798,7 @@ function printMasterSalarySlip(staffIndex, salaryIndex) {
         localStorage.setItem("currentUserId", data.id || id);
         localStorage.setItem("currentUserPass", pass);
         localStorage.setItem("currentUserRole", data.role || "staff");
+        localStorage.setItem("currentUserPass", pass);
         localStorage.setItem("lastAccess", new Date().toLocaleString("id-ID"));
         showDashboard();
       } else {
