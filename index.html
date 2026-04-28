@@ -1688,7 +1688,7 @@
     }
 
     const starGeo = new THREE.BufferGeometry();
-    const count = window.innerWidth < 700 ? 260 : 620;
+    const count = window.innerWidth < 700 ? 120 : 280;
     const positions = new Float32Array(count * 3);
 
     for(let i=0;i<count;i++){
@@ -1730,7 +1730,7 @@
     });
   }
 
-  initThreeBackground();
+  if (window.innerWidth > 900) {   initThreeBackground(); }
 </script>
 </body>
 </html>
