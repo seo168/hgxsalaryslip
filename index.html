@@ -938,26 +938,32 @@
       Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
       url.searchParams.set("callback", callbackName);
       url.searchParams.set("_t", Date.now().toString());
+
       const script = document.createElement("script");
       let finished = false;
+
       function cleanup() {
         if (script.parentNode) script.parentNode.removeChild(script);
         try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
       }
+
       window[callbackName] = function(data) {
         if (finished) return;
         finished = true;
         cleanup();
         resolve(data);
       };
+
       script.onerror = function() {
         if (finished) return;
         finished = true;
         cleanup();
         reject(new Error("Gagal memuat JSONP dari Apps Script"));
       };
+
       script.src = url.toString();
       document.body.appendChild(script);
+
       setTimeout(() => {
         if (finished) return;
         finished = true;
@@ -971,11 +977,15 @@
     const id = document.getElementById("login-id").value.trim();
     const pass = document.getElementById("login-pass").value.trim();
     const btn = document.getElementById("btn-login");
+
     if (!id || !pass) return alert("Lengkapi data!");
+
     btn.disabled = true;
     btn.innerText = "Memproses...";
+
     try {
       const data = await requestJsonp({ action: "login", id: id, pass: pass });
+
       if (data.result === "success") {
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("currentUser", data.name || id);
@@ -999,12 +1009,16 @@
     const id = document.getElementById("reg-id").value.trim();
     const pass = document.getElementById("reg-pass").value.trim();
     const btn = document.getElementById("btn-reg");
+
     if (!name || !id || !pass) return alert("Lengkapi data!");
     if (pass.length < 6) return alert("Password minimal 6 karakter!");
+
     btn.disabled = true;
     btn.innerText = "Mendaftarkan...";
+
     try {
       const data = await requestJsonp({ action: "register", id: id, name: name, pass: pass });
+
       if (data.result === "success") {
         alert(data.message || "Pendaftaran berhasil! Silakan masuk.");
         document.getElementById("reg-name").value = "";
@@ -1027,25 +1041,35 @@
     const currentUser = localStorage.getItem("currentUser") || "";
     const currentUserId = localStorage.getItem("currentUserId") || "";
     const lastAccess = localStorage.getItem("lastAccess") || "-";
+
     document.getElementById("auth-page").style.display = "none";
     document.getElementById("dashboard").style.display = "block";
+
     setText("user-display", currentUser || "Staff");
     setText("welcome-name", currentUser || "Staff");
     setText("last-access-text", lastAccess);
+
     if (currentUserId) loadStaffData(currentUserId);
   }
 
   async function loadStaffData(id) {
     try {
       const profileData = await requestJsonp({ action: "getProfile", id: id });
-      if (profileData.result === "success" && profileData.profile) renderProfile(profileData.profile, id);
-      else {
+
+      if (profileData.result === "success" && profileData.profile) {
+        renderProfile(profileData.profile, id);
+      } else {
         setText("profile-name", "Data staff tidak ditemukan");
         setText("profile-id", "ID: " + id);
       }
+
       const salaryData = await requestJsonp({ action: "getSalary", id: id });
-      if (salaryData.result === "success") renderSalaryData(salaryData.salary || []);
-      else renderSalaryData([]);
+
+      if (salaryData.result === "success") {
+        renderSalaryData(salaryData.salary || []);
+      } else {
+        renderSalaryData([]);
+      }
     } catch (err) {
       console.error("LOAD STAFF DATA ERROR:", err);
       alert("Gagal mengambil data staff / salary dari Google Sheet.");
@@ -1059,6 +1083,7 @@
 
   function renderProfile(p, id) {
     const name = p.name || "-";
+
     setText("profile-avatar", getInitial(name));
     setText("profile-avatar-2", getInitial(name));
     setText("profile-name", name);
@@ -1083,6 +1108,7 @@
   function renderSalaryData(salaryList) {
     currentSalaryList = salaryList || [];
     const tbody = document.getElementById("history-body");
+
     setText("stat-total-slip", currentSalaryList.length || 0);
 
     if (!currentSalaryList.length) {
@@ -1096,17 +1122,18 @@
     }
 
     currentSalaryList.sort((a,b) => getSortTime(b.period) - getSortTime(a.period));
+
     const latest = currentSalaryList[0];
+
     setText("latest-period", formatPeriod(latest.period));
     setText("latest-total", formatMoney(latest.total_salary));
     setText("latest-status", latest.status || "-");
     setText("stat-payment-status", latest.status || "-");
     setText("stat-active-period", formatPeriod(latest.period));
 
-    tbody.innerHTML = currentSalaryList.map(item => {
-      const pdfBtn = item.pdf_url
-        ? `<button class="download-btn" onclick="window.open('${escapeAttr(item.pdf_url)}', '_blank')">Download</button>`
-        : `<button class="download-btn" onclick="alert('PDF belum tersedia')">-</button>`;
+    tbody.innerHTML = currentSalaryList.map((item, index) => {
+      const pdfBtn = `<button class="download-btn" onclick="printSalarySlip(${index})">Print PDF</button>`;
+
       return `
         <tr>
           <td><b>${escapeHtml(formatPeriod(item.period))}</b></td>
@@ -1122,12 +1149,239 @@
     }).join("");
   }
 
+  function printSalarySlip(itemIndex) {
+    const item = currentSalaryList[itemIndex];
+    if (!item) return alert("Data slip tidak ditemukan.");
+
+    const userName = localStorage.getItem("currentUser") || "Staff";
+    const userId = localStorage.getItem("currentUserId") || "-";
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>HGX Salary Slip - ${escapeHtml(userName)} - ${escapeHtml(formatPeriod(item.period))}</title>
+  <style>
+    *{box-sizing:border-box}
+    body{
+      font-family:Arial,sans-serif;
+      background:#f3f4f6;
+      color:#111827;
+      padding:30px;
+    }
+    .slip{
+      max-width:780px;
+      margin:0 auto;
+      background:#fff;
+      border:1px solid #d1d5db;
+      border-radius:14px;
+      padding:34px;
+    }
+    .header{
+      text-align:center;
+      border-bottom:2px solid #111827;
+      padding-bottom:18px;
+      margin-bottom:24px;
+    }
+    .header h1{
+      margin:0;
+      font-size:28px;
+      letter-spacing:1px;
+    }
+    .header p{
+      margin:8px 0 0;
+      color:#6b7280;
+      font-size:14px;
+    }
+    .info{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:22px;
+    }
+    .box{
+      border:1px solid #e5e7eb;
+      border-radius:10px;
+      padding:12px 14px;
+      background:#f9fafb;
+    }
+    .label{
+      font-size:11px;
+      color:#6b7280;
+      font-weight:bold;
+      text-transform:uppercase;
+      margin-bottom:5px;
+    }
+    .value{
+      font-size:15px;
+      font-weight:bold;
+      color:#111827;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:18px;
+    }
+    th,td{
+      border:1px solid #d1d5db;
+      padding:13px;
+      text-align:left;
+      font-size:14px;
+    }
+    th{
+      background:#111827;
+      color:white;
+    }
+    .amount{
+      text-align:right;
+      font-weight:bold;
+    }
+    .total-row td{
+      background:#eff6ff;
+      font-size:18px;
+      font-weight:bold;
+    }
+    .note{
+      margin-top:22px;
+      border:1px solid #e5e7eb;
+      border-radius:10px;
+      padding:14px;
+      background:#f9fafb;
+      font-size:14px;
+    }
+    .footer{
+      margin-top:38px;
+      display:flex;
+      justify-content:space-between;
+      gap:30px;
+      font-size:13px;
+      color:#374151;
+    }
+    .sign{
+      width:45%;
+      text-align:center;
+      padding-top:50px;
+      border-top:1px solid #9ca3af;
+    }
+    @media print{
+      body{background:white;padding:0}
+      .slip{border:none;border-radius:0}
+    }
+  </style>
+</head>
+<body>
+  <div class="slip">
+    <div class="header">
+      <h1>HGX SALARY SLIP</h1>
+      <p>Official Salary Statement</p>
+    </div>
+
+    <div class="info">
+      <div class="box">
+        <div class="label">Nama Staff</div>
+        <div class="value">${escapeHtml(userName)}</div>
+      </div>
+      <div class="box">
+        <div class="label">ID Staff</div>
+        <div class="value">${escapeHtml(userId)}</div>
+      </div>
+      <div class="box">
+        <div class="label">Periode</div>
+        <div class="value">${escapeHtml(formatPeriod(item.period))}</div>
+      </div>
+      <div class="box">
+        <div class="label">Tanggal Bayar</div>
+        <div class="value">${escapeHtml(formatDisplayDate(item.paid_date))}</div>
+      </div>
+      <div class="box">
+        <div class="label">Status</div>
+        <div class="value">${escapeHtml(item.status || "-")}</div>
+      </div>
+      <div class="box">
+        <div class="label">Dicetak</div>
+        <div class="value">${new Date().toLocaleDateString("id-ID")}</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Keterangan</th>
+          <th style="text-align:right;">Nominal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Base Salary</td>
+          <td class="amount">${escapeHtml(formatMoney(item.base_salary))}</td>
+        </tr>
+        <tr>
+          <td>Bonus</td>
+          <td class="amount">${escapeHtml(formatMoney(item.bonus))}</td>
+        </tr>
+        <tr>
+          <td>Deduction</td>
+          <td class="amount">${escapeHtml(formatMoney(item.deduction))}</td>
+        </tr>
+        <tr class="total-row">
+          <td>Total Salary</td>
+          <td class="amount">${escapeHtml(formatMoney(item.total_salary))}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <b>Note:</b> ${escapeHtml(item.note || "-")}
+    </div>
+
+    <div class="footer">
+      <div class="sign">Staff</div>
+      <div class="sign">Finance / Admin</div>
+    </div>
+  </div>
+
+  <script>
+    window.onload = function(){
+      setTimeout(function(){
+        window.print();
+      }, 300);
+    };
+  <\/script>
+</body>
+</html>
+    `;
+
+    const w = window.open("", "_blank");
+    if (!w) return alert("Popup diblokir browser. Izinkan popup untuk print PDF.");
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+  }
+
+  function exportSalaryCSV() {
+    if (!currentSalaryList.length) return alert("Belum ada data salary untuk dibuat PDF.");
+
+    currentSalaryList.forEach((item, index) => {
+      setTimeout(() => {
+        printSalarySlip(index);
+      }, index * 700);
+    });
+  }
+
   function getSortTime(value) {
     if (!value) return 0;
+
     const raw = String(value).trim();
-    const map = {januari:0,februari:1,maret:2,april:3,mei:4,juni:5,juli:6,agustus:7,september:8,oktober:9,november:10,desember:11,january:0,february:1,march:2,april:3,may:4,june:5,july:6,august:7,september:8,october:9,november:10,december:11};
+
+    const map = {
+      januari:0,februari:1,maret:2,april:3,mei:4,juni:5,juli:6,agustus:7,september:8,oktober:9,november:10,desember:11,
+      january:0,february:1,march:2,april:3,may:4,june:5,july:6,august:7,september:8,october:9,november:10,december:11
+    };
+
     const m = raw.toLowerCase().match(/([a-zA-ZÀ-ÿ]+)\s+(\d{4})/);
     if (m && map[m[1]] !== undefined) return new Date(Number(m[2]), map[m[1]], 1).getTime();
+
     const d = new Date(raw);
     return isNaN(d.getTime()) ? 0 : d.getTime();
   }
@@ -1139,21 +1393,32 @@
 
   function formatDisplayDate(value) {
     if (!value) return "-";
+
     const raw = String(value).trim();
+
     if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
       const p = raw.split("-");
       return `${p[2]}/${p[1]}/${p[0]}`;
     }
+
     const d = new Date(raw);
-    if (!isNaN(d.getTime())) return d.toLocaleDateString("id-ID", { day:"2-digit", month:"2-digit", year:"numeric" });
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString("id-ID", { day:"2-digit", month:"2-digit", year:"numeric" });
+    }
+
     return raw;
   }
 
   function formatPeriod(value) {
     if (!value) return "-";
+
     const raw = String(value).trim();
     const d = new Date(raw);
-    if (!isNaN(d.getTime())) return d.toLocaleDateString("id-ID", { month:"long", year:"numeric" });
+
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString("id-ID", { month:"long", year:"numeric" });
+    }
+
     return raw;
   }
 
@@ -1163,25 +1428,15 @@
   }
 
   function escapeHtml(value) {
-    return String(value || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    return String(value || "")
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;");
   }
 
   function escapeAttr(value) {
     return String(value || "").replace(/'/g,"\\'");
-  }
-
-  function exportSalaryCSV() {
-    if (!currentSalaryList.length) return alert("Belum ada data salary untuk diexport.");
-    const rows = [["Period","Base","Bonus","Deduction","Total","Paid Date","Status","PDF URL","Note"]];
-    currentSalaryList.forEach(item => rows.push([formatPeriod(item.period),item.base_salary||0,item.bonus||0,item.deduction||0,item.total_salary||0,formatDisplayDate(item.paid_date),item.status||"",item.pdf_url||"",item.note||""]));
-    const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
-    const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "hgx_salary_export.csv";
-    a.click();
-    URL.revokeObjectURL(url);
   }
 
   function handleForgot() {
@@ -1199,7 +1454,9 @@
   function toggleSidebar(open) {
     const sidebar = document.getElementById("sidebar");
     const overlay = document.getElementById("mobile-overlay");
+
     if (!sidebar || !overlay) return;
+
     if (open) {
       sidebar.classList.add("open");
       overlay.classList.add("show");
@@ -1209,8 +1466,17 @@
     }
   }
 
-  ["login-id","login-pass"].forEach(id => document.getElementById(id).addEventListener("keydown", e => { if (e.key === "Enter") handleLogin(); }));
-  ["reg-name","reg-id","reg-pass"].forEach(id => document.getElementById(id).addEventListener("keydown", e => { if (e.key === "Enter") handleRegister(); }));
+  ["login-id","login-pass"].forEach(id => {
+    document.getElementById(id).addEventListener("keydown", e => {
+      if (e.key === "Enter") handleLogin();
+    });
+  });
+
+  ["reg-name","reg-id","reg-pass"].forEach(id => {
+    document.getElementById(id).addEventListener("keydown", e => {
+      if (e.key === "Enter") handleRegister();
+    });
+  });
 
   if (localStorage.getItem("isLoggedIn") === "true") showDashboard();
 
@@ -1236,6 +1502,7 @@
 
     const ringGeo = new THREE.TorusGeometry(11, .035, 16, 160);
     const colors = [0x37e8ff,0x7c3aed,0xff3cac];
+
     for(let i=0;i<3;i++){
       const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({color:colors[i], transparent:true, opacity:.22}));
       ring.rotation.x = Math.PI/2 + i*.55;
@@ -1246,17 +1513,21 @@
     const starGeo = new THREE.BufferGeometry();
     const count = window.innerWidth < 700 ? 260 : 620;
     const positions = new Float32Array(count * 3);
+
     for(let i=0;i<count;i++){
       positions[i*3] = (Math.random()-.5)*90;
       positions[i*3+1] = (Math.random()-.5)*70;
       positions[i*3+2] = (Math.random()-.5)*70;
     }
+
     starGeo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+
     const starMat = new THREE.PointsMaterial({color:0x9cc9ff, size:.045, transparent:true, opacity:.72});
     const stars = new THREE.Points(starGeo, starMat);
     scene.add(stars);
 
     let mx = 0, my = 0;
+
     window.addEventListener("mousemove", e => {
       mx = (e.clientX / window.innerWidth - .5) * 2;
       my = (e.clientY / window.innerHeight - .5) * 2;
@@ -1272,6 +1543,7 @@
       camera.lookAt(scene.position);
       renderer.render(scene,camera);
     }
+
     animate();
 
     window.addEventListener("resize", () => {
@@ -1280,6 +1552,7 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
   }
+
   initThreeBackground();
 </script>
 </body>
