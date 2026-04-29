@@ -411,151 +411,229 @@ opacity:.32}
   const BACKEND_URL = "https://script.google.com/macros/s/AKfycbzm0XymEtq1ZfyYTci0T8xW2vutrnWOHqk9CJu5T0mmw0TkBL8sahxUrTzd6rT3KCkC1w/exec";
 
   function switchTab(type) {
-
     document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
     document.querySelectorAll(".auth-form").forEach(form => form.classList.remove("active"));
+
     if (type === "login") {
-document.getElementById("tab-login").classList.add("active");document.getElementById("login-form").classList.add("active");}
-
-    else {
-document.getElementById("tab-reg").classList.add("active");document.getElementById("register-form").classList.add("active");}
-
+      document.getElementById("tab-login").classList.add("active");
+      document.getElementById("login-form").classList.add("active");
+    } else {
+      document.getElementById("tab-reg").classList.add("active");
+      document.getElementById("register-form").classList.add("active");
+    }
   }
-
 
   function requestJsonp(params) {
-
     return new Promise((resolve, reject) => {
-
       const callbackName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
       const url = new URL(BACKEND_URL);
+
       Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
-      url.searchParams.set("callback", callbackName);url.searchParams.set("_t", Date.now().toString());
-      const script = document.createElement("script");let finished = false;
+      url.searchParams.set("callback", callbackName);
+      url.searchParams.set("_t", Date.now().toString());
+
+      const script = document.createElement("script");
+      let finished = false;
+
       function cleanup() {
-if (script.parentNode) script.parentNode.removeChild(script);try {
- delete window[callbackName];
-}
- catch (_) {
- window[callbackName] = undefined;
-}
-}
+        if (script.parentNode) script.parentNode.removeChild(script);
+        try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
+      }
 
       window[callbackName] = function(data) {
-if (finished) return;finished = true;cleanup();resolve(data);}
-;
+        if (finished) return;
+        finished = true;
+        cleanup();
+        resolve(data);
+      };
+
       script.onerror = function() {
-if (finished) return;finished = true;cleanup();reject(new Error("Gagal memuat JSONP dari Apps Script"));}
-;
-      script.src = url.toString();document.body.appendChild(script);
+        if (finished) return;
+        finished = true;
+        cleanup();
+        reject(new Error("Gagal memuat JSONP dari Apps Script"));
+      };
+
+      script.src = url.toString();
+      document.body.appendChild(script);
+
       setTimeout(() => {
-if (finished) return;finished = true;cleanup();reject(new Error("Request timeout"));}
-, 15000);
-    }
-);
+        if (finished) return;
+        finished = true;
+        cleanup();
+        reject(new Error("Request timeout"));
+      }, 15000);
+    });
   }
 
-
   async function handleLogin() {
-
     const id = document.getElementById("login-id").value.trim();
     const pass = document.getElementById("login-pass").value.trim();
     const btn = document.getElementById("btn-login");
+
     if (!id || !pass) return alert("Lengkapi data!");
-    btn.disabled = true;btn.innerText = "Memproses...";
+
+    btn.disabled = true;
+    btn.innerText = "Memproses...";
+
     try {
+      const data = await requestJsonp({ action: "login", id, pass });
 
-      const data = await requestJsonp({
- action: "login", id, pass }
-);
+      console.log("LOGIN RESPONSE:", data);
+
       if (data.result === "success") {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("currentUser", data.name || id);
+        localStorage.setItem("currentUserId", data.id || id);
+        localStorage.setItem("currentUserPass", pass);
+        localStorage.setItem("currentUserRole", data.role || "staff");
+        localStorage.setItem("lastAccess", new Date().toLocaleString("id-ID"));
 
-        localStorage.setItem("isLoggedIn", "true");localStorage.setItem("currentUser", data.name || id);localStorage.setItem("currentUserId", data.id || id);localStorage.setItem("currentUserPass", pass);localStorage.setItem("currentUserRole", data.role || "staff");localStorage.setItem("lastAccess", new Date().toLocaleString("id-ID"));
         window.location.href = "dashboard.html";
+      } else {
+        alert(data.message || "ID atau Password salah!");
       }
- else {
-alert(data.message || "ID atau Password salah!");}
-
+    } catch (error) {
+      console.error("LOGIN ERROR:", error);
+      alert("ERROR LOGIN: " + error.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Masuk ke Dashboard";
     }
- catch (error) {
-console.error("LOGIN ERROR:", error);alert("ERROR ASLI: " + error.message);
-
-    finally {
-btn.disabled = false;btn.innerText = "Masuk ke Dashboard";}
-
   }
-
 
   async function handleRegister() {
+    const name = document.getElementById("reg-name").value.trim();
+    const id = document.getElementById("reg-id").value.trim();
+    const pass = document.getElementById("reg-pass").value.trim();
+    const btn = document.getElementById("btn-reg");
 
-    const name = document.getElementById("reg-name").value.trim();const id = document.getElementById("reg-id").value.trim();const pass = document.getElementById("reg-pass").value.trim();const btn = document.getElementById("btn-reg");
-    if (!name || !id || !pass) return alert("Lengkapi data!");if (pass.length < 6) return alert("Password minimal 6 karakter!");
-    btn.disabled = true;btn.innerText = "Mendaftarkan...";
+    if (!name || !id || !pass) return alert("Lengkapi data!");
+    if (pass.length < 6) return alert("Password minimal 6 karakter!");
+
+    btn.disabled = true;
+    btn.innerText = "Mendaftarkan...";
+
     try {
-const data = await requestJsonp({
- action: "register", id, name, pass }
-);if (data.result === "success") {
-alert(data.message || "Pendaftaran berhasil! Silakan masuk.");document.getElementById("reg-name").value = "";document.getElementById("reg-id").value = "";document.getElementById("reg-pass").value = "";switchTab("login");}
- else {
-alert(data.message || "Pendaftaran gagal.");}
-}
+      const data = await requestJsonp({ action: "register", id, name, pass });
 
-    catch (error) {
-console.error("REGISTER ERROR:", error);alert("Pendaftaran gagal dikirim.");}
+      console.log("REGISTER RESPONSE:", data);
 
-    finally {
-btn.disabled = false;btn.innerText = "Daftar Staff";}
-
+      if (data.result === "success") {
+        alert(data.message || "Pendaftaran berhasil! Silakan masuk.");
+        document.getElementById("reg-name").value = "";
+        document.getElementById("reg-id").value = "";
+        document.getElementById("reg-pass").value = "";
+        switchTab("login");
+      } else {
+        alert(data.message || "Pendaftaran gagal.");
+      }
+    } catch (error) {
+      console.error("REGISTER ERROR:", error);
+      alert("ERROR DAFTAR: " + error.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Daftar Staff";
+    }
   }
 
-
   function handleForgot() {
-window.open("https://wa.me/628123456789?text=Halo%20Admin,%20saya%20lupa%20password%20HGX%20Salary", "_blank");}
+    window.open("https://wa.me/628123456789?text=Halo%20Admin,%20saya%20lupa%20password%20HGX%20Salary", "_blank");
+  }
 
+  ["login-id", "login-pass"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("keydown", e => {
+        if (e.key === "Enter") handleLogin();
+      });
+    }
+  });
 
-  ["login-id","login-pass"].forEach(id => {
-document.getElementById(id).addEventListener("keydown", e => {
-if (e.key === "Enter") handleLogin();}
-);}
-);
-  ["reg-name","reg-id","reg-pass"].forEach(id => {
-document.getElementById(id).addEventListener("keydown", e => {
-if (e.key === "Enter") handleRegister();}
-);}
-);
+  ["reg-name", "reg-id", "reg-pass"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("keydown", e => {
+        if (e.key === "Enter") handleRegister();
+      });
+    }
+  });
 
-  if (localStorage.getItem("isLoggedIn") === "true") window.location.href = "dashboard.html";
+  if (localStorage.getItem("isLoggedIn") === "true") {
+    window.location.href = "dashboard.html";
+  }
 
-  function initThreeBackground(){
+  function initThreeBackground() {
+    const canvas = document.getElementById("three-bg");
+    if (!canvas || !window.THREE) return;
 
-    const canvas = document.getElementById("three-bg");if (!canvas || !window.THREE) return;
-    const scene = new THREE.Scene();const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);camera.position.z = 34;
-    const renderer = new THREE.WebGLRenderer({
-canvas, alpha:true, antialias:true}
-);renderer.setSize(window.innerWidth, window.innerHeight);renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
-    const group = new THREE.Group();scene.add(group);const geo = new THREE.IcosahedronGeometry(7, 1);const mat = new THREE.MeshBasicMaterial({
-color:0x2f7cff, wireframe:true, transparent:true, opacity:.16}
-);const core = new THREE.Mesh(geo, mat);group.add(core);
-    const ringGeo = new THREE.TorusGeometry(11, .035, 16, 160);const colors = [0x37e8ff,0x7c3aed,0xff3cac];for(let i=0;i<3;i++){
-const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({
-color:colors[i], transparent:true, opacity:.22}
-));ring.rotation.x = Math.PI/2 + i*.55;ring.rotation.y = i*.35;group.add(ring);}
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 34;
 
-    const starGeo = new THREE.BufferGeometry();const count = window.innerWidth < 700 ? 260 : 620;const positions = new Float32Array(count * 3);for(let i=0;i<count;i++){
-positions[i*3] = (Math.random()-.5)*90;positions[i*3+1] = (Math.random()-.5)*70;positions[i*3+2] = (Math.random()-.5)*70;}
-starGeo.setAttribute("position", new THREE.BufferAttribute(positions,3));
-    const starMat = new THREE.PointsMaterial({
-color:0x9cc9ff, size:.045, transparent:true, opacity:.72}
-);const stars = new THREE.Points(starGeo, starMat);scene.add(stars);let mx = 0, my = 0;
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const geo = new THREE.IcosahedronGeometry(7, 1);
+    const mat = new THREE.MeshBasicMaterial({ color: 0x2f7cff, wireframe: true, transparent: true, opacity: .16 });
+    const core = new THREE.Mesh(geo, mat);
+    group.add(core);
+
+    const ringGeo = new THREE.TorusGeometry(11, .035, 16, 160);
+    const colors = [0x37e8ff, 0x7c3aed, 0xff3cac];
+
+    for (let i = 0; i < 3; i++) {
+      const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: colors[i], transparent: true, opacity: .22 }));
+      ring.rotation.x = Math.PI / 2 + i * .55;
+      ring.rotation.y = i * .35;
+      group.add(ring);
+    }
+
+    const starGeo = new THREE.BufferGeometry();
+    const count = window.innerWidth < 700 ? 260 : 620;
+    const positions = new Float32Array(count * 3);
+
+    for (let i = 0; i < count; i++) {
+      positions[i * 3] = (Math.random() - .5) * 90;
+      positions[i * 3 + 1] = (Math.random() - .5) * 70;
+      positions[i * 3 + 2] = (Math.random() - .5) * 70;
+    }
+
+    starGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+    const starMat = new THREE.PointsMaterial({ color: 0x9cc9ff, size: .045, transparent: true, opacity: .72 });
+    const stars = new THREE.Points(starGeo, starMat);
+    scene.add(stars);
+
+    let mx = 0, my = 0;
+
     window.addEventListener("mousemove", e => {
-mx = (e.clientX / window.innerWidth - .5) * 2;my = (e.clientY / window.innerHeight - .5) * 2;}
-);
-    function animate(){
-requestAnimationFrame(animate);group.rotation.x += .0025;group.rotation.y += .004;stars.rotation.y += .0008;camera.position.x += (mx * 2.2 - camera.position.x) * .025;camera.position.y += (-my * 1.5 - camera.position.y) * .025;camera.lookAt(scene.position);renderer.render(scene,camera);}
-animate();
+      mx = (e.clientX / window.innerWidth - .5) * 2;
+      my = (e.clientY / window.innerHeight - .5) * 2;
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      group.rotation.x += .0025;
+      group.rotation.y += .004;
+      stars.rotation.y += .0008;
+      camera.position.x += (mx * 2.2 - camera.position.x) * .025;
+      camera.position.y += (-my * 1.5 - camera.position.y) * .025;
+      camera.lookAt(scene.position);
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
     window.addEventListener("resize", () => {
-camera.aspect = window.innerWidth / window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth, window.innerHeight);}
-);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
   }
 
   initThreeBackground();
