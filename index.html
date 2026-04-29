@@ -428,7 +428,9 @@ opacity:.32}
       const callbackName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
       const url = new URL(BACKEND_URL);
 
-      Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
+      Object.entries(params).forEach(([key, value]) => {
+        url.searchParams.set(key, value == null ? "" : String(value));
+      });
       url.searchParams.set("callback", callbackName);
       url.searchParams.set("_t", Date.now().toString());
 
@@ -444,25 +446,19 @@ opacity:.32}
         if (finished) return;
         finished = true;
         cleanup();
-        resolve(data);
-      };
-
-      script.onerror = function() {
-        if (finished) return;
-        finished = true;
-        cleanup();
-        reject(new Error("Gagal memuat JSONP dari Apps Script"));
+        resolve(data || {});
       };
 
       script.src = url.toString();
+      script.async = true;
       document.body.appendChild(script);
 
       setTimeout(() => {
         if (finished) return;
         finished = true;
         cleanup();
-        reject(new Error("Request timeout"));
-      }, 15000);
+        reject(new Error("Request timeout. Apps Script tidak mengembalikan callback JSONP."));
+      }, 30000);
     });
   }
 
