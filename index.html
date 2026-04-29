@@ -478,7 +478,7 @@ alert(data.message || "ID atau Password salah!");}
 
     }
  catch (error) {
-console.error("LOGIN ERROR:", error);alert("Gagal terhubung ke database.");}
+console.error("LOGIN ERROR:", error);alert("ERROR ASLI: " + error.message);
 
     finally {
 btn.disabled = false;btn.innerText = "Masuk ke Dashboard";}
