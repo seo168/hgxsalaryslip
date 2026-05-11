@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -674,20 +674,20 @@
 
     <div class="auth-header">
       <h1>HGX <span>SALARY</span></h1>
-      <p>Quantum salary portal untuk slip gaji dan informasi akun staff.</p>
+      <p>Salary portal information.</p>
     </div>
 
     <div class="tab-menu">
-      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')"><i class="fas fa-user"></i> Masuk</button>
-      <button class="tab-btn" id="tab-reg" onclick="switchTab('register')"><i class="fas fa-user-plus"></i> Daftar</button>
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')"><i class="fas fa-user"></i> Login</button>
+      <button class="tab-btn" id="tab-reg" onclick="switchTab('register')"><i class="fas fa-user-plus"></i> Register</button>
     </div>
 
     <div id="login-form" class="auth-form active">
       <div class="form-group">
-        <label>ID Karyawan</label>
+        <label>ID</label>
         <div class="input-wrap">
           <i class="fas fa-id-badge"></i>
-          <input type="text" id="login-id" placeholder="Masukkan ID">
+          <input type="text" id="login-id" placeholder="Input your ID here">
         </div>
       </div>
 
@@ -695,40 +695,40 @@
         <label>Password</label>
         <div class="input-wrap">
           <i class="fas fa-lock"></i>
-          <input type="password" id="login-pass" placeholder="Masukkan password">
+          <input type="password" id="login-pass" placeholder="Input your password here">
         </div>
       </div>
 
-      <button class="btn" id="btn-login" onclick="handleLogin()">Masuk ke Dashboard</button>
-      <a class="forgot-link" onclick="handleForgot()">Lupa Password? Hubungi Admin</a>
+      <button class="btn" id="btn-login" onclick="handleLogin()">Login ke Dashboard</button>
+      <a class="forgot-link" onclick="handleForgot()">Forgot password? Please contact Team Leader.</a>
     </div>
 
     <div id="register-form" class="auth-form">
       <div class="form-group">
-        <label>Nama Lengkap</label>
+        <label>Full name</label>
         <div class="input-wrap">
           <i class="fas fa-user"></i>
-          <input type="text" id="reg-name" placeholder="Nama Lengkap">
+          <input type="text" id="reg-name" placeholder="Full name">
         </div>
       </div>
 
       <div class="form-group">
-        <label>ID Karyawan</label>
+        <label>ID</label>
         <div class="input-wrap">
           <i class="fas fa-id-card"></i>
-          <input type="text" id="reg-id" placeholder="ID Karyawan">
+          <input type="text" id="reg-id" placeholder="Input your ID here">
         </div>
       </div>
 
       <div class="form-group">
-        <label>Password Baru</label>
+        <label>New password</label>
         <div class="input-wrap">
           <i class="fas fa-key"></i>
-          <input type="password" id="reg-pass" placeholder="Minimal 6 karakter">
+          <input type="password" id="reg-pass" placeholder="Minimum 6 characters">
         </div>
       </div>
 
-      <button class="btn btn-dark" id="btn-reg" onclick="handleRegister()">Daftar Staff</button>
+      <button class="btn btn-dark" id="btn-reg" onclick="handleRegister()">Register Staff</button>
     </div>
   </div>
 </section>
@@ -748,16 +748,16 @@
           <i class="fas fa-home"></i> Dashboard
         </button>
         <button class="side-link" data-page="salary-page" onclick="showPage('salary-page', this)">
-          <i class="fas fa-receipt"></i> Riwayat Slip
+          <i class="fas fa-receipt"></i> Payslip History
         </button>
         <button class="side-link" data-page="profile-page" onclick="showPage('profile-page', this)">
-          <i class="fas fa-user-astronaut"></i> Profil Saya
+          <i class="fas fa-user-astronaut"></i> My Profile
         </button>
         <button class="side-link" data-page="help-page" onclick="showPage('help-page', this)">
-          <i class="fas fa-circle-question"></i> Bantuan
+          <i class="fas fa-circle-question"></i> Help
         </button>
         <button class="side-link" onclick="handleLogout()" style="color:#fb7185;">
-          <i class="fas fa-right-from-bracket"></i> Keluar
+          <i class="fas fa-right-from-bracket"></i> Logout
         </button>
       </div>
 
@@ -776,27 +776,27 @@
 
         <div class="user-area">
           <div class="user-pill" id="user-display">Staff</div>
-          <button class="logout-btn" onclick="handleLogout()">Keluar</button>
+          <button class="logout-btn" onclick="handleLogout()">Logout</button>
         </div>
       </header>
 
       <section id="dashboard-page" class="page-view active">
         <section class="welcome">
-          <h2>Selamat datang, <span id="welcome-name">Staff</span> 👋</h2>
-          <p>Portal ini membaca langsung data Google Sheet untuk profil staff, rekening, riwayat slip, status pembayaran, dan PDF slip gaji.</p>
+          <h2>Welcome, <span id="welcome-name">Staff</span> 👋</h2>
+          <p>Portal ini membaca langsung data Google Sheet untuk profil staff, rekening, Payslip History, Payment Status, dan PDF slip gaji.</p>
         </section>
 
         <section class="stats">
           <div class="stat-box">
-            <div class="stat-label">Total Slip</div>
+            <div class="stat-label">Total Slips</div>
             <div class="stat-value" id="stat-total-slip">0</div>
           </div>
           <div class="stat-box">
-            <div class="stat-label">Status Pembayaran</div>
+            <div class="stat-label">Payment Status</div>
             <div class="stat-value" id="stat-payment-status">-</div>
           </div>
           <div class="stat-box">
-            <div class="stat-label">Periode Aktif</div>
+            <div class="stat-label">Active Period</div>
             <div class="stat-value" id="stat-active-period">-</div>
           </div>
         </section>
@@ -804,13 +804,13 @@
         <section class="grid">
           <div class="card">
             <div class="card-header">
-              <div class="card-title"><i class="fas fa-user-astronaut"></i> Profil Singkat</div>
+              <div class="card-title"><i class="fas fa-user-astronaut"></i> Short Profile</div>
             </div>
             <div class="card-body">
               <div class="profile-main">
                 <div class="avatar" id="profile-avatar">H</div>
                 <div>
-                  <div class="profile-name" id="profile-name">Nama Staff</div>
+                  <div class="profile-name" id="profile-name">Name Staff</div>
                   <div class="profile-id" id="profile-id">ID: -</div>
                 </div>
               </div>
@@ -824,12 +824,12 @@
 
           <div class="card">
             <div class="card-header">
-              <div class="card-title"><i class="fas fa-receipt"></i> Slip Terbaru</div>
+              <div class="card-title"><i class="fas fa-receipt"></i> Latest Payslip</div>
             </div>
             <div class="card-body">
               <div class="salary-summary">
-                <div class="summary-box"><div class="summary-label">Periode</div><div class="summary-value" id="latest-period">-</div></div>
-                <div class="summary-box"><div class="summary-label">Total Gaji</div><div class="summary-value" id="latest-total">$ 0.00</div></div>
+                <div class="summary-box"><div class="summary-label">Period</div><div class="summary-value" id="latest-period">-</div></div>
+                <div class="summary-box"><div class="summary-label">Total Salary</div><div class="summary-value" id="latest-total">$ 0.00</div></div>
                 <div class="summary-box"><div class="summary-label">Status</div><div class="summary-value" id="latest-status">-</div></div>
               </div>
             </div>
@@ -840,8 +840,8 @@
       <section id="salary-page" class="page-view">
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><i class="fas fa-receipt"></i> Riwayat Slip Gaji</div>
-            <button class="download-btn" onclick="exportSalaryCSV()">Export / Print Semua</button>
+            <div class="card-title"><i class="fas fa-receipt"></i> Salary Payslip History</div>
+            <button class="download-btn" onclick="exportSalaryCSV()">Export / Print All</button>
           </div>
           <div class="card-body">
             <div class="help-box" style="margin-bottom:16px;">
@@ -852,7 +852,7 @@
               <table>
                 <thead>
                   <tr>
-                    <th>Periode</th>
+                    <th>Period</th>
                     <th>Base</th>
                     <th>Bonus</th>
                     <th>Deduction</th>
@@ -863,7 +863,7 @@
                   </tr>
                 </thead>
                 <tbody id="history-body">
-                  <tr><td colspan="8" class="empty">Memuat data salary...</td></tr>
+                  <tr><td colspan="8" class="empty">Loading salary data...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -874,13 +874,13 @@
       <section id="profile-page" class="page-view">
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><i class="fas fa-user-astronaut"></i> Profil Saya</div>
+            <div class="card-title"><i class="fas fa-user-astronaut"></i> My Profile</div>
           </div>
           <div class="card-body">
             <div class="profile-main">
               <div class="avatar" id="profile-avatar-2">H</div>
               <div>
-                <div class="profile-name" id="profile-name-2">Nama Staff</div>
+                <div class="profile-name" id="profile-name-2">Name Staff</div>
                 <div class="profile-id" id="profile-id-2">ID: -</div>
               </div>
             </div>
@@ -902,7 +902,7 @@
       <section id="help-page" class="page-view">
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><i class="fas fa-circle-question"></i> Bantuan Pengisian Data</div>
+            <div class="card-title"><i class="fas fa-circle-question"></i> Help Pengisian Data</div>
           </div>
           <div class="card-body help-box">
             <p><b>Sheet staff</b></p>
@@ -911,9 +911,9 @@
             <p><b>Sheet salary</b></p>
             <p><code>id | period | base_salary | bonus | deduction | total_salary | paid_date | status | pdf_url | note</code></p>
             <br>
-            <p>Untuk riwayat gaji sebelumnya, cukup tambah baris baru di sheet <b>salary</b> dengan ID yang sama dan periode berbeda.</p>
+            <p>Untuk riwayat gaji sebelumnya, cukup tambah baris baru di sheet <b>salary</b> dengan ID yang sama dan Period berbeda.</p>
             <br>
-            <button class="download-btn" onclick="handleForgot()">Hubungi Admin</button>
+            <button class="download-btn" onclick="handleForgot()">Contact Admin</button>
           </div>
         </div>
       </section>
@@ -1000,10 +1000,10 @@
     const pass = document.getElementById("login-pass").value.trim();
     const btn = document.getElementById("btn-login");
 
-    if (!id || !pass) return alert("Lengkapi data!");
+    if (!id || !pass) return alert("Please complete all fields!");
 
     btn.disabled = true;
-    btn.innerText = "Memproses...";
+    btn.innerText = "Processing...";
 
     try {
       const data = await requestJsonp({ action: "login", id, pass });
@@ -1018,14 +1018,14 @@
 
         showDashboard();
       } else {
-        alert(data.message || "ID atau Password salah!");
+        alert(data.message || "Processing.Incorrect ID or Password!..");
       }
     } catch (error) {
       console.error("LOGIN ERROR:", error);
       alert("Gagal terhubung ke database.");
     } finally {
       btn.disabled = false;
-      btn.innerText = "Masuk ke Dashboard";
+      btn.innerText = "Login ke Dashboard";
     }
   }
 
@@ -1035,30 +1035,30 @@
     const pass = document.getElementById("reg-pass").value.trim();
     const btn = document.getElementById("btn-reg");
 
-    if (!name || !id || !pass) return alert("Lengkapi data!");
-    if (pass.length < 6) return alert("Password minimal 6 karakter!");
+    if (!name || !id || !pass) return alert("Please complete all fields!");
+    if (pass.length < 6) return alert("Password must be at least 6 characters!");
 
     btn.disabled = true;
-    btn.innerText = "Mendaftarkan...";
+    btn.innerText = "MenRegisterkan...";
 
     try {
       const data = await requestJsonp({ action: "register", id, name, pass });
 
       if (data.result === "success") {
-        alert(data.message || "Pendaftaran berhasil! Silakan masuk.");
+        alert(data.message || "PenRegisteran berhasil! Silakan Login.");
         document.getElementById("reg-name").value = "";
         document.getElementById("reg-id").value = "";
         document.getElementById("reg-pass").value = "";
         switchTab("login");
       } else {
-        alert(data.message || "Pendaftaran gagal.");
+        alert(data.message || "PenRegisteran gagal.");
       }
     } catch (error) {
       console.error("REGISTER ERROR:", error);
-      alert("Pendaftaran gagal dikirim.");
+      alert("PenRegisteran gagal dikirim.");
     } finally {
       btn.disabled = false;
-      btn.innerText = "Daftar Staff";
+      btn.innerText = "Register Staff";
     }
   }
 
@@ -1091,7 +1091,7 @@
       if (profileData.result === "success" && profileData.profile) {
         renderProfile(profileData.profile, id);
       } else {
-        setText("profile-name", "Data staff tidak ditemukan");
+        setText("profile-name", "Staff data not found");
         setText("profile-id", "ID: " + id);
       }
 
@@ -1138,7 +1138,7 @@
     dashboardPage.innerHTML = `
       <section class="welcome">
         <h2>Master Dashboard 👑</h2>
-        <p>Mode ini bisa melihat semua staff, mencari nama / ID, filter department, lalu klik staff untuk melihat slip gaji langsung slide turun di bawah nama staff.</p>
+        <p>Mode ini bisa melihat All Staff, mencari Name / ID, filter department, lalu klik staff untuk meView Slip gaji langsung slide turun di bawah Name staff.</p>
       </section>
 
       <section class="stats">
@@ -1158,15 +1158,15 @@
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i class="fas fa-users"></i> Semua Staff</div>
+          <div class="card-title"><i class="fas fa-users"></i> All Staff</div>
         </div>
         <div class="card-body">
           <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:12px;margin-bottom:16px;">
-            <input id="master-search" placeholder="Cari nama / ID..."
+            <input id="master-search" placeholder="Search name / ID..."
               style="width:100%;padding:13px 15px;border-radius:14px;border:1px solid rgba(148,163,184,.28);background:rgba(2,6,23,.56);color:#fff;outline:none;font-weight:800;">
             <select id="master-dept"
               style="width:100%;padding:13px 15px;border-radius:14px;border:1px solid rgba(148,163,184,.28);background:rgba(2,6,23,.56);color:#fff;outline:none;font-weight:800;">
-              <option value="">Semua Department</option>
+              <option value="">All Departments</option>
               ${getDepartmentOptions(list)}
             </select>
           </div>
@@ -1176,7 +1176,7 @@
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Nama</th>
+                  <th>Name</th>
                   <th>Department</th>
                   <th>Position</th>
                   <th>Country</th>
@@ -1202,7 +1202,7 @@
     if (!tbody) return;
 
     if (!list.length) {
-      tbody.innerHTML = `<tr><td colspan="7" class="empty">Tidak ada data staff.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="empty">No staff data available.</td></tr>`;
       return;
     }
 
@@ -1215,7 +1215,7 @@
         <td>${escapeHtml(s.country)}</td>
         <td><span class="status-badge">${escapeHtml(s.status || "-")}</span></td>
         <td>
-          <button class="download-btn" onclick="openMasterStaff('${escapeAttr(s.id)}')">Lihat Slip</button>
+          <button class="download-btn" onclick="openMasterStaff('${escapeAttr(s.id)}')">View Slip</button>
         </td>
       </tr>
     `).join("");
@@ -1259,7 +1259,7 @@
       });
 
       if (data.result !== "success") {
-        alert(data.message || "Gagal mengambil detail staff.");
+        alert(data.message || "Failed to retrieve staff details.");
         return;
       }
 
@@ -1279,7 +1279,7 @@
                 <h3>${escapeHtml(profile.name || "-")}</h3>
                 <p>ID: ${escapeHtml(profile.id || targetId)} · ${escapeHtml(profile.department || "-")} · ${escapeHtml(profile.position || "-")}</p>
               </div>
-              <button class="download-btn" onclick="document.getElementById('detail-${escapeAttr(targetId)}').remove()">Tutup</button>
+              <button class="download-btn" onclick="document.getElementById('detail-${escapeAttr(targetId)}').remove()">Close</button>
             </div>
 
             <div class="master-profile-grid">
@@ -1295,7 +1295,7 @@
               <table>
                 <thead>
                   <tr>
-                    <th>Periode</th>
+                    <th>Period</th>
                     <th>Base</th>
                     <th>Bonus</th>
                     <th>Deduction</th>
@@ -1317,7 +1317,7 @@
                       <td><span class="status-badge">${escapeHtml(item.status || "-")}</span></td>
                       <td><button class="download-btn" onclick="printMasterSalarySlip('${escapeAttr(targetId)}',${index})">Print PDF</button></td>
                     </tr>
-                  `).join("") : `<tr><td colspan="8" class="empty">Belum ada slip gaji.</td></tr>`}
+                  `).join("") : `<tr><td colspan="8" class="empty">No salary slips available yet.</td></tr>`}
                 </tbody>
               </table>
             </div>
@@ -1330,7 +1330,7 @@
       window["masterProfile_" + targetId] = profile;
     } catch (err) {
       console.error("DETAIL STAFF ERROR:", err);
-      alert("Gagal membuka slip staff.");
+      alert("Failed to open staff salary slip.");
     }
   }
 
@@ -1398,7 +1398,7 @@
     setText("stat-total-slip", currentSalaryList.length || 0);
 
     if (!currentSalaryList.length) {
-      tbody.innerHTML = `<tr><td colspan="8" class="empty">Belum ada data slip gaji untuk akun ini.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" class="empty">No salary slip data available for this account.</td></tr>`;
       setText("latest-period", "-");
       setText("latest-total", "$ 0.00");
       setText("latest-status", "-");
@@ -1433,7 +1433,7 @@
 
   function printSalarySlip(itemIndex) {
     const item = currentSalaryList[itemIndex];
-    if (!item) return alert("Data slip tidak ditemukan.");
+    if (!item) return alert("Salary slip data not found.");
 
     const profile = currentProfile || {};
     const userName = profile.name || localStorage.getItem("currentUser") || "Staff";
@@ -1480,22 +1480,22 @@
     </div>
 
     <div class="info">
-      <div class="box"><div class="label">Nama Staff</div><div class="value">${escapeHtml(userName)}</div></div>
-      <div class="box"><div class="label">ID Staff</div><div class="value">${escapeHtml(userId)}</div></div>
+      <div class="box"><div class="label">Name Staff</div><div class="value">${escapeHtml(userName)}</div></div>
+      <div class="box"><div class="label">Staff ID</div><div class="value">${escapeHtml(userId)}</div></div>
       <div class="box"><div class="label">Department</div><div class="value">${escapeHtml(department)}</div></div>
       <div class="box"><div class="label">Position</div><div class="value">${escapeHtml(position)}</div></div>
       <div class="box"><div class="label">Bank</div><div class="value">${escapeHtml(bankName)}</div></div>
       <div class="box"><div class="label">Account</div><div class="value">${escapeHtml(bankAccount)}</div></div>
       <div class="box"><div class="label">Account Name</div><div class="value">${escapeHtml(accountName)}</div></div>
-      <div class="box"><div class="label">Periode</div><div class="value">${escapeHtml(formatPeriod(item.period))}</div></div>
-      <div class="box"><div class="label">Tanggal Bayar</div><div class="value">${escapeHtml(formatDisplayDate(item.paid_date))}</div></div>
+      <div class="box"><div class="label">Period</div><div class="value">${escapeHtml(formatPeriod(item.period))}</div></div>
+      <div class="box"><div class="label">Payment Date</div><div class="value">${escapeHtml(formatDisplayDate(item.paid_date))}</div></div>
       <div class="box"><div class="label">Status</div><div class="value">${escapeHtml(item.status || "-")}</div></div>
     </div>
 
     <table>
       <thead>
         <tr>
-          <th>Keterangan</th>
+          <th>Description</th>
           <th style="text-align:right;">Nominal</th>
         </tr>
       </thead>
