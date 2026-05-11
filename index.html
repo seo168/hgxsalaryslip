@@ -88,8 +88,8 @@
       opacity:.42;
     }
 
-    @keyfras cosmicSpin{to{transform:rotate(360deg)}}
-    @keyfras gridTunnel{to{background-position:0 78px}}
+    @keyframes cosmicSpin{to{transform:rotate(360deg)}}
+    @keyframes gridTunnel{to{background-position:0 78px}}
 
     .laser-field,.particle-field{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:-8}
     .laser{
@@ -105,7 +105,7 @@
     .laser:nth-child(2){top:33%;left:-80%;transform:rotate(18deg);animation-delay:1.1s}
     .laser:nth-child(3){top:60%;left:-95%;transform:rotate(-18deg);animation-delay:2.4s}
     .laser:nth-child(4){top:82%;left:-85%;transform:rotate(22deg);animation-delay:3.6s}
-    @keyfras laserRun{0%{translate:-35vw 0;opacity:0}14%{opacity:1}100%{translate:190vw 0;opacity:0}}
+    @keyframes laserRun{0%{translate:-35vw 0;opacity:0}14%{opacity:1}100%{translate:190vw 0;opacity:0}}
 
     .spark{
       position:absolute;
@@ -798,7 +798,7 @@
         </div>
       </div>
 
-      <button class="btn" id="btn-login" onclick="handleLogin()">Login ke Dashboard</button>
+      <button class="btn" id="btn-login" onclick="handleLogin()">Login to Dashboard</button>
       <a class="forgot-link" onclick="handleForgot()">Forgot password? Please contact Team Leader.</a>
     </div>
 
@@ -861,8 +861,8 @@
       </div>
 
       <div class="side-bottom">
-        <div>Akses Terakhir</div>
-        <b id="last-access-text">Aktif</b><br>
+        <div>Last Access</div>
+        <b id="last-access-text">Active</b><br>
         <span><i class="online-dot"></i>Online</span>
       </div>
     </aside>
@@ -1001,7 +1001,7 @@
       <section id="help-page" class="page-view">
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><i class="fas fa-circle-question"></i> Help Pengisian Data</div>
+            <div class="card-title"><i class="fas fa-circle-question"></i> Data Entry Help</div>
           </div>
           <div class="card-body help-box">
             <p><b>Sheet staff</b></p>
@@ -1098,7 +1098,7 @@
         if (finished) return;
         finished = true;
         cleanup();
-        reject(new Error("Gagal memuat JSONP dari Apps Script"));
+        reject(new Error("Failed to load JSONP from Apps Script"));
       };
 
       script.src = url.toString();
@@ -1140,10 +1140,10 @@
       }
     } catch (error) {
       console.error("LOGIN ERROR:", error);
-      showAlert("Gagal terhubung ke database.");
+      showAlert("Failed to connect to the database.");
     } finally {
       btn.disabled = false;
-      btn.innerText = "Login ke Dashboard";
+      btn.innerText = "Login to Dashboard";
     }
   }
 
@@ -1222,7 +1222,7 @@
       }
     } catch (err) {
       console.error("LOAD STAFF DATA ERROR:", err);
-      showAlert("Gagal mengambil data staff / salary dari Google Sheet.");
+      showAlert("Failed to retrieve staff / salary data.");
     }
   }
 
@@ -1238,7 +1238,7 @@
       });
 
       if (data.result !== "success") {
-        showAlert(data.message || "Gagal mengambil semua data staff.");
+        showAlert(data.message || "Failed to retrieve all staff data.");
         return;
       }
 
@@ -1246,7 +1246,7 @@
       renderMasterDashboard(masterStaffList);
     } catch (err) {
       console.error("MASTER ERROR:", err);
-      showAlert("Gagal membuka master dashboard.");
+      showAlert("Failed to open master dashboard.");
     }
   }
 
