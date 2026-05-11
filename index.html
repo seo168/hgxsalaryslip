@@ -88,8 +88,8 @@
       opacity:.42;
     }
 
-    @keyframes cosmicSpin{to{transform:rotate(360deg)}}
-    @keyframes gridTunnel{to{background-position:0 78px}}
+    @keyfras cosmicSpin{to{transform:rotate(360deg)}}
+    @keyfras gridTunnel{to{background-position:0 78px}}
 
     .laser-field,.particle-field{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:-8}
     .laser{
@@ -105,7 +105,7 @@
     .laser:nth-child(2){top:33%;left:-80%;transform:rotate(18deg);animation-delay:1.1s}
     .laser:nth-child(3){top:60%;left:-95%;transform:rotate(-18deg);animation-delay:2.4s}
     .laser:nth-child(4){top:82%;left:-85%;transform:rotate(22deg);animation-delay:3.6s}
-    @keyframes laserRun{0%{translate:-35vw 0;opacity:0}14%{opacity:1}100%{translate:190vw 0;opacity:0}}
+    @keyfras laserRun{0%{translate:-35vw 0;opacity:0}14%{opacity:1}100%{translate:190vw 0;opacity:0}}
 
     .spark{
       position:absolute;
@@ -1157,7 +1157,7 @@
     if (pass.length < 6) return showAlert("Password must be at least 6 characters!");
 
     btn.disabled = true;
-    btn.innerText = "MenRegisterkan...";
+    btn.innerText = "Register...";
 
     try {
       const data = await requestJsonp({ action: "register", id, name, pass });
