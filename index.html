@@ -1163,17 +1163,17 @@
       const data = await requestJsonp({ action: "register", id, name, pass });
 
       if (data.result === "success") {
-        showAlert(data.message || "PenRegisteran berhasil! Silakan Login.");
+        showAlert(data.message || "Registration successful! Please login.");
         document.getElementById("reg-name").value = "";
         document.getElementById("reg-id").value = "";
         document.getElementById("reg-pass").value = "";
         switchTab("login");
       } else {
-        showAlert(data.message || "PenRegisteran gagal.");
+        showAlert(data.message || "Registration failed.");
       }
     } catch (error) {
       console.error("REGISTER ERROR:", error);
-      showAlert("PenRegisteran gagal dikirim.");
+      showAlert("Registration failed to send.");
     } finally {
       btn.disabled = false;
       btn.innerText = "Register Staff";
