@@ -635,10 +635,109 @@
       .holo-scanlines{opacity:.32}
     }
 
+
+    /* === CUSTOM CENTER ALERT POPUP === */
+    .custom-alert{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      background:rgba(0,0,0,.58);
+      backdrop-filter:blur(10px);
+      z-index:999999;
+    }
+
+    .custom-alert.show{
+      display:flex;
+    }
+
+    .custom-alert-box{
+      width:100%;
+      max-width:430px;
+      position:relative;
+      padding:30px 26px 24px;
+      border-radius:26px;
+      background:linear-gradient(180deg,rgba(8,13,31,.96),rgba(5,10,25,.94));
+      border:1px solid rgba(55,232,255,.34);
+      box-shadow:0 30px 90px rgba(0,0,0,.70),0 0 38px rgba(55,232,255,.22),0 0 52px rgba(255,60,172,.10);
+      text-align:center;
+      overflow:hidden;
+      animation:customAlertPop .22s ease;
+    }
+
+    .custom-alert-box::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius:26px;
+      padding:1px;
+      background:linear-gradient(135deg,rgba(55,232,255,.75),rgba(47,124,255,.18),rgba(139,92,246,.42),rgba(255,60,172,.62));
+      -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+      pointer-events:none;
+    }
+
+    .custom-alert-icon{
+      width:54px;
+      height:54px;
+      margin:0 auto 16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:18px;
+      color:#fff;
+      font-size:1.25rem;
+      background:linear-gradient(135deg,var(--cyan),var(--blue),var(--purple));
+      box-shadow:0 0 30px rgba(55,232,255,.30);
+    }
+
+    .custom-alert-box p{
+      color:#f8fafc;
+      font-size:1rem;
+      font-weight:850;
+      line-height:1.6;
+      margin-bottom:22px;
+      word-break:break-word;
+    }
+
+    .custom-alert-box button{
+      min-width:120px;
+      border:none;
+      border-radius:15px;
+      padding:12px 28px;
+      color:white;
+      font-weight:900;
+      cursor:pointer;
+      background:linear-gradient(135deg,#37e8ff,#2f7cff,#8b5cf6);
+      box-shadow:0 14px 32px rgba(47,124,255,.28);
+    }
+
+    .custom-alert-box button:hover{
+      filter:saturate(1.15);
+      transform:translateY(-1px);
+    }
+
+    @keyframes customAlertPop{
+      from{opacity:0;transform:scale(.92) translateY(14px)}
+      to{opacity:1;transform:scale(1) translateY(0)}
+    }
+
   </style>
 </head>
 
 <body>
+
+<div id="custom-alert" class="custom-alert">
+  <div class="custom-alert-box">
+    <div class="custom-alert-icon"><i class="fas fa-info-circle"></i></div>
+    <p id="custom-alert-message"></p>
+    <button type="button" onclick="closeAlert()">OK</button>
+  </div>
+</div>
+
 <div class="holo-scanlines"></div>
 <div class="holo-beam"></div>
 <div class="holo-runes">
@@ -929,6 +1028,25 @@
   let masterStaffList = [];
   let isMasterMode = false;
 
+  function showAlert(message) {
+    const alertBox = document.getElementById("custom-alert");
+    const alertMessage = document.getElementById("custom-alert-message");
+
+    if (!alertBox || !alertMessage) {
+      window.alert(message || "");
+      return;
+    }
+
+    alertMessage.innerText = message || "";
+    alertBox.classList.add("show");
+  }
+
+  function closeAlert() {
+    const alertBox = document.getElementById("custom-alert");
+    if (alertBox) alertBox.classList.remove("show");
+  }
+
+
   function switchTab(type) {
     document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
     document.querySelectorAll(".auth-form").forEach(form => form.classList.remove("active"));
@@ -1000,7 +1118,7 @@
     const pass = document.getElementById("login-pass").value.trim();
     const btn = document.getElementById("btn-login");
 
-    if (!id || !pass) return alert("Please complete all fields!");
+    if (!id || !pass) return showAlert("Please complete all fields!");
 
     btn.disabled = true;
     btn.innerText = "Processing...";
@@ -1018,11 +1136,11 @@
 
         showDashboard();
       } else {
-        alert(data.message || "Processing.Incorrect ID or Password!..");
+        showAlert(data.message || "Processing.Incorrect ID or Password!..");
       }
     } catch (error) {
       console.error("LOGIN ERROR:", error);
-      alert("Gagal terhubung ke database.");
+      showAlert("Gagal terhubung ke database.");
     } finally {
       btn.disabled = false;
       btn.innerText = "Login ke Dashboard";
@@ -1035,8 +1153,8 @@
     const pass = document.getElementById("reg-pass").value.trim();
     const btn = document.getElementById("btn-reg");
 
-    if (!name || !id || !pass) return alert("Please complete all fields!");
-    if (pass.length < 6) return alert("Password must be at least 6 characters!");
+    if (!name || !id || !pass) return showAlert("Please complete all fields!");
+    if (pass.length < 6) return showAlert("Password must be at least 6 characters!");
 
     btn.disabled = true;
     btn.innerText = "MenRegisterkan...";
@@ -1045,17 +1163,17 @@
       const data = await requestJsonp({ action: "register", id, name, pass });
 
       if (data.result === "success") {
-        alert(data.message || "PenRegisteran berhasil! Silakan Login.");
+        showAlert(data.message || "PenRegisteran berhasil! Silakan Login.");
         document.getElementById("reg-name").value = "";
         document.getElementById("reg-id").value = "";
         document.getElementById("reg-pass").value = "";
         switchTab("login");
       } else {
-        alert(data.message || "PenRegisteran gagal.");
+        showAlert(data.message || "PenRegisteran gagal.");
       }
     } catch (error) {
       console.error("REGISTER ERROR:", error);
-      alert("PenRegisteran gagal dikirim.");
+      showAlert("PenRegisteran gagal dikirim.");
     } finally {
       btn.disabled = false;
       btn.innerText = "Register Staff";
@@ -1104,7 +1222,7 @@
       }
     } catch (err) {
       console.error("LOAD STAFF DATA ERROR:", err);
-      alert("Gagal mengambil data staff / salary dari Google Sheet.");
+      showAlert("Gagal mengambil data staff / salary dari Google Sheet.");
     }
   }
 
@@ -1120,7 +1238,7 @@
       });
 
       if (data.result !== "success") {
-        alert(data.message || "Gagal mengambil semua data staff.");
+        showAlert(data.message || "Gagal mengambil semua data staff.");
         return;
       }
 
@@ -1128,7 +1246,7 @@
       renderMasterDashboard(masterStaffList);
     } catch (err) {
       console.error("MASTER ERROR:", err);
-      alert("Gagal membuka master dashboard.");
+      showAlert("Gagal membuka master dashboard.");
     }
   }
 
@@ -1259,7 +1377,7 @@
       });
 
       if (data.result !== "success") {
-        alert(data.message || "Failed to retrieve staff details.");
+        showAlert(data.message || "Failed to retrieve staff details.");
         return;
       }
 
@@ -1330,7 +1448,7 @@
       window["masterProfile_" + targetId] = profile;
     } catch (err) {
       console.error("DETAIL STAFF ERROR:", err);
-      alert("Failed to open staff salary slip.");
+      showAlert("Failed to open staff salary slip.");
     }
   }
 
@@ -1433,7 +1551,7 @@
 
   function printSalarySlip(itemIndex) {
     const item = currentSalaryList[itemIndex];
-    if (!item) return alert("Salary slip data not found.");
+    if (!item) return showAlert("Salary slip data not found.");
 
     const profile = currentProfile || {};
     const userName = profile.name || localStorage.getItem("currentUser") || "Staff";
@@ -1470,6 +1588,96 @@
     .footer{margin-top:38px;display:flex;justify-content:space-between;gap:30px;font-size:13px;color:#374151}
     .sign{width:45%;text-align:center;padding-top:50px;border-top:1px solid #9ca3af}
     @media print{body{background:white;padding:0}.slip{border:none;border-radius:0}}
+
+    /* === CUSTOM CENTER ALERT POPUP === */
+    .custom-alert{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      background:rgba(0,0,0,.58);
+      backdrop-filter:blur(10px);
+      z-index:999999;
+    }
+
+    .custom-alert.show{
+      display:flex;
+    }
+
+    .custom-alert-box{
+      width:100%;
+      max-width:430px;
+      position:relative;
+      padding:30px 26px 24px;
+      border-radius:26px;
+      background:linear-gradient(180deg,rgba(8,13,31,.96),rgba(5,10,25,.94));
+      border:1px solid rgba(55,232,255,.34);
+      box-shadow:0 30px 90px rgba(0,0,0,.70),0 0 38px rgba(55,232,255,.22),0 0 52px rgba(255,60,172,.10);
+      text-align:center;
+      overflow:hidden;
+      animation:customAlertPop .22s ease;
+    }
+
+    .custom-alert-box::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius:26px;
+      padding:1px;
+      background:linear-gradient(135deg,rgba(55,232,255,.75),rgba(47,124,255,.18),rgba(139,92,246,.42),rgba(255,60,172,.62));
+      -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+      pointer-events:none;
+    }
+
+    .custom-alert-icon{
+      width:54px;
+      height:54px;
+      margin:0 auto 16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:18px;
+      color:#fff;
+      font-size:1.25rem;
+      background:linear-gradient(135deg,var(--cyan),var(--blue),var(--purple));
+      box-shadow:0 0 30px rgba(55,232,255,.30);
+    }
+
+    .custom-alert-box p{
+      color:#f8fafc;
+      font-size:1rem;
+      font-weight:850;
+      line-height:1.6;
+      margin-bottom:22px;
+      word-break:break-word;
+    }
+
+    .custom-alert-box button{
+      min-width:120px;
+      border:none;
+      border-radius:15px;
+      padding:12px 28px;
+      color:white;
+      font-weight:900;
+      cursor:pointer;
+      background:linear-gradient(135deg,#37e8ff,#2f7cff,#8b5cf6);
+      box-shadow:0 14px 32px rgba(47,124,255,.28);
+    }
+
+    .custom-alert-box button:hover{
+      filter:saturate(1.15);
+      transform:translateY(-1px);
+    }
+
+    @keyframes customAlertPop{
+      from{opacity:0;transform:scale(.92) translateY(14px)}
+      to{opacity:1;transform:scale(1) translateY(0)}
+    }
+
   </style>
 </head>
 <body>
@@ -1525,14 +1733,14 @@
     `;
 
     const w = window.open("", "_blank");
-    if (!w) return alert("Popup diblokir browser. Izinkan popup untuk print PDF.");
+    if (!w) return showAlert("Popup diblokir browser. Izinkan popup untuk print PDF.");
     w.document.open();
     w.document.write(html);
     w.document.close();
   }
 
   function exportSalaryCSV() {
-    if (!currentSalaryList.length) return alert("Belum ada data salary untuk dibuat PDF.");
+    if (!currentSalaryList.length) return showAlert("Belum ada data salary untuk dibuat PDF.");
 
     currentSalaryList.forEach((item, index) => {
       setTimeout(() => {
