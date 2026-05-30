@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <title>XX7 Monitoring Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { margin:0; font-family:Arial, sans-serif; background:#0f172a; color:#e5e7eb; }
+    header { padding:20px; background:#111827; position:sticky; top:0; z-index:10; }
+    h1 { margin:0; font-size:24px; }
+    .time { color:#9ca3af; margin-top:6px; }
+    .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; padding:20px; }
+    .card { background:#1e293b; border-radius:14px; padding:16px; box-shadow:0 8px 20px #0005; }
+    .card h2 { margin:0 0 12px; font-size:20px; color:#93c5fd; }
+    .big { font-size:28px; font-weight:bold; color:#fff; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; color:#cbd5e1; }
+    section { padding:0 20px 24px; }
+    .box { background:#1e293b; border-radius:14px; padding:16px; overflow:auto; }
+    table { width:100%; border-collapse:collapse; min-width:1200px; }
+    th,td { padding:9px 10px; border-bottom:1px solid #334155; text-align:center; white-space:nowrap; }
+    th { background:#334155; color:#fff; position:sticky; top:0; }
+    .bad { color:#f87171; font-weight:bold; }
+    .good { color:#4ade80; font-weight:bold; }
+    .warn { color:#facc15; font-weight:bold; }
+    .tabs { padding:0 20px 16px; display:flex; gap:10px; }
+    button { background:#334155; color:#fff; border:0; padding:10px 16px; border-radius:10px; cursor:pointer; }
+    button.active { background:#2563eb; }
+    @media(max-width:900px){ .cards{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+<header>
+  <h1>XX7 Monitoring Dashboard</h1>
+  <div class="time" id="updated">Loading...</div>
+</header>
+
+<div class="cards" id="summaryCards"></div>
+
+<div class="tabs">
+  <button class="active" onclick="showTab('detail')">Detail</button>
+  <button onclick="showTab('alert')">Alert</button>
+</div>
+
+<section id="detailBox" class="box"></section>
+<section id="alertBox" class="box" style="display:none;"></section>
+
+<script>
+const SUMMARY_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUZgk2WtmhecGB1AJsBSsI54LiBT87sMCssDvmXkzNIZNK67ho9EMSNocsSctKSWuJ4v6WenbKM_5Z/pub?gid=0&single=true&output=csv";
+const DETAIL_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUZgk2WtmhecGB1AJsBSsI54LiBT87sMCssDvmXkzNIZNK67ho9EMSNocsSctKSWuJ4v6WenbKM_5Z/pub?gid=16814199&single=true&output=csv";
+const ALERT_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUZgk2WtmhecGB1AJsBSsI54LiBT87sMCssDvmXkzNIZNK67ho9EMSNocsSctKSWuJ4v6WenbKM_5Z/pub?gid=844445321&single=true&output=csv";
+
+function parseCSV(text){
+  const rows = [];
+  let row = [], cell = "", quote = false;
+  for(let i=0;i<text.length;i++){
+    const c = text[i], n = text[i+1];
+    if(c === '"' && quote && n === '"'){ cell += '"'; i++; }
+    else if(c === '"'){ quote = !quote; }
+    else if(c === "," && !quote){ row.push(cell); cell = ""; }
+    else if((c === "\n" || c === "\r") && !quote){
+      if(cell || row.length){ row.push(cell); rows.push(row); row=[]; cell=""; }
+      if(c === "\r" && n === "\n") i++;
+    } else cell += c;
+  }
+  if(cell || row.length){ row.push(cell); rows.push(row); }
+  const headers = rows.shift();
+  return rows.map(r => Object.fromEntries(headers.map((h,i)=>[h.trim(), (r[i]||"").trim()])));
+}
+
+async function loadCSV(url){
+  const res = await fetch(url + "&t=" + Date.now());
+  return parseCSV(await res.text());
+}
+
+function makeCards(rows){
+  const html = rows.map(r => `
+    <div class="card">
+      <h2>${r["窗口"]}</h2>
+      <div class="big">${r["成功率"]}</div>
+      <div class="grid">
+        <div>总金额<br><b>${r["总金额"]}</b></div>
+        <div>成功金额<br><b>${r["充值成功金额"]}</b></div>
+        <div>总笔数<br><b>${r["总笔数"]}</b></div>
+        <div>成功笔数<br><b>${r["充值成功笔数"]}</b></div>
+      </div>
+    </div>
+  `).join("");
+  document.getElementById("summaryCards").innerHTML = html;
+}
+
+function renderTable(id, rows){
+  if(!rows.length){
+    document.getElementById(id).innerHTML = "<p>暂无数据</p>";
+    return;
+  }
+  const headers = Object.keys(rows[0]);
+  const html = `
+    <table>
+      <thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead>
+      <tbody>
+        ${rows.map(r=>`
+          <tr>
+            ${headers.map(h=>{
+              const v = r[h] || "";
+              let cls = "";
+              if(h.includes("成功率")){
+                const num = parseFloat(v);
+                cls = num < 30 ? "bad" : num >= 45 ? "good" : "warn";
+              }
+              if(h === "备注") cls = "bad";
+              return `<td class="${cls}">${v}</td>`;
+            }).join("")}
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+  document.getElementById(id).innerHTML = html;
+}
+
+function showTab(tab){
+  document.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+  event.target.classList.add("active");
+  document.getElementById("detailBox").style.display = tab === "detail" ? "block" : "none";
+  document.getElementById("alertBox").style.display = tab === "alert" ? "block" : "none";
+}
+
+async function main(){
+  const [summary, detail, alert] = await Promise.all([
+    loadCSV(SUMMARY_URL),
+    loadCSV(DETAIL_URL),
+    loadCSV(ALERT_URL)
+  ]);
+
+  makeCards(summary);
+  renderTable("detailBox", detail);
+  renderTable("alertBox", alert);
+
+  document.getElementById("updated").innerText =
+    "Last refresh: " + new Date().toLocaleString();
+
+  setTimeout(main, 60000);
+}
+
+main();
+</script>
+</body>
+</html>
