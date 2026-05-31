@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
   <meta charset="utf-8" />
-  <title>XX7 Monitoring Dashboard V2</title>
+  <title>XX7 Monitoring Dashboard V3</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     * { box-sizing:border-box; }
@@ -14,15 +14,19 @@
     .platforms { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
     .platform { padding:7px 12px; border-radius:10px; background:#334155; color:#cbd5e1; font-weight:bold; }
     .platform.active { background:#2563eb; color:white; }
+
     .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; padding:20px; }
+    .data1Cards { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding:0 20px 20px; }
     .card { background:#1e293b; border-radius:16px; padding:16px; box-shadow:0 8px 20px #0005; border:1px solid #334155; }
     .card h2 { margin:0 0 12px; font-size:20px; color:#93c5fd; }
     .big { font-size:30px; font-weight:bold; }
     .grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; color:#cbd5e1; font-size:13px; }
+
     .alertCards { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding:0 20px 20px; }
     .alertCard { background:#281c1c; border:1px solid #7f1d1d; border-radius:16px; padding:14px; }
     .alertCard h3 { margin:0 0 8px; color:#fecaca; }
     .alertCard .name { font-size:18px; font-weight:bold; }
+
     section { padding:0 20px 24px; }
     .box { background:#1e293b; border-radius:16px; padding:16px; overflow:auto; border:1px solid #334155; }
     table { width:100%; border-collapse:collapse; min-width:1200px; }
@@ -31,12 +35,15 @@
     .bad { color:#f87171; font-weight:bold; }
     .good { color:#4ade80; font-weight:bold; }
     .warn { color:#facc15; font-weight:bold; }
+
     .tabs { padding:0 20px 16px; display:flex; gap:10px; flex-wrap:wrap; }
     button { background:#334155; color:#fff; border:0; padding:10px 16px; border-radius:10px; cursor:pointer; }
     button.active { background:#2563eb; }
-    .sectionTitle { padding:0 20px 10px; margin:0; color:#e5e7eb; }
-    @media(max-width:1100px){ .cards,.alertCards{grid-template-columns:1fr 1fr;} }
-    @media(max-width:700px){ .cards,.alertCards{grid-template-columns:1fr;} table{min-width:900px;} }
+    .sectionTitle { padding:0 20px 10px; margin:0; color:#e5e7eb; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    select { background:#334155; color:#fff; border:0; padding:8px 12px; border-radius:10px; }
+
+    @media(max-width:1100px){ .cards,.alertCards,.data1Cards{grid-template-columns:1fr 1fr;} }
+    @media(max-width:700px){ .cards,.alertCards,.data1Cards{grid-template-columns:1fr;} table{min-width:900px;} }
   </style>
 </head>
 <body>
@@ -57,26 +64,36 @@
   </div>
 </header>
 
+<h2 class="sectionTitle">
+  Data1 Channel 历史数据
+  <select id="data1DateSelect" onchange="renderData1ByDate()"></select>
+</h2>
+<div class="data1Cards" id="data1Cards"></div>
+
 <div class="cards" id="summaryCards"></div>
 
 <h2 class="sectionTitle">重点告警</h2>
 <div class="alertCards" id="alertCards"></div>
 
 <div class="tabs">
-  <button class="active" onclick="showTab(event,'detail')">Detail</button>
+  <button class="active" onclick="showTab(event,'data1')">Data1_Channel</button>
+  <button onclick="showTab(event,'detail')">Detail</button>
   <button onclick="showTab(event,'alert')">Alert</button>
 </div>
 
-<section id="detailBox" class="box"></section>
+<section id="data1Box" class="box"></section>
+<section id="detailBox" class="box" style="display:none;"></section>
 <section id="alertBox" class="box" style="display:none;"></section>
 
 <script>
+const DATA1_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUZgk2WtmhecGB1AJsBSsI54LiBT87sMCssDvmXkzNIZNK67ho9EMSNocsSctKSWuJ4v6WenbKM_5Z/pub?gid=1465117953&single=true&output=csv";
 const SUMMARY_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUZgk2WtmhecGB1AJsBSsI54LiBT87sMCssDvmXkzNIZNK67ho9EMSNocsSctKSWuJ4v6WenbKM_5Z/pub?gid=0&single=true&output=csv";
 const DETAIL_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUZgk2WtmhecGB1AJsBSsI54LiBT87sMCssDvmXkzNIZNK67ho9EMSNocsSctKSWuJ4v6WenbKM_5Z/pub?gid=16814199&single=true&output=csv";
 const ALERT_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUZgk2WtmhecGB1AJsBSsI54LiBT87sMCssDvmXkzNIZNK67ho9EMSNocsSctKSWuJ4v6WenbKM_5Z/pub?gid=844445321&single=true&output=csv";
 const SYSTEM_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUZgk2WtmhecGB1AJsBSsI54LiBT87sMCssDvmXkzNIZNK67ho9EMSNocsSctKSWuJ4v6WenbKM_5Z/pub?gid=696911992&single=true&output=csv";
 
 let countdown = 60;
+let data1Rows = [];
 
 function parseCSV(text){
   const rows = [];
@@ -102,6 +119,7 @@ async function loadCSV(url){
 }
 
 function pctNum(v){ return parseFloat(String(v || "0").replace("%","")) || 0; }
+function num(v){ return Number(String(v || "0").replace(/,/g,"")) || 0; }
 
 function rateClass(v){
   const n = pctNum(v);
@@ -123,6 +141,34 @@ function makeCards(rows){
       </div>
     </div>
   `).join("");
+}
+
+function setupData1(rows){
+  data1Rows = rows;
+  const dates = [...new Set(rows.map(r => r["日期"]).filter(Boolean))].sort().reverse();
+  const sel = document.getElementById("data1DateSelect");
+  sel.innerHTML = dates.map(d => `<option value="${d}">${d}</option>`).join("");
+  renderData1ByDate();
+}
+
+function renderData1ByDate(){
+  const date = document.getElementById("data1DateSelect").value;
+  const rows = data1Rows.filter(r => r["日期"] === date);
+
+  document.getElementById("data1Cards").innerHTML = rows.map(r => `
+    <div class="card">
+      <h2>${r["类型"]}</h2>
+      <div class="big ${rateClass(r["成功率"])}">${r["成功率"]}</div>
+      <div class="grid">
+        <div>金额<br><b>${r["金额"]}</b></div>
+        <div>金额占比<br><b>${r["金额占比"]}</b></div>
+        <div>总订单<br><b>${r["总订单"]}</b></div>
+        <div>成功<br><b>${r["成功"]}</b></div>
+      </div>
+    </div>
+  `).join("");
+
+  renderTable("data1Box", rows.length ? rows : data1Rows);
 }
 
 function makeAlertCards(rows){
@@ -173,6 +219,7 @@ function renderTable(id, rows){
 function showTab(e, tab){
   document.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
   e.target.classList.add("active");
+  document.getElementById("data1Box").style.display = tab === "data1" ? "block" : "none";
   document.getElementById("detailBox").style.display = tab === "detail" ? "block" : "none";
   document.getElementById("alertBox").style.display = tab === "alert" ? "block" : "none";
 }
@@ -183,13 +230,15 @@ function systemValue(rows, key){
 }
 
 async function main(){
-  const [summary, detail, alert, system] = await Promise.all([
+  const [data1, summary, detail, alert, system] = await Promise.all([
+    loadCSV(DATA1_URL),
     loadCSV(SUMMARY_URL),
     loadCSV(DETAIL_URL),
     loadCSV(ALERT_URL),
     loadCSV(SYSTEM_URL)
   ]);
 
+  setupData1(data1);
   makeCards(summary);
   makeAlertCards(alert);
   renderTable("detailBox", detail);
