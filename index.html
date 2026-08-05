@@ -4,13 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#ffffff" />
-  <title>ZONO — Official App Download</title>
-  <meta name="description" content="Download the official ZONO app for Android. Fast, secure, and optimized for mobile." />
+  <title>ZONO India — Slots, Live Casino & Fast Payments</title>
+  <meta name="description" content="Play slots and live casino games with India-friendly payments, secure access, and 24/7 support." />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="ZONO — Official App Download" />
-  <meta property="og:description" content="Download the latest official ZONO Android app." />
+  <meta property="og:title" content="ZONO India — Slots, Live Casino & Fast Payments" />
+  <meta property="og:description" content="Download the latest official ZONO Fast Payments app." />
   <meta property="og:image" content="assets/og-zono.webp" />
   <meta property="og:url" content="https://zono.club/" />
 
@@ -419,6 +419,13 @@
     .info-item b{display:block;font-size:14px;margin-bottom:4px}
     .info-item span{font-size:13px;color:var(--muted);line-height:1.4}
 
+
+    .payment-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:22px}
+    .payment-card{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:17px;padding:17px;background:#fff;box-shadow:0 3px 10px rgba(32,33,36,.04)}
+    .payment-logo{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;flex:0 0 auto;background:linear-gradient(145deg,#04a978,#006644);color:#fff;font-size:12px;font-weight:900}
+    .payment-card b{display:block;font-size:15px;margin-bottom:5px}
+    .payment-card span{display:block;color:var(--muted);font-size:13px;line-height:1.5}
+
     .data-card{
       border:1px solid var(--line);
       border-radius:18px;
@@ -513,7 +520,14 @@
       .share-btn{width:100%}
       .section{padding:26px 0}
       .shot{flex-basis:170px;height:340px}
-      .data-card{grid-template-columns:1fr}
+  
+    .payment-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:22px}
+    .payment-card{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:17px;padding:17px;background:#fff;box-shadow:0 3px 10px rgba(32,33,36,.04)}
+    .payment-logo{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;flex:0 0 auto;background:linear-gradient(145deg,#04a978,#006644);color:#fff;font-size:12px;font-weight:900}
+    .payment-card b{display:block;font-size:15px;margin-bottom:5px}
+    .payment-card span{display:block;color:var(--muted);font-size:13px;line-height:1.5}
+
+    .data-card{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -523,13 +537,14 @@
     <div class="topbar-inner">
       <a class="brand" href="#">
         <span class="play-mark" aria-hidden="true"></span>
-        <span>ZONO Store</span>
+        <span>ZONO India</span>
       </a>
 
       <nav class="nav">
         <a href="#screenshots">Screenshots</a>
         <a href="#about">About</a>
-        <a href="#privacy">Data safety</a>
+        <a href="#payments">Payments</a>
+        <a href="#privacy">Payments & account safety</a>
         <button class="header-btn" onclick="downloadApp()">Download</button>
       </nav>
     </div>
@@ -545,11 +560,10 @@
           <div class="app-icon" aria-label="ZONO logo">ZO</div>
 
           <div>
-            <h1 class="app-title">ZONO</h1>
-            <div class="developer">ZONO Official</div>
+            <h1 class="app-title">ZONO India</h1>
+            <div class="developer">Slots • Live Casino • Instant Payments</div>
             <p class="short-desc">
-              Discover a fast, secure, and modern mobile experience.
-              Download the newest official Android version directly from this page.
+              Enjoy popular slots, live dealer games, crash games, daily rewards, and fast India-friendly payments.
             </p>
           </div>
         </div>
@@ -557,24 +571,24 @@
         <div class="metrics" aria-label="App information">
           <div class="metric">
             <strong>4.8 ★</strong>
-            <span>12K reviews</span>
+            <span>25K+ players</span>
           </div>
           <div class="metric">
-            <strong>1M+</strong>
-            <span>Downloads</span>
+            <strong>500+</strong>
+            <span>Games</span>
           </div>
           <div class="metric">
-            <strong>18+</strong>
-            <span>Rated for 18+</span>
+            <strong>24/7</strong>
+            <span>Customer support</span>
           </div>
           <div class="metric">
-            <strong>42 MB</strong>
-            <span>App size</span>
+            <strong>Fast</strong>
+            <span>Deposit & withdrawal</span>
           </div>
         </div>
 
         <div class="actions">
-          <button class="install-btn" onclick="downloadApp()">Install</button>
+          <button class="install-btn" onclick="downloadApp()">Download App</button>
           <button class="share-btn" onclick="sharePage()">⌁ Share</button>
         </div>
       </div>
@@ -582,20 +596,20 @@
       <div class="phone-wrap" aria-hidden="true">
         <div class="phone">
           <div class="screen">
-            <div class="screen-logo">ZONO</div>
-            <div class="screen-note">Premium mobile experience</div>
+            <div class="screen-logo">ZONO INDIA</div>
+            <div class="screen-note">Slots, live games & India payments</div>
 
             <div class="screen-banner">
-              <small>WELCOME</small>
-              <h3>Play smarter</h3>
-              <small>Fast • Safe • Simple</small>
+              <small>WELCOME BONUS</small>
+              <h3>Play & win</h3>
+              <small>UPI • IMPS • QR • Bank</small>
             </div>
 
             <div class="screen-grid">
-              <div class="screen-card"><b>Popular</b></div>
-              <div class="screen-card"><b>New</b></div>
-              <div class="screen-card"><b>Rewards</b></div>
-              <div class="screen-card"><b>Support</b></div>
+              <div class="screen-card"><b>Slots</b></div>
+              <div class="screen-card"><b>Live Casino</b></div>
+              <div class="screen-card"><b>Bonuses</b></div>
+              <div class="screen-card"><b>Payments</b></div>
             </div>
           </div>
         </div>
@@ -668,23 +682,20 @@
 
     <section class="section" id="about">
       <div class="section-title">
-        <h2>About this app</h2>
+        <h2>About ZONO India</h2>
         <span class="arrow">›</span>
       </div>
 
       <div class="about-grid">
         <div>
           <div class="about-text">
-            ZONO brings a clean, fast, and mobile-first experience with an
-            easy-to-use interface, responsive performance, and account protection.
-            This page is an independent app-download landing page inspired by the
-            familiar structure of modern app stores.
+            ZONO India is a mobile-first gaming platform featuring popular slots, live dealer tables, crash games, card games, daily rewards, fast registration, secure wallet tools, and India-friendly deposit and withdrawal options.
           </div>
 
           <div class="tags">
-            <span class="tag">Entertainment</span>
-            <span class="tag">Mobile app</span>
-            <span class="tag">Android</span>
+            <span class="tag">India Slots</span>
+            <span class="tag">Live Casino</span>
+            <span class="tag">Fast Payments</span>
           </div>
         </div>
 
@@ -692,57 +703,72 @@
           <div class="info-item">
             <div class="info-icon">↻</div>
             <div>
-              <b>Updated on</b>
-              <span>August 5, 2026</span>
+              <b>Game categories</b>
+              <span>Slots, live casino, crash, table games</span>
             </div>
           </div>
 
           <div class="info-item">
             <div class="info-icon">⌁</div>
             <div>
-              <b>Works on your device</b>
-              <span>Requires Android 7.0 and up</span>
+              <b>Popular payment methods</b>
+              <span>Requires Fast Payments 7.0 and up</span>
             </div>
           </div>
 
           <div class="info-item">
             <div class="info-icon">ⓘ</div>
             <div>
-              <b>Version</b>
-              <span>2.8.5</span>
+              <b>Support</b>
+              <span>24/7 English and Hindi assistance</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
+
+    <section class="section" id="payments">
+      <div class="section-title"><h2>Deposit & withdrawal methods</h2><span class="arrow">›</span></div>
+      <p class="about-text">Choose from popular India-friendly payment methods. Actual availability, limits, fees, and processing time depend on the active provider and verified account status.</p>
+      <div class="payment-grid">
+        <article class="payment-card"><div class="payment-logo">UPI</div><div><b>UPI</b><span>PhonePe, Google Pay, Paytm, BHIM, and supported UPI apps.</span></div></article>
+        <article class="payment-card"><div class="payment-logo">QR</div><div><b>UPI QR</b><span>Scan a QR code and complete payment from your preferred UPI app.</span></div></article>
+        <article class="payment-card"><div class="payment-logo">IMPS</div><div><b>IMPS</b><span>Real-time bank transfer for eligible deposits and withdrawals.</span></div></article>
+        <article class="payment-card"><div class="payment-logo">BANK</div><div><b>Bank Transfer</b><span>Manual or automated transfer through supported Indian banks.</span></div></article>
+        <article class="payment-card"><div class="payment-logo">PP</div><div><b>Paytm</b><span>Paytm UPI and supported bank-linked payment flows.</span></div></article>
+        <article class="payment-card"><div class="payment-logo">PE</div><div><b>PhonePe</b><span>Fast UPI deposits through PhonePe where available.</span></div></article>
+        <article class="payment-card"><div class="payment-logo">GPay</div><div><b>Google Pay</b><span>UPI payment through Google Pay and linked bank accounts.</span></div></article>
+        <article class="payment-card"><div class="payment-logo">USDT</div><div><b>USDT</b><span>Optional digital-asset settlement only where legally available and supported.</span></div></article>
+      </div>
+    </section>
+
     <section class="section" id="privacy">
       <div class="section-title">
-        <h2>Data safety</h2>
+        <h2>Payments & account safety</h2>
         <span class="arrow">›</span>
       </div>
 
       <p class="about-text">
-        Security starts with understanding how developers collect and share your data.
-        Replace the information below so it accurately reflects your real application.
+        ZONO India supports secure account access and protected payment processing. Payment availability, limits, fees, and processing time depend on the active channel and verified account status.
       </p>
 
       <div class="data-card">
         <div>
-          <b>No data shared</b>
-          <span>No user data is shared with third parties.</span>
+          <b>UPI & QR payments</b>
+          <span>Supports PhonePe, Google Pay, Paytm, BHIM, and other supported UPI apps where available.</span>
         </div>
         <div>
-          <b>Data encrypted</b>
-          <span>Data is encrypted during transmission.</span>
+          <b>IMPS & bank transfer</b>
+          <span>Fast bank-based deposits and withdrawals through supported payment channels.</span>
         </div>
         <div>
-          <b>Deletion available</b>
-          <span>Users can request deletion of their account data.</span>
+          <b>Withdrawal review</b>
+          <span>Withdrawals may require account verification and are processed according to platform rules.</span>
         </div>
         <div>
-          <b>Verified package</b>
-          <span>Always download from the official domain.</span>
+          <b>Responsible play</b>
+          <span>Adults 18+ only. Set limits and play responsibly. Availability depends on local law.</span>
         </div>
       </div>
     </section>
@@ -750,7 +776,7 @@
 
   <footer>
     <div class="footer-inner">
-      <div>© 2026 ZONO. All rights reserved.</div>
+      <div>© 2026 ZONO India. Adults 18+ only. Play responsibly.</div>
       <div class="footer-links">
         <a href="#">Privacy</a>
         <a href="#">Terms</a>
@@ -772,7 +798,7 @@
     async function sharePage(){
       const data = {
         title: document.title,
-        text: "Download the official ZONO app.",
+        text: "Play slots and live games on ZONO India with fast UPI, IMPS, QR, and bank payments.",
         url: window.location.href
       };
 
