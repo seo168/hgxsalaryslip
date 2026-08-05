@@ -593,6 +593,165 @@
       .brand span:last-child{display:none}
       .about-modal{padding:23px;border-radius:20px}
     }
+  
+    /* ===== Locked update: horizontal partner slider ===== */
+    .partner-grid{
+      display:flex !important;
+      grid-template-columns:none !important;
+      gap:12px !important;
+      overflow-x:auto !important;
+      overflow-y:hidden !important;
+      padding:3px 2px 16px !important;
+      scroll-snap-type:x mandatory;
+      overscroll-behavior-inline:contain;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:thin;
+      scrollbar-color:#b8c1c8 transparent;
+    }
+
+    .partner-grid::-webkit-scrollbar{height:5px}
+    .partner-grid::-webkit-scrollbar-track{background:transparent}
+    .partner-grid::-webkit-scrollbar-thumb{background:#c6cdd2;border-radius:999px}
+
+    .partner-card{
+      flex:0 0 210px !important;
+      min-width:210px !important;
+      scroll-snap-align:start;
+      padding:14px !important;
+    }
+
+    .partner-card > div:last-child{min-width:0}
+    .partner-card b,.partner-card span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    /* Small background area below header.
+       Replace assets/header-small.webp with your own image. */
+    .header-visual-space{
+      position:relative;
+      width:100%;
+      height:150px;
+      overflow:hidden;
+      border-bottom:1px solid rgba(218,220,224,.8);
+      background:
+        linear-gradient(90deg,rgba(1,135,95,.78),rgba(4,73,58,.55)),
+        url("assets/header-small.webp") center/cover no-repeat;
+    }
+
+    .header-visual-space::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.10));
+      pointer-events:none;
+    }
+
+    .header-visual-inner{
+      position:relative;
+      z-index:1;
+      max-width:1120px;
+      height:100%;
+      margin:auto;
+      padding:0 24px;
+      display:flex;
+      align-items:center;
+    }
+
+    .header-visual-copy{
+      max-width:560px;
+      color:#fff;
+      text-shadow:0 2px 12px rgba(0,0,0,.24);
+    }
+
+    .header-visual-copy strong{
+      display:block;
+      font-size:24px;
+      line-height:1.15;
+      margin-bottom:7px;
+    }
+
+    .header-visual-copy span{
+      font-size:13px;
+      line-height:1.5;
+      opacity:.92;
+    }
+
+    @media(max-width:760px){
+      body{padding-bottom:76px}
+      .topbar{height:58px}
+      .topbar-inner{padding:0 14px !important}
+      .brand{font-size:17px}
+      .nav{gap:10px !important}
+      .nav a{font-size:12px}
+      .header-btn{padding:8px 11px;font-size:12px}
+      .header-visual-space{height:104px}
+      .header-visual-inner{padding:0 17px}
+      .header-visual-copy strong{font-size:20px}
+      .header-visual-copy span{font-size:12px}
+      .hero{padding-top:24px !important}
+      .app-head{align-items:center}
+      .app-title{font-size:29px !important}
+      .developer{line-height:1.35}
+      .partner-card{
+        flex-basis:176px !important;
+        min-width:176px !important;
+        padding:12px !important;
+      }
+      .partner-logo{
+        width:42px !important;
+        height:42px !important;
+        border-radius:12px !important;
+      }
+      .partner-card span{font-size:11px !important}
+      .partner-download{font-size:12px !important}
+      .screenshots{gap:11px}
+      .shot{flex-basis:158px !important;height:316px !important}
+      .section-title h2{font-size:21px}
+      .payment-card{padding:14px}
+      .payment-logo{width:47px;height:47px}
+      .live-chat-fab{right:12px !important}
+    }
+
+    @media(max-width:480px){
+      .nav a{display:none !important}
+      .header-btn{display:inline-flex !important}
+      .header-visual-space{height:90px}
+      .header-visual-copy strong{font-size:18px}
+      .header-visual-copy span{
+        display:block;
+        max-width:290px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+      }
+      .container{padding-left:14px !important;padding-right:14px !important}
+      .app-head{gap:13px !important}
+      .app-icon{width:80px !important;height:80px !important}
+      .app-title{font-size:27px !important}
+      .short-desc{line-height:1.55}
+      .metrics{
+        width:calc(100vw - 28px);
+        overflow-x:auto;
+        padding-bottom:8px;
+      }
+      .metric{flex:0 0 104px}
+      .partner-grid{
+        width:calc(100vw - 28px);
+        margin-right:-14px;
+        padding-right:14px !important;
+      }
+      .partner-card{
+        flex-basis:164px !important;
+        min-width:164px !important;
+      }
+      .screenshots{
+        width:calc(100vw - 28px);
+        margin-right:-14px;
+        padding-right:14px;
+      }
+      .actions{gap:8px}
+      .install-btn,.share-btn{min-height:46px}
+      .about-grid{gap:26px}
+    }
+
   </style>
 </head>
 
@@ -618,6 +777,15 @@
       </nav>
     </div>
   </header>
+
+  <section class="header-visual-space" aria-label="W5W promotional background">
+    <div class="header-visual-inner">
+      <div class="header-visual-copy">
+        <strong>W5W Game APK</strong>
+        <span>Space reserved for your small promotional background banner.</span>
+      </div>
+    </div>
+  </section>
 
   <main class="container">
     <section class="hero">
@@ -692,9 +860,6 @@
         <span class="arrow">›</span>
       </div>
       <div class="partner-grid">
-        <article class="partner-card" aria-label="W5WCOM official platform">
-          <div class="partner-logo">W5W</div><div><b>W5WCOM</b><span>Official W5W platform</span><a class="partner-download" href="#" data-platform="w5wcom">Download</a></div>
-        </article>
         <article class="partner-card" aria-label="XX6COM partner platform">
           <div class="partner-logo">XX6</div><div><b>XX6COM</b><span>Partner platform</span><a class="partner-download" href="#" data-platform="xx6com">Download</a></div>
         </article>
@@ -721,7 +886,7 @@
 
     <section class="section" id="screenshots">
       <div class="section-title">
-        <h2>App screenshots</h2>
+        <h2>Preview</h2>
         <span class="arrow">›</span>
       </div>
 
@@ -962,7 +1127,6 @@
 
     // Replace each placeholder with the real direct-download URL.
     const PARTNER_LINKS = {
-      w5wcom: "#",
       xx6com: "#",
       xx7com: "#",
       yygame: "#",
