@@ -1,107 +1,803 @@
-<!DOCTYPE html>
-<html lang="id">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZONO.CLUB</title>
-    <!-- Tailwind CSS (via CDN agar langsung jalan tanpa instalasi) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d0e12;
-            color: #ffffff;
-        }
-        /* Glow Effect Custom */
-        .glow-effect {
-            box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
-        }
-        .glow-effect:hover {
-            box-shadow: 0 0 35px rgba(99, 102, 241, 0.7);
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>ZONO — Official App Download</title>
+  <meta name="description" content="Download the official ZONO app for Android. Fast, secure, and optimized for mobile." />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ZONO — Official App Download" />
+  <meta property="og:description" content="Download the latest official ZONO Android app." />
+  <meta property="og:image" content="assets/og-zono.webp" />
+  <meta property="og:url" content="https://zono.club/" />
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --surface:#f8f9fa;
+      --surface-2:#f1f3f4;
+      --text:#202124;
+      --muted:#5f6368;
+      --line:#dadce0;
+      --green:#01875f;
+      --green-hover:#056f50;
+      --blue:#1a73e8;
+      --shadow:0 10px 28px rgba(32,33,36,.10);
+      --radius:20px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+    }
+
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    button,input{font:inherit}
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:30;
+      height:64px;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(218,220,224,.75);
+    }
+
+    .topbar-inner{
+      max-width:1180px;
+      height:100%;
+      margin:auto;
+      padding:0 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:11px;
+      font-size:21px;
+      font-weight:700;
+    }
+
+    .play-mark{
+      width:31px;
+      height:34px;
+      position:relative;
+      overflow:hidden;
+      clip-path:polygon(0 0,100% 50%,0 100%);
+      background:linear-gradient(145deg,#00c3ff 0 33%,#00d17a 33% 58%,#ffd200 58% 78%,#ff3d67 78%);
+      filter:drop-shadow(0 2px 3px rgba(0,0,0,.12));
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:24px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:600;
+    }
+
+    .nav a:hover{color:var(--text)}
+    .header-btn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--green);
+      border-radius:999px;
+      padding:10px 17px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .container{
+      max-width:1120px;
+      margin:auto;
+      padding:0 24px;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 330px;
+      gap:48px;
+      align-items:center;
+      padding:64px 0 48px;
+    }
+
+    .app-head{
+      display:flex;
+      align-items:flex-start;
+      gap:26px;
+    }
+
+    .app-icon{
+      width:168px;
+      height:168px;
+      border-radius:34px;
+      object-fit:cover;
+      background:
+        radial-gradient(circle at 30% 20%,rgba(255,255,255,.65),transparent 30%),
+        linear-gradient(145deg,#04a978,#006644);
+      box-shadow:var(--shadow);
+      flex:0 0 auto;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      font-size:56px;
+      font-weight:900;
+      letter-spacing:-4px;
+    }
+
+    .app-title{
+      margin:0;
+      font-size:44px;
+      line-height:1.08;
+      letter-spacing:-1.5px;
+    }
+
+    .developer{
+      margin-top:10px;
+      color:var(--green);
+      font-size:16px;
+      font-weight:700;
+    }
+
+    .short-desc{
+      margin:18px 0 0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.65;
+      max-width:650px;
+    }
+
+    .metrics{
+      display:flex;
+      align-items:stretch;
+      gap:0;
+      margin:32px 0 28px;
+      overflow:auto;
+    }
+
+    .metric{
+      min-width:125px;
+      padding:0 24px;
+      text-align:center;
+      border-right:1px solid var(--line);
+    }
+    .metric:first-child{padding-left:0}
+    .metric:last-child{border-right:0}
+    .metric strong{
+      display:block;
+      font-size:16px;
+      margin-bottom:8px;
+    }
+    .metric span{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .install-btn{
+      min-width:210px;
+      border:0;
+      border-radius:9px;
+      padding:14px 27px;
+      color:#fff;
+      background:var(--green);
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 4px 12px rgba(1,135,95,.23);
+    }
+    .install-btn:hover{background:var(--green-hover)}
+
+    .share-btn{
+      border:0;
+      background:transparent;
+      color:var(--green);
+      padding:12px 14px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .phone-wrap{
+      justify-self:center;
+      position:relative;
+    }
+
+    .phone{
+      width:280px;
+      height:570px;
+      border-radius:38px;
+      border:10px solid #1c1c1c;
+      background:#111;
+      box-shadow:0 24px 55px rgba(0,0,0,.22);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .phone::before{
+      content:"";
+      position:absolute;
+      z-index:5;
+      top:8px;
+      left:50%;
+      transform:translateX(-50%);
+      width:84px;
+      height:22px;
+      border-radius:999px;
+      background:#151515;
+    }
+
+    .screen{
+      width:100%;
+      height:100%;
+      background:
+        radial-gradient(circle at 70% 12%,rgba(45,255,183,.22),transparent 27%),
+        linear-gradient(180deg,#071916,#09231e 54%,#04100e);
+      padding:55px 18px 24px;
+      color:#fff;
+    }
+
+    .screen-logo{
+      font-size:29px;
+      font-weight:900;
+      letter-spacing:-1px;
+    }
+    .screen-note{font-size:12px;color:#a9c9be;margin-top:4px}
+    .screen-banner{
+      margin-top:25px;
+      border-radius:18px;
+      background:linear-gradient(135deg,#07aa79,#034d3b);
+      padding:20px;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+    .screen-banner small{opacity:.8}
+    .screen-banner h3{font-size:24px;margin:8px 0}
+    .screen-grid{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .screen-card{
+      height:105px;
+      border-radius:15px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.09);
+      padding:13px;
+    }
+    .screen-card b{display:block;margin-top:36px;font-size:13px}
+
+    .section{
+      padding:32px 0;
+      border-top:1px solid #eceff1;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:20px;
+    }
+
+    .section-title h2{
+      margin:0;
+      font-size:23px;
+      letter-spacing:-.4px;
+    }
+
+    .arrow{
+      font-size:24px;
+      color:var(--muted);
+    }
+
+    .screenshots{
+      display:flex;
+      gap:15px;
+      overflow:auto;
+      padding:2px 2px 18px;
+      scroll-snap-type:x mandatory;
+    }
+
+    .shot{
+      flex:0 0 205px;
+      height:405px;
+      border-radius:18px;
+      overflow:hidden;
+      scroll-snap-align:start;
+      background:#10231f;
+      border:1px solid #dce4e1;
+      box-shadow:0 4px 12px rgba(0,0,0,.07);
+      padding:18px;
+      color:#fff;
+    }
+
+    .shot:nth-child(2){background:linear-gradient(180deg,#112035,#0b1320)}
+    .shot:nth-child(3){background:linear-gradient(180deg,#43170c,#170b07)}
+    .shot:nth-child(4){background:linear-gradient(180deg,#242043,#0e0b1f)}
+    .shot:nth-child(5){background:linear-gradient(180deg,#0a332d,#061512)}
+
+    .shot-head{
+      height:46px;
+      border-radius:13px;
+      background:rgba(255,255,255,.09);
+      margin-bottom:14px;
+    }
+    .shot-hero{
+      height:135px;
+      border-radius:15px;
+      background:linear-gradient(135deg,rgba(4,213,149,.9),rgba(0,80,61,.9));
+      margin-bottom:12px;
+    }
+    .shot-line{
+      height:12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.13);
+      margin:10px 0;
+    }
+    .shot-line.short{width:62%}
+    .shot-list{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:9px;
+      margin-top:14px;
+    }
+    .shot-tile{
+      height:70px;
+      border-radius:12px;
+      background:rgba(255,255,255,.09);
+    }
+
+    .about-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 320px;
+      gap:60px;
+    }
+
+    .about-text{
+      color:#3c4043;
+      font-size:15px;
+      line-height:1.75;
+    }
+
+    .tags{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .tag{
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:8px 15px;
+      font-size:13px;
+      color:#3c4043;
+    }
+
+    .info-list{
+      display:grid;
+      gap:18px;
+    }
+
+    .info-item{
+      display:flex;
+      gap:15px;
+      align-items:flex-start;
+    }
+
+    .info-icon{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      background:var(--surface-2);
+      display:grid;
+      place-items:center;
+      font-size:18px;
+      flex:0 0 auto;
+    }
+
+    .info-item b{display:block;font-size:14px;margin-bottom:4px}
+    .info-item span{font-size:13px;color:var(--muted);line-height:1.4}
+
+    .data-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:22px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      background:#fff;
+    }
+
+    .data-card div{
+      background:var(--surface);
+      padding:16px;
+      border-radius:14px;
+    }
+
+    .data-card b{display:block;font-size:14px;margin-bottom:7px}
+    .data-card span{font-size:13px;color:var(--muted)}
+
+    footer{
+      margin-top:40px;
+      background:var(--surface);
+      border-top:1px solid var(--line);
+    }
+
+    .footer-inner{
+      max-width:1120px;
+      margin:auto;
+      padding:30px 24px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .footer-links{
+      display:flex;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:24px;
+      transform:translate(-50%,20px);
+      background:#202124;
+      color:#fff;
+      padding:12px 17px;
+      border-radius:9px;
+      font-size:14px;
+      opacity:0;
+      pointer-events:none;
+      transition:.22s ease;
+      z-index:80;
+    }
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+
+    @media(max-width:860px){
+      .nav a{display:none}
+      .hero{
+        grid-template-columns:1fr;
+        gap:38px;
+        padding-top:40px;
+      }
+      .phone-wrap{display:none}
+      .about-grid{grid-template-columns:1fr;gap:35px}
+    }
+
+    @media(max-width:620px){
+      .container{padding:0 17px}
+      .topbar-inner{padding:0 17px}
+      .brand{font-size:18px}
+      .header-btn{padding:9px 13px}
+      .hero{padding:30px 0 34px}
+      .app-head{gap:17px}
+      .app-icon{
+        width:92px;
+        height:92px;
+        border-radius:23px;
+        font-size:34px;
+      }
+      .app-title{font-size:31px}
+      .developer{font-size:14px}
+      .short-desc{font-size:14px}
+      .metrics{margin:26px 0 24px}
+      .metric{min-width:106px;padding:0 15px}
+      .install-btn{width:100%}
+      .share-btn{width:100%}
+      .section{padding:26px 0}
+      .shot{flex-basis:170px;height:340px}
+      .data-card{grid-template-columns:1fr}
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between items-center relative overflow-x-hidden">
 
-    <!-- Background Decoration Gradient -->
-    <div class="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-600/20 blur-[120px] rounded-full -z-10 pointer-events-none"></div>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#">
+        <span class="play-mark" aria-hidden="true"></span>
+        <span>ZONO Store</span>
+      </a>
 
-    <!-- Header / Navbar -->
-    <header class="w-full max-w-5xl mx-auto p-6 flex justify-between items-center">
-        <div class="text-2xl font-extrabold tracking-wider bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">
-            ZONO<span class="text-white">.CLUB</span>
+      <nav class="nav">
+        <a href="#screenshots">Screenshots</a>
+        <a href="#about">About</a>
+        <a href="#privacy">Data safety</a>
+        <button class="header-btn" onclick="downloadApp()">Download</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <div class="app-head">
+          <!-- Replace this block with your own logo:
+          <img class="app-icon" src="assets/zono-icon.webp" alt="ZONO app icon">
+          -->
+          <div class="app-icon" aria-label="ZONO logo">ZO</div>
+
+          <div>
+            <h1 class="app-title">ZONO</h1>
+            <div class="developer">ZONO Official</div>
+            <p class="short-desc">
+              Discover a fast, secure, and modern mobile experience.
+              Download the newest official Android version directly from this page.
+            </p>
+          </div>
         </div>
-        <a href="#links" class="text-sm font-semibold text-gray-400 hover:text-white transition">
-            Community <i class="fa-solid font-xs fa-arrow-up-right-from-square ml-1"></i>
-        </a>
-    </header>
 
-    <!-- Hero Section -->
-    <main class="w-full max-w-md px-6 my-auto text-center flex flex-col items-center">
-        
-        <!-- Avatar / Logo Sub-brand -->
-        <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 p-1 mb-6 glow-effect transition duration-300">
-            <div class="w-full h-full bg-[#121318] rounded-full flex items-center justify-center">
-                <i class="fa-solid fa-bolt text-3xl text-indigo-400"></i>
+        <div class="metrics" aria-label="App information">
+          <div class="metric">
+            <strong>4.8 ★</strong>
+            <span>12K reviews</span>
+          </div>
+          <div class="metric">
+            <strong>1M+</strong>
+            <span>Downloads</span>
+          </div>
+          <div class="metric">
+            <strong>18+</strong>
+            <span>Rated for 18+</span>
+          </div>
+          <div class="metric">
+            <strong>42 MB</strong>
+            <span>App size</span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="install-btn" onclick="downloadApp()">Install</button>
+          <button class="share-btn" onclick="sharePage()">⌁ Share</button>
+        </div>
+      </div>
+
+      <div class="phone-wrap" aria-hidden="true">
+        <div class="phone">
+          <div class="screen">
+            <div class="screen-logo">ZONO</div>
+            <div class="screen-note">Premium mobile experience</div>
+
+            <div class="screen-banner">
+              <small>WELCOME</small>
+              <h3>Play smarter</h3>
+              <small>Fast • Safe • Simple</small>
             </div>
+
+            <div class="screen-grid">
+              <div class="screen-card"><b>Popular</b></div>
+              <div class="screen-card"><b>New</b></div>
+              <div class="screen-card"><b>Rewards</b></div>
+              <div class="screen-card"><b>Support</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="screenshots">
+      <div class="section-title">
+        <h2>App screenshots</h2>
+        <span class="arrow">›</span>
+      </div>
+
+      <div class="screenshots">
+        <article class="shot">
+          <div class="shot-head"></div>
+          <div class="shot-hero"></div>
+          <div class="shot-line"></div>
+          <div class="shot-line short"></div>
+          <div class="shot-list">
+            <div class="shot-tile"></div><div class="shot-tile"></div>
+            <div class="shot-tile"></div><div class="shot-tile"></div>
+          </div>
+        </article>
+
+        <article class="shot">
+          <div class="shot-head"></div>
+          <div class="shot-hero"></div>
+          <div class="shot-line"></div>
+          <div class="shot-line short"></div>
+          <div class="shot-list">
+            <div class="shot-tile"></div><div class="shot-tile"></div>
+            <div class="shot-tile"></div><div class="shot-tile"></div>
+          </div>
+        </article>
+
+        <article class="shot">
+          <div class="shot-head"></div>
+          <div class="shot-hero"></div>
+          <div class="shot-line"></div>
+          <div class="shot-line short"></div>
+          <div class="shot-list">
+            <div class="shot-tile"></div><div class="shot-tile"></div>
+            <div class="shot-tile"></div><div class="shot-tile"></div>
+          </div>
+        </article>
+
+        <article class="shot">
+          <div class="shot-head"></div>
+          <div class="shot-hero"></div>
+          <div class="shot-line"></div>
+          <div class="shot-line short"></div>
+          <div class="shot-list">
+            <div class="shot-tile"></div><div class="shot-tile"></div>
+            <div class="shot-tile"></div><div class="shot-tile"></div>
+          </div>
+        </article>
+
+        <article class="shot">
+          <div class="shot-head"></div>
+          <div class="shot-hero"></div>
+          <div class="shot-line"></div>
+          <div class="shot-line short"></div>
+          <div class="shot-list">
+            <div class="shot-tile"></div><div class="shot-tile"></div>
+            <div class="shot-tile"></div><div class="shot-tile"></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-title">
+        <h2>About this app</h2>
+        <span class="arrow">›</span>
+      </div>
+
+      <div class="about-grid">
+        <div>
+          <div class="about-text">
+            ZONO brings a clean, fast, and mobile-first experience with an
+            easy-to-use interface, responsive performance, and account protection.
+            This page is an independent app-download landing page inspired by the
+            familiar structure of modern app stores.
+          </div>
+
+          <div class="tags">
+            <span class="tag">Entertainment</span>
+            <span class="tag">Mobile app</span>
+            <span class="tag">Android</span>
+          </div>
         </div>
 
-        <!-- Title & Bio -->
-        <h1 class="text-3xl font-extrabold tracking-tight mb-2">Welcome to ZONO</h1>
-        <p class="text-gray-400 text-sm mb-8">
-            Your ultimate hub for tools, links, and exclusive digital experience. Join the movement.
-        </p>
+        <div class="info-list">
+          <div class="info-item">
+            <div class="info-icon">↻</div>
+            <div>
+              <b>Updated on</b>
+              <span>August 5, 2026</span>
+            </div>
+          </div>
 
-        <!-- Link Buttons Stack (Gaya Bio Link ZONO) -->
-        <div id="links" class="w-full flex flex-col gap-4">
+          <div class="info-item">
+            <div class="info-icon">⌁</div>
+            <div>
+              <b>Works on your device</b>
+              <span>Requires Android 7.0 and up</span>
+            </div>
+          </div>
 
-            <!-- Link 1 -->
-            <a href="https://discord.gg" target="_blank" class="w-full py-3.5 px-6 rounded-xl bg-[#161821] hover:bg-[#1e212d] border border-gray-800 hover:border-indigo-500/50 flex items-center justify-between group transition-all duration-300">
-                <div class="flex items-center gap-3">
-                    <i class="fa-brands fa-discord text-xl text-indigo-400"></i>
-                    <span class="font-semibold text-sm">Discord Community</span>
-                </div>
-                <i class="fa-solid fa-chevron-right text-xs text-gray-500 group-hover:translate-x-1 transition-transform"></i>
-            </a>
-
-            <!-- Link 2 -->
-            <a href="https://telegram.org" target="_blank" class="w-full py-3.5 px-6 rounded-xl bg-[#161821] hover:bg-[#1e212d] border border-gray-800 hover:border-indigo-500/50 flex items-center justify-between group transition-all duration-300">
-                <div class="flex items-center gap-3">
-                    <i class="fa-brands fa-telegram text-xl text-sky-400"></i>
-                    <span class="font-semibold text-sm">Official Telegram</span>
-                </div>
-                <i class="fa-solid fa-chevron-right text-xs text-gray-500 group-hover:translate-x-1 transition-transform"></i>
-            </a>
-
-            <!-- Link 3 (Featured Highlighting) -->
-            <a href="#" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-90 flex items-center justify-between group glow-effect transition-all duration-300">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-crown text-xl text-yellow-300"></i>
-                    <span class="font-bold text-sm text-white">VIP Access</span>
-                </div>
-                <i class="fa-solid fa-arrow-right text-xs text-white group-hover:translate-x-1 transition-transform"></i>
-            </a>
-
-            <!-- Link 4 -->
-            <a href="https://github.com" target="_blank" class="w-full py-3.5 px-6 rounded-xl bg-[#161821] hover:bg-[#1e212d] border border-gray-800 hover:border-indigo-500/50 flex items-center justify-between group transition-all duration-300">
-                <div class="flex items-center gap-3">
-                    <i class="fa-brands fa-github text-xl text-gray-300"></i>
-                    <span class="font-semibold text-sm">Open Source Repository</span>
-                </div>
-                <i class="fa-solid fa-chevron-right text-xs text-gray-500 group-hover:translate-x-1 transition-transform"></i>
-            </a>
-
+          <div class="info-item">
+            <div class="info-icon">ⓘ</div>
+            <div>
+              <b>Version</b>
+              <span>2.8.5</span>
+            </div>
+          </div>
         </div>
-    </main>
+      </div>
+    </section>
 
-    <!-- Footer -->
-    <footer class="w-full p-6 text-center text-xs text-gray-600">
-        &copy; <script>document.write(new Date().getFullYear())</script> ZONO.CLUB. All rights reserved.
-    </footer>
+    <section class="section" id="privacy">
+      <div class="section-title">
+        <h2>Data safety</h2>
+        <span class="arrow">›</span>
+      </div>
 
+      <p class="about-text">
+        Security starts with understanding how developers collect and share your data.
+        Replace the information below so it accurately reflects your real application.
+      </p>
+
+      <div class="data-card">
+        <div>
+          <b>No data shared</b>
+          <span>No user data is shared with third parties.</span>
+        </div>
+        <div>
+          <b>Data encrypted</b>
+          <span>Data is encrypted during transmission.</span>
+        </div>
+        <div>
+          <b>Deletion available</b>
+          <span>Users can request deletion of their account data.</span>
+        </div>
+        <div>
+          <b>Verified package</b>
+          <span>Always download from the official domain.</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© 2026 ZONO. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">Link copied</div>
+
+  <script>
+    // Replace with your real APK URL.
+    const APK_URL = "/downloads/zono-latest.apk";
+
+    function downloadApp(){
+      window.location.href = APK_URL;
+    }
+
+    async function sharePage(){
+      const data = {
+        title: document.title,
+        text: "Download the official ZONO app.",
+        url: window.location.href
+      };
+
+      try{
+        if(navigator.share){
+          await navigator.share(data);
+          return;
+        }
+
+        await navigator.clipboard.writeText(window.location.href);
+        showToast("Link copied");
+      }catch(error){
+        if(error && error.name !== "AbortError"){
+          showToast("Unable to share");
+        }
+      }
+    }
+
+    function showToast(message){
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+  </script>
 </body>
 </html>
