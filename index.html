@@ -445,6 +445,21 @@
     @media(max-width:760px){.partner-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.contact-dropdown{right:-20px}.nav{gap:14px}}
     @media(max-width:480px){.partner-grid{grid-template-columns:1fr}.nav{gap:10px;font-size:13px}.header-btn{display:none}}
 
+
+    .partner-card{position:relative}
+    .partner-download{display:inline-block;margin-top:7px;color:#1a73e8;font-size:13px;font-weight:800;text-decoration:none}
+    .partner-download:hover{text-decoration:underline}
+
+    .livechat-float{
+      position:fixed;right:16px;top:58%;z-index:95;width:48px;height:48px;border:0;border-radius:50%;
+      display:grid;place-items:center;background:linear-gradient(145deg,#01875f,#00a978);color:#fff;
+      box-shadow:0 12px 28px rgba(1,135,95,.32);cursor:grab;touch-action:none;user-select:none;
+    }
+    .livechat-float:active{cursor:grabbing}
+    .livechat-float svg{width:23px;height:23px;fill:currentColor}
+    .livechat-label{position:fixed;right:72px;top:calc(58% + 7px);z-index:94;background:rgba(32,33,36,.92);color:#fff;padding:8px 11px;border-radius:9px;font-size:12px;box-shadow:0 8px 20px rgba(0,0,0,.18);pointer-events:none;transition:opacity .2s}
+    @media(max-width:620px){.livechat-label{display:none}.livechat-float{right:10px;width:44px;height:44px}}
+
     .payment-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:22px}
     .payment-card{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:17px;padding:17px;background:#fff;box-shadow:0 3px 10px rgba(32,33,36,.04)}
     .payment-logo{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;flex:0 0 auto;background:linear-gradient(145deg,#04a978,#006644);color:#fff;font-size:12px;font-weight:900}
@@ -677,18 +692,30 @@
         <span class="arrow">›</span>
       </div>
       <div class="partner-grid">
-        <a class="partner-card" href="#" aria-label="W5W partner platform">
-          <div class="partner-logo">W5W</div><div><b>W5WCOM</b><span>Official W5W platform</span></div>
-        </a>
-        <a class="partner-card" href="#" aria-label="XX5 partner platform">
-          <div class="partner-logo">XX5</div><div><b>XX5</b><span>Partner platform</span></div>
-        </a>
-        <a class="partner-card" href="#" aria-label="YY9 partner platform">
-          <div class="partner-logo">YY9</div><div><b>YY9</b><span>Partner platform</span></div>
-        </a>
-        <a class="partner-card" href="#" aria-label="66Game partner platform">
-          <div class="partner-logo">66</div><div><b>66Game</b><span>Partner platform</span></div>
-        </a>
+        <article class="partner-card" aria-label="W5WCOM official platform">
+          <div class="partner-logo">W5W</div><div><b>W5WCOM</b><span>Official W5W platform</span><a class="partner-download" href="#" data-platform="w5wcom">Download</a></div>
+        </article>
+        <article class="partner-card" aria-label="XX6COM partner platform">
+          <div class="partner-logo">XX6</div><div><b>XX6COM</b><span>Partner platform</span><a class="partner-download" href="#" data-platform="xx6com">Download</a></div>
+        </article>
+        <article class="partner-card" aria-label="XX7COM partner platform">
+          <div class="partner-logo">XX7</div><div><b>XX7COM</b><span>Partner platform</span><a class="partner-download" href="#" data-platform="xx7com">Download</a></div>
+        </article>
+        <article class="partner-card" aria-label="YYGame partner platform">
+          <div class="partner-logo">YYG</div><div><b>YYGame</b><span>Partner platform</span><a class="partner-download" href="#" data-platform="yygame">Download</a></div>
+        </article>
+        <article class="partner-card" aria-label="66Game partner platform">
+          <div class="partner-logo">66</div><div><b>66Game</b><span>Partner platform</span><a class="partner-download" href="#" data-platform="66game">Download</a></div>
+        </article>
+        <article class="partner-card" aria-label="XX5COM partner platform">
+          <div class="partner-logo">XX5</div><div><b>XX5COM</b><span>Partner platform</span><a class="partner-download" href="#" data-platform="xx5com">Download</a></div>
+        </article>
+        <article class="partner-card" aria-label="YY9COM partner platform">
+          <div class="partner-logo">YY9</div><div><b>YY9COM</b><span>Partner platform</span><a class="partner-download" href="#" data-platform="yy9com">Download</a></div>
+        </article>
+        <article class="partner-card" aria-label="PE7COM partner platform">
+          <div class="partner-logo">PE7</div><div><b>PE7COM</b><span>Partner platform</span><a class="partner-download" href="#" data-platform="pe7com">Download</a></div>
+        </article>
       </div>
     </section>
 
@@ -796,6 +823,7 @@
         <article class="payment-card"><div class="payment-logo">IMPS</div><div><b>IMPS</b><span>Real-time bank transfer for eligible deposits and withdrawals.</span></div></article>
         <article class="payment-card"><div class="payment-logo">PP</div><div><b>Paytm</b><span>Paytm UPI and supported bank-linked payment flows.</span></div></article>
         <article class="payment-card"><div class="payment-logo">PE</div><div><b>PhonePe</b><span>Fast UPI deposits through PhonePe where the channel is available.</span></div></article>
+        <article class="payment-card"><div class="payment-logo">24H</div><div><b>24-hour service</b><span>Customer support and payment assistance are available around the clock.</span></div></article>
       </div>
     </section>
 
@@ -854,6 +882,12 @@
       </div>
     </div>
   </div>
+
+
+  <div class="livechat-label" id="livechatLabel">Live Chat</div>
+  <button class="livechat-float" id="livechatFloat" type="button" aria-label="Open live chat" title="Live Chat">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm3 6h10V7H7v2Zm0 4h7v-2H7v2Z"/></svg>
+  </button>
 
   <div class="toast" id="toast">Link copied</div>
 
@@ -924,6 +958,70 @@
       clearTimeout(window.__toastTimer);
       window.__toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
     }
+
+
+    // Replace each placeholder with the real direct-download URL.
+    const PARTNER_LINKS = {
+      w5wcom: "#",
+      xx6com: "#",
+      xx7com: "#",
+      yygame: "#",
+      "66game": "#",
+      xx5com: "#",
+      yy9com: "#",
+      pe7com: "#"
+    };
+
+    document.querySelectorAll(".partner-download").forEach(function(link){
+      const key = link.getAttribute("data-platform");
+      if(PARTNER_LINKS[key]) link.href = PARTNER_LINKS[key];
+    });
+
+    (function initDraggableLiveChat(){
+      const button = document.getElementById("livechatFloat");
+      const label = document.getElementById("livechatLabel");
+      if(!button) return;
+
+      let dragging = false;
+      let moved = false;
+      let offsetX = 0;
+      let offsetY = 0;
+
+      button.addEventListener("pointerdown", function(event){
+        dragging = true;
+        moved = false;
+        const rect = button.getBoundingClientRect();
+        offsetX = event.clientX - rect.left;
+        offsetY = event.clientY - rect.top;
+        button.setPointerCapture(event.pointerId);
+      });
+
+      button.addEventListener("pointermove", function(event){
+        if(!dragging) return;
+        moved = true;
+        const maxX = window.innerWidth - button.offsetWidth - 6;
+        const maxY = window.innerHeight - button.offsetHeight - 6;
+        const x = Math.max(6, Math.min(maxX, event.clientX - offsetX));
+        const y = Math.max(6, Math.min(maxY, event.clientY - offsetY));
+        button.style.left = x + "px";
+        button.style.top = y + "px";
+        button.style.right = "auto";
+        if(label){
+          label.style.opacity = "0";
+        }
+      });
+
+      button.addEventListener("pointerup", function(){
+        dragging = false;
+        setTimeout(function(){ moved = false; }, 0);
+      });
+
+      button.addEventListener("click", function(event){
+        if(moved){ event.preventDefault(); return; }
+        toggleContactMenu();
+      });
+    })();
+
   </script>
 </body>
 </html>
