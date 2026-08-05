@@ -752,6 +752,237 @@
       .about-grid{gap:26px}
     }
 
+  
+    /* ===== Locked update V4: integrated hero background + mobile alignment ===== */
+
+    .header-visual-space{display:none !important}
+
+    .hero-feature{
+      position:relative;
+      isolation:isolate;
+      overflow:hidden;
+      margin-top:22px;
+      padding:44px 38px 38px !important;
+      border-radius:28px;
+      background:
+        linear-gradient(90deg,rgba(3,20,17,.93) 0%,rgba(3,35,29,.86) 48%,rgba(1,135,95,.42) 100%),
+        url("assets/w5w-header-bg.webp") center/cover no-repeat;
+      box-shadow:0 18px 46px rgba(10,55,44,.18);
+    }
+
+    .hero-feature::before{
+      content:"W5W";
+      position:absolute;
+      right:-28px;
+      top:50%;
+      transform:translateY(-50%) rotate(-7deg);
+      z-index:-1;
+      font-size:190px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-16px;
+      color:rgba(255,255,255,.075);
+      text-shadow:0 0 1px rgba(255,255,255,.12);
+      pointer-events:none;
+      user-select:none;
+    }
+
+    .hero-feature::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-2;
+      background:
+        radial-gradient(circle at 77% 18%,rgba(46,255,185,.25),transparent 26%),
+        linear-gradient(180deg,rgba(255,255,255,.03),rgba(0,0,0,.16));
+      pointer-events:none;
+    }
+
+    .hero-feature .hero-content{
+      position:relative;
+      z-index:2;
+      min-width:0;
+    }
+
+    .hero-feature .app-head{
+      align-items:center;
+    }
+
+    .hero-feature .app-icon{
+      border:2px solid rgba(255,255,255,.28);
+      box-shadow:
+        0 16px 34px rgba(0,0,0,.25),
+        inset 0 0 0 1px rgba(255,255,255,.10);
+    }
+
+    .hero-feature .app-title{
+      position:relative;
+      display:inline;
+      color:#fff;
+      text-shadow:0 4px 22px rgba(0,0,0,.35);
+      z-index:2;
+    }
+
+    /* Small transparent overlay that slightly passes over the title,
+       making the background feel integrated with the heading. */
+    .hero-feature .app-title::after{
+      content:"";
+      position:absolute;
+      right:-20px;
+      top:52%;
+      width:78px;
+      height:1.05em;
+      transform:translateY(-50%) skewX(-18deg);
+      background:linear-gradient(90deg,transparent,rgba(34,211,153,.30),rgba(255,255,255,.08));
+      border-radius:10px;
+      z-index:-1;
+      pointer-events:none;
+    }
+
+    .hero-feature .developer{
+      color:#77f2c4;
+      text-shadow:0 2px 12px rgba(0,0,0,.25);
+    }
+
+    .hero-feature .short-desc,
+    .hero-feature .metric span{
+      color:rgba(255,255,255,.76);
+    }
+
+    .hero-feature .metric strong,
+    .hero-feature .metric{
+      color:#fff;
+    }
+
+    .hero-feature .metric{
+      border-right-color:rgba(255,255,255,.20);
+    }
+
+    .hero-feature .share-btn{
+      color:#a7f3d0;
+    }
+
+    .hero-feature .phone{
+      box-shadow:0 25px 60px rgba(0,0,0,.40);
+    }
+
+    @media(max-width:860px){
+      .hero-feature{
+        margin-top:14px;
+        padding:30px 22px 28px !important;
+      }
+
+      .hero-feature::before{
+        right:-20px;
+        top:34%;
+        font-size:132px;
+        letter-spacing:-12px;
+      }
+    }
+
+    @media(max-width:620px){
+      .hero-feature{
+        margin:10px 0 0;
+        padding:22px 16px 24px !important;
+        border-radius:22px;
+        background-position:center;
+      }
+
+      .hero-feature::before{
+        right:-14px;
+        top:27%;
+        font-size:94px;
+        letter-spacing:-9px;
+        color:rgba(255,255,255,.08);
+      }
+
+      .hero-feature .app-head{
+        display:grid !important;
+        grid-template-columns:78px minmax(0,1fr);
+        align-items:center !important;
+        gap:14px !important;
+      }
+
+      .hero-feature .app-icon{
+        width:78px !important;
+        height:78px !important;
+        min-width:78px;
+        border-radius:21px !important;
+        font-size:27px !important;
+        letter-spacing:-2px;
+      }
+
+      .hero-feature .app-title{
+        display:block;
+        font-size:25px !important;
+        line-height:1.12 !important;
+        letter-spacing:-.7px !important;
+        margin:0 !important;
+        overflow-wrap:anywhere;
+      }
+
+      .hero-feature .app-title::after{
+        right:-8px;
+        width:58px;
+        opacity:.85;
+      }
+
+      .hero-feature .developer{
+        font-size:12px !important;
+        margin-top:7px;
+        line-height:1.35;
+      }
+
+      .hero-feature .short-desc{
+        grid-column:1 / -1;
+        margin-top:14px !important;
+        font-size:13px !important;
+        line-height:1.55;
+      }
+
+      .hero-feature .metrics{
+        width:100% !important;
+        margin:22px 0 18px !important;
+        padding-bottom:7px;
+      }
+
+      .hero-feature .metric{
+        min-width:98px !important;
+        padding:0 12px !important;
+      }
+
+      .hero-feature .actions{
+        width:100%;
+      }
+
+      .hero-feature .install-btn,
+      .hero-feature .share-btn{
+        width:100%;
+      }
+    }
+
+    @media(max-width:380px){
+      .hero-feature .app-head{
+        grid-template-columns:68px minmax(0,1fr);
+        gap:11px !important;
+      }
+
+      .hero-feature .app-icon{
+        width:68px !important;
+        height:68px !important;
+        min-width:68px;
+        font-size:23px !important;
+      }
+
+      .hero-feature .app-title{
+        font-size:22px !important;
+      }
+
+      .hero-feature::before{
+        font-size:78px;
+      }
+    }
+
   </style>
 </head>
 
@@ -778,18 +1009,9 @@
     </div>
   </header>
 
-  <section class="header-visual-space" aria-label="W5W promotional background">
-    <div class="header-visual-inner">
-      <div class="header-visual-copy">
-        <strong>W5W Game APK</strong>
-        <span>Space reserved for your small promotional background banner.</span>
-      </div>
-    </div>
-  </section>
-
   <main class="container">
-    <section class="hero">
-      <div>
+    <section class="hero hero-feature">
+      <div class="hero-content">
         <div class="app-head">
           <!-- Replace this block with your own logo:
           <img class="app-icon" src="assets/w5wcom-icon.webp" alt="W5WCOM app icon">
